@@ -1,0 +1,24 @@
+<% if authors.any? %>
+  <div class="mt-8 flex max-w-full flex-wrap items-center justify-center gap-x-6 gap-y-3 px-2">
+    <% authors.each do |author| %>
+      <% if author_pages_enabled? %>
+        <%= link_to language_author_path(author.slug, current_language),
+              class: "group inline-flex max-w-full shrink-0 items-center space-x-3 rounded-xl -m-1 p-1 text-left hover:bg-gray-50 transition-colors cursor-pointer no-underline" do %>
+          <%= render "postnhost/public/templates/default/shared/author_avatar", user: author, size_class: "w-10 h-10", text_size_class: "text-sm" %>
+          <div class="text-left min-w-0">
+            <p class="text-sm font-medium text-gray-900 group-hover:text-gray-700"><%= author_name(author) %></p>
+            <p class="text-sm text-gray-500"><%= article_author_label(author) %></p>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="inline-flex max-w-full shrink-0 items-center space-x-3 rounded-xl -m-1 p-1 text-left no-underline">
+          <%= render "postnhost/public/templates/default/shared/author_avatar", user: author, size_class: "w-10 h-10", text_size_class: "text-sm" %>
+          <div class="text-left min-w-0">
+            <p class="text-sm font-medium text-gray-900"><%= author_name(author) %></p>
+            <p class="text-sm text-gray-500"><%= article_author_label(author) %></p>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

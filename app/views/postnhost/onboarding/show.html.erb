@@ -1,0 +1,51 @@
+<% content_for :title, "Set up PostnHost" %>
+<% content_for :meta_description, "Create your admin account and configure your site." %>
+<% content_for :robots, "noindex, nofollow" %>
+
+<div class="flex min-h-dvh min-h-screen bg-gray-50 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(0.75rem,env(safe-area-inset-top))]">
+  <div class="flex w-full min-w-0 flex-1 flex-col justify-center px-4 sm:px-6 lg:px-8 sm:-mt-10">
+    <div class="mx-auto w-full <%= (@post_install_checklist || @step == 3) ? 'max-w-3xl' : 'max-w-md' %>">
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 sm:p-8">
+        <div class="space-y-6">
+          <div class="space-y-2 text-center">
+            <h1 class="text-2xl font-semibold tracking-tight text-gray-900">
+              <%= if @post_install_checklist
+                    "Production checklist"
+                  elsif @step == 1
+                    "Create your admin account"
+                  elsif @step == 2
+                    "Choose blog languages"
+                  elsif @step == 3
+                    "Set your site details"
+                  elsif @step == 4
+                    "Start with sample content?"
+                  else
+                    t("postnhost.onboarding.title")
+                  end %>
+            </h1>
+            <% unless @post_install_checklist %>
+              <p class="text-sm text-gray-600">
+                <%= t("postnhost.onboarding.step_indicator", step: @step, total: 4) %>
+              </p>
+            <% end %>
+          </div>
+
+          <%= render "postnhost/shared/flash_messages" %>
+
+          <% if @post_install_checklist %>
+            <%= render "postnhost/onboarding/post_install_checklist" %>
+          <% else %>
+            <%= render "postnhost/onboarding/step_#{@step}" %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="mt-4 flex justify-center">
+        <a href="https://postnhost.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-gray-400 transition-colors hover:text-gray-600">
+          Powered by
+          <%= image_tag "postnhost/logo.webp", alt: "PostnHost", class: "h-4 w-auto opacity-60 transition-opacity hover:opacity-100", width: 80, height: 16 %>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

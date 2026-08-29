@@ -1,0 +1,67 @@
+<% variants.each do |variant| %>
+  <div class="px-6 py-4 hover:bg-gray-50 transition-colors duration-200">
+    <div class="flex items-center gap-2 md:gap-4">
+      <div class="flex-1 min-w-0">
+        <% if variant.generating? %>
+          <div class="block">
+            <div class="font-medium text-gray-900">
+              <%= variant.name.present? ? variant.name : "Untitled translation" %>
+            </div>
+            <% if variant.meta_description.present? %>
+              <div class="text-sm text-gray-500 mt-1 line-clamp-1">
+                <%= variant.meta_description %>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <%= link_to edit_category_variant_path(category, variant), class: "block group" do %>
+            <div class="font-medium text-gray-900 group-hover:text-gray-600 transition-colors">
+              <%= variant.name %>
+            </div>
+            <% if variant.meta_description.present? %>
+              <div class="text-sm text-gray-500 mt-1 line-clamp-1">
+                <%= variant.meta_description %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="w-32 flex-shrink-0">
+        <span class="<%= stats_badge_classes(variant: :gray) %>">
+          <%= variant.language.name %>
+        </span>
+      </div>
+
+      <div class="hidden md:block md:w-28 flex-shrink-0">
+        <% if variant.generating? %>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+            <%= icon("spinner", css_class: "animate-spin -ml-1 mr-1.5 h-3 w-3 text-purple-800") %>
+            Translating
+          </span>
+        <% end %>
+      </div>
+
+      <div class="w-24 flex items-center justify-end space-x-2 flex-shrink-0">
+        <% if variant.generating? %>
+          <span class="text-gray-300 cursor-not-allowed inline-flex" title="Editing is available when translation finishes">
+            <%= icon("edit", css_class: "w-4 h-4") %>
+          </span>
+        <% else %>
+          <%= link_to edit_category_variant_path(category, variant), class: "text-gray-400 hover:text-gray-600 cursor-pointer" do %>
+            <%= icon("edit", css_class: "w-4 h-4") %>
+          <% end %>
+        <% end %>
+
+        <%= link_to category_variant_path(category, variant),
+            class: "text-gray-400 hover:text-red-600 cursor-pointer",
+            data: {
+              turbo_method: :delete,
+              turbo_confirm: "Are you sure you want to delete this translation? This action cannot be undone."
+            } do %>
+          <%= icon("trash", css_class: "w-4 h-4") %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

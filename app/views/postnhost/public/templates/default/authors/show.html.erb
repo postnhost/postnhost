@@ -1,0 +1,36 @@
+<%= render "postnhost/public/authors/content_for/show" %>
+
+<div class="bg-white border-b border-gray-200">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-12">
+    <%= render "postnhost/public/templates/default/authors/profile_block", author: @author %>
+  </div>
+</div>
+
+<div class="bg-white py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 mb-8">
+      <%= t("postnhost.public.authors.latest_from_author") %>
+    </h2>
+
+    <% if category_articles.any? %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <%= render partial: "postnhost/public/templates/default/authors/article_card",
+              collection: category_articles,
+              as: :item,
+              cached: ->(item) { [public_site_revision, item, "author_card"] } %>
+      </div>
+
+      <div class="flex justify-center">
+        <%= render "postnhost/public/templates/default/shared/pagination", pagy: @pagy %>
+      </div>
+    <% else %>
+      <div class="text-center py-24">
+        <div class="mx-auto h-12 w-12 text-gray-400">
+          <%= icon("document-text", css_class: "w-full h-full") %>
+        </div>
+        <h3 class="mt-2 text-2xl font-semibold text-gray-900 mb-4"><%= t("postnhost.public.authors.no_articles") %></h3>
+        <p class="text-lg text-gray-600"><%= t("postnhost.public.authors.no_articles_description") %></p>
+      </div>
+    <% end %>
+  </div>
+</div>

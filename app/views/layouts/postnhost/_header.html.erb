@@ -1,0 +1,89 @@
+<nav class="bg-white border-b border-gray-200">
+  <div class="mx-auto px-6 py-2 flex items-center justify-between relative">
+    <div class="flex items-center">
+      <%= link_to root_path, class: 'flex items-center group' do %>
+        <%= image_tag 'postnhost/logo.webp',
+              alt: 'postnhost',
+              width: 160,
+              height: 33,
+              class: 'h-8 w-auto group-hover:opacity-80 transition-opacity' %>
+      <% end %>
+    </div>
+
+    <!-- Flash Messages - Centered on desktop, hidden on mobile (shown below header) -->
+    <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 z-10">
+      <%= render 'postnhost/shared/flash_messages' %>
+    </div>
+
+    <div class="flex items-center space-x-4" data-controller="burger">
+      <% if local_assigns[:layout_name] == "postnhost/articles" %>
+        <% if controller_name == "pages" && action_name != "index" %>
+          <%= link_to pages_path, class: "flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200" do %>
+            <%= icon("arrow-left", css_class: "w-4 h-4") %>
+            <span class="hidden sm:inline">Back to Pages</span>
+          <% end %>
+        <% else %>
+          <%= link_to articles_path, class: "flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200" do %>
+            <%= icon("arrow-left", css_class: "w-4 h-4") %>
+            <span class="hidden sm:inline">Back to Articles</span>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <div class="relative mr-0" data-controller="dropdown">
+        <button
+          data-action="click->dropdown#toggle"
+          class="flex items-center gap-3 rounded-xl transition-colors duration-200 cursor-pointer"
+        >
+          <div class="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center overflow-hidden border-2 border-gray-200">
+            <% if current_user&.avatar_file? %>
+              <%= image_tag current_user.avatar_file_url, class: "w-full h-full object-cover", alt: 'Author Image' %>
+            <% else %>
+              <span class="text-gray-700 font-semibold text-sm">
+                <%= author_initials(current_user) %>
+              </span>
+            <% end %>
+          </div>
+          <div class="hidden sm:block text-left">
+            <p class="text-sm font-medium text-gray-900">
+              <%= current_user.name %>
+            </p>
+          </div>
+          <span data-dropdown-target="chevron" class="hidden sm:block">
+            <%= icon("chevron-down-small", css_class: "h-4 w-4 text-gray-400 transition-transform duration-200") %>
+          </span>
+        </button>
+
+        <div data-dropdown-target="menu" class="absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden z-20 hidden">
+          <div class="px-4 py-3 border-b border-gray-100">
+            <p class="text-sm font-medium text-gray-900"><%= current_user.name %></p>
+            <p class="text-xs text-gray-500 truncate"><%= current_user&.email %></p>
+          </div>
+
+          <div class="py-2">
+            <%= link_to edit_user_path(current_user), class: "flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150" do %>
+              <%= icon("user", css_class: "mr-3 h-4 w-4 text-gray-400") %>
+              Account
+            <% end %>
+          </div>
+
+          <div class="border-t border-gray-100 py-2">
+            <%= link_to session_path, data: { turbo_method: :delete }, class: "flex items-center px-4 py-3 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors duration-150" do %>
+              <%= icon("logout", css_class: "mr-3 h-4 w-4") %>
+              Sign Out
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <% unless local_assigns[:layout_name] == "postnhost/articles" %>
+        <button
+          class="block md:hidden p-2 pr-0 md:pr-2 rounded-xl hover:bg-gray-50 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+          data-action="click->burger#toggleMenu"
+        >
+          <%= icon("menu", css_class: "w-5 h-5") %>
+        </button>
+      <% end %>
+    </div>
+  </div>
+</nav>

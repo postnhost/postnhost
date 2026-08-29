@@ -1,0 +1,7 @@
+.git
+.bundle
+coverage
+node_modules
+spec
+tmp
+app/assets/builds/**/*.map

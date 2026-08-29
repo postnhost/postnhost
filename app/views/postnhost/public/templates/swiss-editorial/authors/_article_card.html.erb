@@ -1,0 +1,27 @@
+<article class="border-t border-[#d9d9d9] py-5 break-words">
+  <% if category_article(item).cover_image? %>
+    <%= link_to category_article_url(item), class: "mb-4 block cursor-pointer", "aria-label": t("postnhost.public.blog.read_article_aria_label", title: item.title) do %>
+      <%= render "postnhost/public/templates/swiss-editorial/shared/thumbnail_cover_image", publication: category_article(item), index: local_assigns.fetch(:index) { item_counter + local_assigns.fetch(:index_offset, 0) } %>
+    <% end %>
+  <% end %>
+
+  <div class="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-semibold uppercase text-[#6b6b6b]">
+    <% if category_article(item).categories.any? %>
+      <%= link_to "— #{localized_category_name(category_article(item).categories.first, @current_language)}",
+            language_category_path(category_article(item).categories.first.slug, @current_language),
+            class: "text-[#d4322c] hover:text-[#a4221d] cursor-pointer" %>
+    <% end %>
+    <span><%= l category_article(item).published_at.to_date, format: :long %></span>
+  </div>
+
+  <%= link_to category_article_url(item), class: "group block cursor-pointer", "aria-label": t("postnhost.public.blog.read_article_aria_label", title: item.title) do %>
+    <h3 class="text-[22px] font-semibold leading-tight text-[#0a0a0a] group-hover:text-[#d4322c] sm:text-[24px]">
+      <%= item.title %>
+    </h3>
+    <% if article_excerpt(item).present? %>
+      <p class="mt-2 text-[15px] leading-6 text-[#1f1f1f] line-clamp-2">
+        <%= article_excerpt(item) %>
+      </p>
+    <% end %>
+  <% end %>
+</article>

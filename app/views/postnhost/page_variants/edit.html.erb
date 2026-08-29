@@ -1,0 +1,50 @@
+<% content_for :title, "Editing #{@page_variant.title.presence || 'Translation'}" %>
+
+<div data-controller="auto-save publish-guard editor-mobile-sidebars">
+  <%= form_with model: @page_variant, url: page_variant_path(@page, @page_variant), local: true, data: { auto_save_target: "form" } do |form| %>
+  <%= render 'postnhost/shared/articles/error_messages', resource: @page_variant, resource_type: "variant" %>
+
+  <div class="md:hidden px-4 py-3 bg-white border-b border-gray-200">
+    <div class="grid grid-cols-2 gap-2">
+      <button type="button"
+              data-action="click->editor-mobile-sidebars#toggleMeta"
+              class="w-full bg-white border border-gray-300 text-gray-700 py-2.5 px-4 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition duration-200 text-sm font-medium cursor-pointer">
+        Details
+      </button>
+      <button type="button"
+              data-action="click->editor-mobile-sidebars#toggleActions"
+              class="w-full bg-white border border-gray-300 text-gray-700 py-2.5 px-4 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition duration-200 text-sm font-medium cursor-pointer">
+        Actions
+      </button>
+    </div>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <%= render 'postnhost/shared/pages/meta_sidebar',
+        form: form,
+        resource: @page_variant,
+        page: @page,
+        is_variant: true,
+        mobile_target: "metaSidebar" %>
+
+    <div class="order-3 md:order-2 w-full md:w-3/5 bg-white border-t border-b border-gray-200 border-t-0">
+      <%= render 'postnhost/shared/articles/title_field',
+        form: form,
+        placeholder: "Translation Title" %>
+
+      <%= render 'postnhost/shared/articles/tiptap_editor',
+        form: form,
+        content: @page_variant.content,
+        resource_type: 'page',
+        resource_id: @page.id %>
+    </div>
+
+    <%= render 'postnhost/shared/pages/action_buttons',
+        form: form,
+        resource: @page_variant,
+        page: @page,
+        is_variant: true,
+        mobile_target: "actionsSidebar" %>
+  </div>
+<% end %>
+</div>

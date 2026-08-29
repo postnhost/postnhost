@@ -1,0 +1,10 @@
+<%# locals: versioned (Article snapshot from PaperTrail#reify, or nil) %>
+<% if versioned %>
+  <h3 class="text-lg font-medium text-gray-900 mb-1 break-words"><%= versioned.title %></h3>
+  <% if versioned.meta_description.present? %>
+    <p class="text-sm text-gray-600 mb-2 break-words"><%= truncate(versioned.meta_description, length: 120) %></p>
+  <% end %>
+  <div class="text-xs text-gray-500 break-words">
+    Content: <%= truncate(strip_tags(versioned.content), length: 100) %>
+  </div>
+<% end %>

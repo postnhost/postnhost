@@ -1,0 +1,19 @@
+<% content_for :title, @content.title_tag.present? ? @content.title_tag : @content.title %>
+<% content_for :og_title, @content.og_title if @content.og_title.present? %>
+<% content_for :meta_description, @content.meta_description if @content.meta_description.present? %>
+<% content_for :lang, @actual_language.html_lang %>
+<% content_for :url, params[:locale].present? ? localized_public_static_page_url(locale: @actual_language.html_lang, slug: @page.slug) : public_static_page_url(slug: @page.slug) %>
+
+<%# Hreflang tags for language variants %>
+<% content_for :hreflang do %>
+  <!-- Original page -->
+  <link rel="alternate" hreflang="<%= @page.language&.html_lang || @current_language.html_lang %>" href="<%= public_static_page_url(slug: @page.slug) %>" data-turbo-track="reload">
+
+  <!-- Page variants -->
+  <% @available_variants.each do |variant| %>
+    <link rel="alternate" hreflang="<%= variant.language.html_lang %>" href="<%= localized_public_static_page_url(locale: variant.language.html_lang, slug: @page.slug) %>" data-turbo-track="reload">
+  <% end %>
+
+  <!-- x-default -->
+  <link rel="alternate" hreflang="x-default" href="<%= public_static_page_url(slug: @page.slug) %>" data-turbo-track="reload">
+<% end %>

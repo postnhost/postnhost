@@ -1,0 +1,35 @@
+<% if pagy.pages > 1 %>
+  <nav class="flex items-center justify-center gap-1 border-y border-[#d9d9d9] py-8">
+    <% if pagy.previous %>
+      <%= link_to pagination_url(pagy, pagy.previous), class: "h-10 min-w-10 inline-flex items-center justify-center border border-zinc-300 text-zinc-700 hover:border-zinc-900 hover:text-zinc-900 cursor-pointer", aria: { label: t('postnhost.public.pagination.previous') } do %>
+        <%= icon('chevron-left', css_class: 'h-5 w-5') %>
+      <% end %>
+    <% else %>
+      <span class="h-10 min-w-10 inline-flex items-center justify-center border border-zinc-200 text-zinc-300" aria-label="<%= t('postnhost.public.pagination.previous') %>" aria-disabled="true">
+        <%= icon('chevron-left', css_class: 'h-5 w-5') %>
+      </span>
+    <% end %>
+
+    <% pagination_series(pagy).each do |item| %>
+      <% if item.is_a?(Integer) %>
+        <% if item == pagy.page %>
+          <span class="h-10 min-w-10 inline-flex items-center justify-center border border-zinc-900 bg-zinc-900 text-stone-50 text-sm" aria-current="page"><%= item %></span>
+        <% else %>
+          <%= link_to item, pagination_url(pagy, item), class: "h-10 min-w-10 inline-flex items-center justify-center border border-zinc-300 text-zinc-700 hover:border-zinc-900 hover:text-zinc-900 text-sm cursor-pointer" %>
+        <% end %>
+      <% elsif item == :gap %>
+        <span class="h-10 min-w-10 inline-flex items-center justify-center text-zinc-400 text-sm">…</span>
+      <% end %>
+    <% end %>
+
+    <% if pagy.next %>
+      <%= link_to pagination_url(pagy, pagy.next), class: "h-10 min-w-10 inline-flex items-center justify-center border border-zinc-300 text-zinc-700 hover:border-zinc-900 hover:text-zinc-900 cursor-pointer", aria: { label: t('postnhost.public.pagination.next') } do %>
+        <%= icon('chevron-right', css_class: 'h-5 w-5') %>
+      <% end %>
+    <% else %>
+      <span class="h-10 min-w-10 inline-flex items-center justify-center border border-zinc-200 text-zinc-300" aria-label="<%= t('postnhost.public.pagination.next') %>" aria-disabled="true">
+        <%= icon('chevron-right', css_class: 'h-5 w-5') %>
+      </span>
+    <% end %>
+  </nav>
+<% end %>

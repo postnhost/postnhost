@@ -1,0 +1,40 @@
+<div class="mb-6">
+  <h2 class="text-xl font-medium tracking-tight text-gray-700">Assets</h2>
+  <p class="mt-1 text-sm text-gray-500">Upload branding images used across the public site.</p>
+</div>
+
+<%= form_with model: @setting, url: settings_path(section: 'assets'), method: :patch, multipart: true, class: "space-y-6", data: { controller: "file-auto-submit", file_auto_submit_target: "form" } do |f| %>
+  <%= render 'postnhost/shared/form_errors', resource: @setting %>
+
+  <div class="space-y-3">
+    <%= f.label :site_logo, 'Site Logo', class: form_label_classes %>
+    <div class="relative rounded-xl border border-gray-200 bg-gray-50 p-4">
+      <%= image_tag(setting_site_logo_src, alt: 'Site logo', class: 'h-9 w-auto', width: 180, height: 37) %>
+      <% if @setting.site_logo? %>
+        <%= link_to settings_path(section: 'assets', setting: { site_logo: nil }),
+          class: "absolute top-3 right-3 bg-white/90 hover:bg-red-50 text-gray-600 hover:text-red-600 p-1.5 rounded-lg shadow transition-colors cursor-pointer",
+          data: { turbo_method: :patch, turbo_confirm: 'Delete current site logo?' } do %>
+          <%= icon('trash', css_class: 'w-4 h-4') %>
+        <% end %>
+      <% end %>
+    </div>
+    <%= f.file_field :site_logo, accept: 'image/png,image/jpeg,image/gif,image/webp,image/heic', class: form_input_classes, data: { file_auto_submit_target: "input" } %>
+  </div>
+
+  <div class="space-y-3">
+    <%= f.label :og_image, 'Default OG Image', class: form_label_classes %>
+    <div class="relative rounded-xl border border-gray-200 bg-gray-50 p-4">
+      <%= image_tag(setting_og_image_src, alt: 'Default og image', class: 'w-full max-w-md rounded-lg object-cover', width: 1200, height: 630) %>
+      <% if @setting.og_image? %>
+        <%= link_to settings_path(section: 'assets', setting: { og_image: nil }),
+          class: "absolute top-3 right-3 bg-white/90 hover:bg-red-50 text-gray-600 hover:text-red-600 p-1.5 rounded-lg shadow transition-colors cursor-pointer",
+          data: { turbo_method: :patch, turbo_confirm: 'Delete current OG image?' } do %>
+          <%= icon('trash', css_class: 'w-4 h-4') %>
+        <% end %>
+      <% end %>
+    </div>
+    <%= f.file_field :og_image, accept: 'image/png,image/jpeg,image/gif,image/webp,image/heic', class: form_input_classes, data: { file_auto_submit_target: "input" } %>
+  </div>
+
+  <%= f.submit 'Save Assets', class: button_classes %>
+<% end %>

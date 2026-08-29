@@ -1,0 +1,42 @@
+<% if top_pick_articles.any? && !public_search_endpoint? && !public_search_page? && !paginated_public_page? %>
+  <section class="bg-white border-b border-gray-200 py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-8 border-b border-gray-200 pb-4">
+        <h2 class="text-2xl font-semibold text-gray-900"><%= t("postnhost.public.blog.top_picks") %></h2>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <% top_pick_articles.each_with_index do |item, index| %>
+          <% cache [public_site_revision, item, article_authors_cache_key(item), "default_editors_pick"] do %>
+            <article class="border-b border-gray-200 pb-6">
+              <% if category_article(item).categories.any? %>
+                <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                  <%= localized_category_name(category_article(item).categories.first, @current_language) %>
+                </span>
+              <% end %>
+
+              <%= link_to category_article_url(item), class: "group mt-2 block cursor-pointer" do %>
+                <h3 class="text-xl font-semibold leading-tight text-gray-900 group-hover:text-gray-700">
+                  <%= item.title %>
+                </h3>
+              <% end %>
+
+              <% if article_excerpt(item).present? %>
+                <p class="mt-2 text-sm text-gray-600">
+                  <%= article_excerpt(item) %>
+                </p>
+              <% end %>
+
+              <p class="mt-3 text-xs font-medium uppercase tracking-wide text-gray-500">
+                <% if author_name(category_article_author_user(item)).present? %>
+                  <%= author_name(category_article_author_user(item)) %> ·
+                <% end %>
+                <%= l category_article(item).published_at.to_date, format: :long %>
+              </p>
+            </article>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </section>
+<% end %>

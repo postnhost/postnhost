@@ -1,0 +1,49 @@
+pt:
+  postnhost:
+    public:
+      site:
+        schema_site_name: "postnhost"
+        blog_tagline: "Blog"
+        blog_subtitle: "Descubra os últimos insights, tutoriais e histórias"
+        blog_meta_title: "Blog - postnhost"
+        blog_meta_description: "Descubra os últimos insights, tutoriais e histórias do postnhost"
+        blog_meta_title_paginated: "Página %{page} - %{blog_meta_title}"
+        name_footer_copyright: "postnhost.com"
+
+      blog:
+        page_title: "Página %{page} - Blog"
+        author_label: "Autor"
+        no_articles: "Ainda não há artigos"
+        no_articles_description: "Volte em breve para novo conteúdo!"
+        back_to_articles: "Voltar aos artigos"
+        more_in_category: "%{category}"
+        available_in_languages: "Disponível em outros idiomas:"
+        browse_all_articles: "Navegar todos os artigos"
+        read_more: "Leia também"
+        top_picks: "Destaques"
+
+      search:
+        title: "Voce pesquisou por %{query}"
+        heading: "Resultado da busca por %{query}"
+        input_placeholder: "Buscar por titulo ou conteudo"
+        submit: "Buscar"
+
+      category:
+        title: "%{category} - postnhost"
+        page_title: "Página %{page} - %{category} - postnhost"
+        page_heading: "Página %{page} - %{category}"
+        no_articles: "Nenhum artigo encontrado"
+        no_articles_description: "Ainda não há artigos publicados nesta categoria."
+
+      authors:
+        latest_from_author: "Últimos do autor"
+        no_articles: "Ainda não há artigos"
+        no_articles_description: "Este autor ainda não publicou nenhum artigo."
+
+      footer:
+        explore_categories: "Posts por categoria"
+        pages: "Páginas"
+
+      pagination:
+        previous: "Anterior"
+        next: "Próximo"

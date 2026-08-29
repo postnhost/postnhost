@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@source "../../../views/postnhost/**/*.erb";
+@source "../../../views/layouts/postnhost/**/*.erb";
+@source "../../../helpers/**/*.rb";
+@source "../../../javascript/**/*.js";

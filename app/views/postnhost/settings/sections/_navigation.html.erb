@@ -1,0 +1,98 @@
+<div class="mb-6">
+  <h2 class="text-xl font-medium tracking-tight text-gray-700">Navigation</h2>
+  <p class="mt-1 text-sm text-gray-500">Choose automatic or custom navigation independently for the header and footer.</p>
+</div>
+
+<% if @navigation_locale_keys.any? %>
+  <div class="mb-6">
+    <%= form_with url: edit_settings_path, method: :get, class: "space-y-2" do %>
+      <%= hidden_field_tag :section, 'navigation' %>
+      <label for="navigation-locale-selector" class="<%= form_label_classes %>">Language</label>
+      <%= select_tag :locale,
+        options_for_select(@navigation_locale_keys, @selected_navigation_locale_key),
+        id: 'navigation-locale-selector',
+        class: "block w-full rounded-xl border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-900 transition-all duration-200 focus:border-gray-900 focus:bg-white focus:ring-0",
+        onchange: 'this.form.requestSubmit()' %>
+    <% end %>
+    <p class="mt-2 text-xs text-gray-500">Labels fallback to default language when missing.</p>
+  </div>
+
+  <%= form_with url: settings_path(section: "navigation"), method: :patch, class: "space-y-4", data: { controller: "navigation-builder", action: "submit->navigation-builder#syncBeforeSubmit turbo:submit-start->navigation-builder#syncBeforeSubmit", navigation_builder_tree_value: @navigation_tree.to_json, navigation_builder_locale_value: @selected_navigation_locale_key } do %>
+    <%= render 'postnhost/shared/form_errors', resource: @setting %>
+    <div class="hidden" aria-hidden="true">
+      <span data-navigation-builder-target="dragHandleIconTemplate"><%= icon("drag-handle", css_class: "h-5 w-5") %></span>
+      <span data-navigation-builder-target="chevronDownIconTemplate"><%= icon("chevron-down", css_class: "h-4 w-4") %></span>
+    </div>
+    <%= hidden_field_tag :locale_key, @selected_navigation_locale_key %>
+
+    <div class="space-y-3">
+      <label class="flex items-start gap-3 rounded-xl border border-gray-200 bg-gray-50 p-3 cursor-pointer">
+        <%= hidden_field_tag "setting[use_auto_header_navigation]", "0" %>
+        <%= check_box_tag "setting[use_auto_header_navigation]", "1", @setting.use_auto_header_navigation, class: "mt-1 rounded border-gray-300 text-gray-900 focus:ring-gray-900", data: { action: "navigation-builder#toggleHeaderMode", navigation_builder_target: "headerToggle" } %>
+        <span class="space-y-1">
+          <span class="flex items-center gap-2 text-sm font-medium text-gray-900">
+            <%= icon("sparkles", css_class: "h-4 w-4 text-gray-500") %>
+            Use auto-generated header navigation
+          </span>
+          <span class="block text-xs text-gray-500">When enabled, the public header uses the template's built-in navigation.</span>
+        </span>
+      </label>
+
+      <div data-navigation-builder-target="headerBuilder" class="<%= @setting.use_auto_header_navigation ? 'hidden' : '' %> rounded-xl border border-gray-200 bg-white overflow-hidden">
+        <div class="flex flex-wrap items-center justify-between gap-2 px-4 py-3 border-b border-gray-200">
+          <h3 class="flex items-center gap-2 text-sm font-semibold text-gray-900">
+            <%= icon("bars", css_class: "h-4 w-4 text-gray-500") %>
+            Header Navigation
+          </h3>
+          <div class="flex gap-2">
+            <button type="button" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs border border-gray-300 hover:bg-gray-50 cursor-pointer" data-action="navigation-builder#addHeaderLink">
+              <%= icon("plus", css_class: "h-3.5 w-3.5") %> Link
+            </button>
+            <button type="button" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs border border-gray-300 hover:bg-gray-50 cursor-pointer" data-action="navigation-builder#addHeaderDropdown">
+              <%= icon("chevron-down", css_class: "h-3.5 w-3.5") %> Dropdown
+            </button>
+          </div>
+        </div>
+        <div class="p-2 bg-gray-50">
+          <div class="space-y-1.5" data-navigation-builder-target="headerList"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <label class="flex items-start gap-3 rounded-xl border border-gray-200 bg-gray-50 p-3 cursor-pointer">
+        <%= hidden_field_tag "setting[use_auto_footer_navigation]", "0" %>
+        <%= check_box_tag "setting[use_auto_footer_navigation]", "1", @setting.use_auto_footer_navigation, class: "mt-1 rounded border-gray-300 text-gray-900 focus:ring-gray-900", data: { action: "navigation-builder#toggleFooterMode", navigation_builder_target: "footerToggle" } %>
+        <span class="space-y-1">
+          <span class="flex items-center gap-2 text-sm font-medium text-gray-900">
+            <%= icon("sparkles", css_class: "h-4 w-4 text-gray-500") %>
+            Use auto-generated footer navigation
+          </span>
+          <span class="block text-xs text-gray-500">When enabled, the public footer uses the built-in categories and pages navigation.</span>
+        </span>
+      </label>
+
+      <div data-navigation-builder-target="footerBuilder" class="<%= @setting.use_auto_footer_navigation ? 'hidden' : '' %> rounded-xl border border-gray-200 bg-white overflow-hidden">
+        <div class="flex flex-wrap items-center justify-between gap-2 px-4 py-3 border-b border-gray-200">
+          <h3 class="flex items-center gap-2 text-sm font-semibold text-gray-900">
+            <%= icon("layers", css_class: "h-4 w-4 text-gray-500") %>
+            Footer Columns
+          </h3>
+          <button type="button" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs border border-gray-300 hover:bg-gray-50 cursor-pointer" data-action="navigation-builder#addFooterColumn">
+            <%= icon("plus", css_class: "h-3.5 w-3.5") %> Column
+          </button>
+        </div>
+        <div class="p-2 bg-gray-50">
+          <div class="space-y-1.5" data-navigation-builder-target="footerList"></div>
+        </div>
+      </div>
+    </div>
+
+    <%= hidden_field_tag "navigation[tree]", @navigation_tree.to_json, data: { navigation_builder_target: "treeInput" } %>
+    <%= hidden_field_tag "navigation[target_options]", @navigation_target_options.to_json, data: { navigation_builder_target: "targetOptions" } %>
+
+    <%= submit_tag 'Save Navigation', class: button_classes %>
+  <% end %>
+<% else %>
+  <p class="text-sm text-gray-500">No languages found. Create a language first to edit navigation labels.</p>
+<% end %>

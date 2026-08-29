@@ -1,0 +1,9 @@
+<% if publication.cover_image? %>
+  <%= image_tag publication.cover_image.thumbnail.url,
+        loading: index.to_i < 3 ? "eager" : "lazy",
+        fetchpriority: index.to_i < 3 ? "high" : "auto",
+        alt: publication.cover_image_alt.presence || publication.title,
+        width: 520,
+        height: 273,
+        class: local_assigns.fetch(:image_class, "h-auto w-full") %>
+<% end %>

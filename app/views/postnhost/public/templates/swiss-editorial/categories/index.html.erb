@@ -1,0 +1,88 @@
+<%= render "postnhost/public/categories/content_for/index" %>
+
+<section class="mx-auto max-w-[1440px] px-6 py-14">
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+    <div class="lg:col-span-8">
+      <h1 class="break-words text-[42px] font-extrabold leading-[0.95] sm:text-[58px] md:text-[78px] lg:text-[96px]"><%= public_category_heading(@category) %></h1>
+      <% if show_public_category_description?(@category) %>
+        <p class="mt-6 max-w-2xl text-[21px] leading-8 text-[#6b6b6b]"><%= public_category_description(@category) %></p>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<% if category_articles.any? %>
+  <section class="mx-auto max-w-[1440px] px-6">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start">
+      <div class="lg:col-span-8">
+        <% if category_article(category_articles.first).cover_image? %>
+          <div class="border-y border-[#d9d9d9] py-4">
+            <%= link_to category_article_url(category_articles.first), class: "block cursor-pointer" do %>
+              <%= render "postnhost/public/templates/swiss-editorial/shared/thumbnail_cover_image", publication: category_article(category_articles.first), index: 0 %>
+            <% end %>
+          </div>
+        <% end %>
+        <%= link_to category_article_url(category_articles.first), class: "group block cursor-pointer" do %>
+          <h2 class="mt-6 break-words text-[38px] font-bold leading-none group-hover:text-[#d4322c] md:text-[56px]"><%= category_articles.first.title %></h2>
+          <% if article_excerpt(category_articles.first).present? %>
+            <p class="mt-5 max-w-2xl text-[21px] leading-8 text-[#1f1f1f]"><%= article_excerpt(category_articles.first) %></p>
+          <% end %>
+        <% end %>
+        <p class="mt-5 text-[11px] font-medium uppercase text-[#6b6b6b]">
+          <% if author_name(category_article_author_user(category_articles.first)).present? %>
+            <%= author_name(category_article_author_user(category_articles.first)) %> ·
+          <% end %>
+          <%= l category_article(category_articles.first).published_at.to_date, format: :long %>
+        </p>
+      </div>
+
+      <% if category_articles.drop(1).any? %>
+        <aside class="lg:col-span-4">
+          <div class="border-t-2 border-[#0a0a0a]">
+            <% category_articles.drop(1).first(4).each do |item| %>
+              <article class="border-b border-[#d9d9d9] py-5">
+                <%= link_to category_article_url(item), class: "group block cursor-pointer" do %>
+                  <h3 class="text-[22px] font-semibold leading-tight group-hover:text-[#d4322c]"><%= item.title %></h3>
+                <% end %>
+                <p class="mt-2 text-[11px] font-medium uppercase text-[#6b6b6b]">
+                  <% if author_name(category_article_author_user(item)).present? %>
+                    <%= author_name(category_article_author_user(item)) %> ·
+                  <% end %>
+                  <%= l category_article(item).published_at.to_date, format: :long %>
+                </p>
+              </article>
+            <% end %>
+          </div>
+        </aside>
+      <% end %>
+    </div>
+  </section>
+
+  <% if category_articles.drop(5).any? %>
+    <section class="mx-auto max-w-[1440px] px-6 pt-20">
+      <div class="mb-8 flex items-baseline justify-between border-b-2 border-[#0a0a0a] pb-4">
+        <h2 class="text-[40px] font-bold leading-none"><%= t("postnhost.public.blog.browse_all_articles") %></h2>
+      </div>
+
+      <div class="grid grid-cols-1 gap-x-8 gap-y-12 md:grid-cols-3">
+        <%= render partial: "postnhost/public/templates/swiss-editorial/categories/article_card",
+              collection: category_articles.drop(5),
+              as: :item,
+              cached: ->(item) { [public_site_revision, item, article_authors_cache_key(item), "category_card"] },
+              locals: { index_offset: 5 } %>
+      </div>
+    </section>
+  <% end %>
+
+  <div class="mx-auto max-w-[1440px] px-6 pt-12">
+    <%= render "postnhost/public/templates/swiss-editorial/shared/pagination", pagy: @pagy %>
+  </div>
+<% else %>
+  <section class="mx-auto max-w-[1440px] px-6 py-20 text-center">
+    <div class="border-y border-[#d9d9d9] py-14">
+      <h2 class="text-[40px] font-bold leading-tight"><%= t("postnhost.public.category.no_articles") %></h2>
+      <p class="mt-4 text-[18px] text-[#6b6b6b]"><%= t("postnhost.public.category.no_articles_description") %></p>
+      <%= link_to t("postnhost.public.blog.browse_all_articles"), language_root_path(@current_language), class: "mt-8 inline-flex border border-[#0a0a0a] bg-[#0a0a0a] px-6 py-3 text-[12px] font-semibold uppercase text-[#fafaf7] hover:border-[#d4322c] hover:bg-[#d4322c] cursor-pointer" %>
+    </div>
+  </section>
+<% end %>

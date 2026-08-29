@@ -1,0 +1,42 @@
+<%= form_with model: @user, url: postnhost.onboarding_path, method: :patch, class: "space-y-5" do |f| %>
+  <%= hidden_field_tag :step, 1 %>
+  <%= render "postnhost/shared/form_errors", resource: @user %>
+
+  <div class="space-y-4">
+    <div>
+      <%= f.label :name, "Your name", class: "mb-1 block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :name,
+          autofocus: true,
+          autocomplete: "name",
+          placeholder: "Enter your name",
+          required: true,
+          class: "block w-full rounded-xl border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-900 placeholder-gray-500 transition-all duration-200 focus:border-gray-900 focus:bg-white focus:ring-0" %>
+    </div>
+
+    <div>
+      <%= f.label :email, "Email", class: "mb-1 block text-sm font-medium text-gray-700" %>
+      <%= f.email_field :email,
+          autocomplete: "email",
+          placeholder: "Enter your email address",
+          required: true,
+          class: "block w-full rounded-xl border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-900 placeholder-gray-500 transition-all duration-200 focus:border-gray-900 focus:bg-white focus:ring-0" %>
+    </div>
+
+    <div>
+      <%= f.label :password, "Password", class: "mb-1 block text-sm font-medium text-gray-700" %>
+      <%= f.password_field :password,
+          autocomplete: "new-password",
+          placeholder: "Create a password (min 6 characters)",
+          required: true,
+          minlength: 6,
+          class: "block w-full rounded-xl border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-900 placeholder-gray-500 transition-all duration-200 focus:border-gray-900 focus:bg-white focus:ring-0" %>
+    </div>
+  </div>
+
+  <button type="submit" class="group relative w-full cursor-pointer overflow-hidden rounded-xl bg-gray-900 px-4 py-3 font-medium text-white transition-all duration-300 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2">
+    <span class="relative flex items-center justify-center">
+      Continue
+      <%= icon("arrow-right", css_class: "ml-2 h-4 w-4 transition-transform group-hover:translate-x-1") %>
+    </span>
+  </button>
+<% end %>

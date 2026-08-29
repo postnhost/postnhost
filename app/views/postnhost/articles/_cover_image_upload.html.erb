@@ -1,0 +1,82 @@
+<div class="px-6 py-4 border-b border-gray-100"
+     data-controller="cover-image-upload collapsible-sidebar"
+     data-cover-image-upload-article-id-value="<%= article.id %>"
+     data-cover-image-upload-mount-path-value="<%= postnhost.root_path %>"
+     data-collapsible-sidebar-storage-key-value="article-cover-image-<%= article.id %>">
+  <div data-collapsible-sidebar-target="section" data-section-id="cover-image">
+    <div class="flex items-center justify-between">
+      <button type="button"
+              class="inline-flex items-center text-left cursor-pointer"
+              data-role="section-toggle"
+              data-action="click->collapsible-sidebar#toggle"
+              data-collapsible-sidebar-id-param="cover-image"
+              aria-expanded="true"
+              aria-controls="cover-image-section-<%= article.id %>">
+        <span class="text-sm font-medium text-gray-900">Cover Image (ogimage)</span>
+        <span data-role="section-icon" class="ml-1 inline-flex text-gray-400 transition-transform duration-200 rotate-0">
+          <%= icon("chevron-down", css_class: "w-4 h-4") %>
+        </span>
+      </button>
+      <button type="button"
+              data-role="section-accessory"
+              class="mb-2 inline-flex items-center px-2.5 py-1 bg-gray-200 text-gray-400 text-xs font-medium rounded-lg cursor-not-allowed opacity-60"
+              disabled
+              title="AI generation coming soon">
+        <%= icon("sparkles", css_class: "w-3 h-3 mr-1") %>
+        <span>Generate</span>
+      </button>
+    </div>
+
+    <div data-role="section-content" id="cover-image-section-<%= article.id %>">
+      <!-- Preview with Alt Text -->
+      <div data-cover-image-upload-target="preview" class="<%= 'hidden' unless article.cover_image? %> space-y-2">
+        <div class="relative">
+          <%= image_tag(article.cover_image? ? article.cover_image.url : '',
+                alt: article.cover_image_alt,
+                width: 1200,
+                height: 630,
+                data: { cover_image_upload_target: "previewImage" },
+                class: "w-full object-cover") %>
+          <button type="button" data-action="click->cover-image-upload#removeImage" class="absolute top-2 right-2 bg-white/90 hover:bg-red-50 text-gray-600 hover:text-red-600 p-1.5 rounded-lg shadow transition-colors cursor-pointer">
+            <%= icon("trash", css_class: "w-4 h-4") %>
+          </button>
+        </div>
+        <%= form.text_field :cover_image_alt,
+              data: { cover_image_upload_target: "altField" },
+              class: "w-full px-3 py-1.5 rounded-lg focus:outline-none text-sm text-gray-600",
+              placeholder: "Add alt text...",
+              autocomplete: "off" %>
+      </div>
+
+      <!-- Compact Upload Area -->
+      <div data-cover-image-upload-target="uploadSection" class="<%= 'hidden' if article.cover_image? %>">
+        <div data-cover-image-upload-target="uploadArea"
+             data-action="dragover->cover-image-upload#dragOver dragleave->cover-image-upload#dragLeave drop->cover-image-upload#drop"
+             class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
+
+          <%= form.file_field :cover_image,
+                data: { cover_image_upload_target: "input", action: "change->cover-image-upload#selectFile" },
+                accept: "image/jpeg,image/png,image/gif,image/webp,image/heic",
+                class: "hidden" %>
+
+          <!-- Placeholder -->
+          <div data-cover-image-upload-target="placeholder">
+            <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+              <%= icon("image", css_class: "w-4 h-4 text-gray-400") %>
+            </div>
+            <p class="text-xs text-gray-600 mb-1">Drag and drop or <button type="button" data-action="click->cover-image-upload#triggerFileInput" class="text-gray-900 font-medium hover:underline">browse</button></p>
+            <p class="text-xs text-gray-400">1200x630 • Max 25MB</p>
+          </div>
+
+          <!-- Loading Spinner -->
+          <div data-cover-image-upload-target="spinner" class="hidden flex items-center justify-center">
+            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+              <%= icon("spinner", css_class: "animate-spin -ml-0.5 mr-1.5 h-3 w-3 text-purple-800") %>
+              Uploading...
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

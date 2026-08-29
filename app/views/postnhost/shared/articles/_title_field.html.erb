@@ -1,0 +1,9 @@
+<div class="px-6 py-6 border-b border-gray-100" data-controller="title-field">
+  <%= form.text_area :title,
+    class: "w-full text-3xl font-bold text-gray-900 placeholder-gray-400 border-none outline-none focus:ring-0 p-0 m-0 bg-transparent resize-none overflow-hidden leading-snug block",
+    placeholder: placeholder,
+    rows: 1,
+    style: "field-sizing: content;",
+    data: { auto_save_target: "titleField", publish_guard_target: "titleField", action: "keydown->title-field#preventNewLine input->publish-guard#sync" },
+    autocomplete: "off" %>
+</div>

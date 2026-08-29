@@ -1,0 +1,43 @@
+<div class="mb-6">
+  <h2 class="text-xl font-medium tracking-tight text-gray-700">Feature Flags</h2>
+  <p class="mt-1 text-sm text-gray-500">Enable or disable public-facing CMS features.</p>
+</div>
+
+<%= form_with model: @setting, url: settings_path(section: "feature_flags"), method: :patch, class: "space-y-6" do |f| %>
+  <%= render "postnhost/shared/form_errors", resource: @setting %>
+
+  <label class="flex items-start gap-3 rounded-xl border border-gray-200 bg-gray-50 p-4 cursor-pointer">
+    <%= f.check_box :author_pages_enabled, class: "mt-1 rounded border-gray-300 text-gray-900 focus:ring-gray-900" %>
+    <span class="space-y-1">
+      <span class="flex items-center gap-2 text-sm font-medium text-gray-900">
+        <%= icon("users", css_class: "h-4 w-4 text-gray-500") %>
+        Author pages
+      </span>
+      <span class="block text-xs text-gray-500">When enabled, public author profile pages and byline links are available.</span>
+    </span>
+  </label>
+
+  <label class="flex items-start gap-3 rounded-xl border border-gray-200 bg-gray-50 p-4 cursor-pointer">
+    <%= f.check_box :search_enabled, class: "mt-1 rounded border-gray-300 text-gray-900 focus:ring-gray-900" %>
+    <span class="space-y-1">
+      <span class="flex items-center gap-2 text-sm font-medium text-gray-900">
+        <%= icon("magnifying-glass", css_class: "h-4 w-4 text-gray-500") %>
+        Site search
+      </span>
+      <span class="block text-xs text-gray-500">When enabled, visitors can search published articles from the public site.</span>
+    </span>
+  </label>
+
+  <label class="flex items-start gap-3 rounded-xl border border-gray-200 bg-gray-50 p-4 cursor-pointer">
+    <%= f.check_box :show_powered_by, class: "mt-1 rounded border-gray-300 text-gray-900 focus:ring-gray-900" %>
+    <span class="space-y-1">
+      <span class="flex items-center gap-2 text-sm font-medium text-gray-900">
+        <%= icon("external-link", css_class: "h-4 w-4 text-gray-500") %>
+        Show “Powered by PostnHost”
+      </span>
+      <span class="block text-xs text-gray-500">When enabled, a link to postnhost.com appears in the public footer.</span>
+    </span>
+  </label>
+
+  <%= f.submit "Save Feature Flags", class: button_classes %>
+<% end %>

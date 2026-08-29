@@ -1,0 +1,67 @@
+<footer aria-labelledby="footer-heading" class="bg-white border-t border-gray-200">
+  <h2 id="footer-heading" class="sr-only"><%= t('postnhost.public.footer.heading') %></h2>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <%# Categories %>
+    <% if @use_auto_footer_navigation && @footer_categories.any? %>
+      <div class="text-center pb-6">
+        <p class="text-sm text-gray-500 mb-4"><%= t('postnhost.public.footer.explore_categories') %></p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <% @footer_categories.each do |category| %>
+            <%= link_to localized_category_name(category, @current_language),
+                language_category_path(category.slug, @current_language),
+                class: "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-color cursor-pointer" %>
+          <% end %>
+        </div>
+      </div>
+    <% elsif !@use_auto_footer_navigation && @footer_navigation_columns.any? %>
+      <div class="pb-8">
+        <div class="flex flex-col gap-y-6 sm:flex-row sm:flex-wrap sm:gap-x-10 sm:gap-y-8">
+          <% @footer_navigation_columns.each do |column| %>
+            <div class="min-w-32">
+              <p class="mb-3 text-sm font-semibold text-gray-700"><%= navigation_label(column) %></p>
+              <div class="space-y-2">
+                <% column.children.each do |child| %>
+                  <% if child.target_kind != "external" && navigation_href(child).present? %>
+                    <%= link_to navigation_label(child), navigation_href(child), **navigation_link_options(child), class: "block text-sm text-gray-600 hover:text-gray-900 transition-colors cursor-pointer" %>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-xs text-gray-400 text-center sm:text-left sm:flex-1">
+        &copy; <%= Date.current.year %> <%= t('postnhost.public.site.name_footer_copyright') %>
+      </p>
+
+      <% if @use_auto_footer_navigation && (@footer_published_pages.any? || @footer_static_pages.any?) %>
+        <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:flex-1">
+          <% @footer_published_pages.each do |page| %>
+            <%= link_to (page.title.presence || page.slug.humanize),
+                language_static_page_path(page.slug, @current_language),
+                class: "text-xs text-gray-400 hover:text-gray-600 transition-colors cursor-pointer" %>
+          <% end %>
+
+          <% @footer_static_pages.each do |slug| %>
+            <%= link_to slug.humanize,
+                language_static_page_path(slug, @current_language),
+              class: "text-xs text-gray-400 hover:text-gray-600 transition-colors cursor-pointer" %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="hidden sm:block sm:flex-1"></div>
+      <% end %>
+
+      <% if @setting.show_powered_by? %>
+        <a href="https://postnhost.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 transition-colors sm:flex-1 sm:justify-end cursor-pointer">
+          Powered by
+          <%= image_tag 'postnhost/logo.webp', alt: 'PostnHost', class: 'h-4 w-auto opacity-60 hover:opacity-100 transition-opacity', width: 80, height: 16 %>
+        </a>
+      <% end %>
+    </div>
+  </div>
+</footer>

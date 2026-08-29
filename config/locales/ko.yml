@@ -1,0 +1,50 @@
+ko:
+  postnhost:
+    public:
+      site:
+        schema_site_name: "postnhost"
+        blog_tagline: "블로그"
+        blog_subtitle: "최신 인사이트, 튜토리얼, 스토리를 만나보세요"
+        blog_meta_title: "블로그 - postnhost"
+        blog_meta_description: "postnhost의 최신 인사이트, 튜토리얼, 스토리를 만나보세요"
+        blog_meta_title_paginated: "페이지 %{page} - %{blog_meta_title}"
+        name_footer_copyright: "postnhost.com"
+
+      blog:
+        page_title: "페이지 %{page} - 블로그"
+        author_label: "작성자"
+        no_articles: "아직 게시물이 없습니다"
+        no_articles_description: "새로운 콘텐츠를 기대해주세요!"
+        back_to_articles: "게시물 목록으로"
+        more_in_category: "%{category}"
+        available_in_languages: "다른 언어로 보기:"
+        browse_all_articles: "모든 게시물 보기"
+        read_more: "더 읽어보기"
+        read_article_aria_label: "게시물 읽기: %{title}"
+        top_picks: "추천 글"
+
+      search:
+        title: "%{query} 검색 결과"
+        heading: "%{query} 검색 결과"
+        input_placeholder: "제목 또는 내용으로 검색"
+        submit: "검색"
+
+      category:
+        title: "%{category} - postnhost"
+        page_title: "페이지 %{page} - %{category} - postnhost"
+        page_heading: "페이지 %{page} - %{category}"
+        no_articles: "게시물을 찾을 수 없습니다"
+        no_articles_description: "이 카테고리에는 아직 게시된 글이 없습니다."
+
+      authors:
+        latest_from_author: "작성자의 최신 글"
+        no_articles: "아직 게시물이 없습니다"
+        no_articles_description: "이 작성자는 아직 게시물을 발행하지 않았습니다."
+
+      footer:
+        explore_categories: "카테고리별 글"
+        pages: "페이지"
+
+      pagination:
+        previous: "이전"
+        next: "다음"

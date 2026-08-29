@@ -1,0 +1,26 @@
+<%= form_with url: postnhost.onboarding_path, method: :patch, class: "space-y-5" do %>
+  <%= hidden_field_tag :step, 4 %>
+
+  <div class="space-y-3">
+    <p class="text-sm text-gray-600">
+      Generate demo categories and articles similar to the development seeds, or skip and start with an empty blog.
+    </p>
+    <div class="space-y-2">
+      <label class="flex cursor-pointer items-center gap-2 text-sm text-gray-700">
+        <%= radio_button_tag :generate_sample, "1", true, class: "cursor-pointer" %>
+        Yes, add sample categories and articles
+      </label>
+      <label class="flex cursor-pointer items-center gap-2 text-sm text-gray-700">
+        <%= radio_button_tag :generate_sample, "0", false, class: "cursor-pointer" %>
+        No, start empty
+      </label>
+    </div>
+  </div>
+
+  <button type="submit" class="group relative w-full cursor-pointer overflow-hidden rounded-xl bg-gray-900 px-4 py-3 font-medium text-white transition-all duration-300 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2">
+    <span class="relative flex items-center justify-center">
+      Finish setup
+      <%= icon("arrow-right", css_class: "ml-2 h-4 w-4 transition-transform group-hover:translate-x-1") %>
+    </span>
+  </button>
+<% end %>

@@ -1,0 +1,26 @@
+<% content_for :title, "Edit Author" %>
+
+<div class="space-y-8">
+  <%= render "postnhost/shared/elements/page_header",
+    title: "Edit Author",
+    description: "Update profile details and credentials",
+    stats: [
+      { text: author_pages_enabled? ? "Slug: /authors/#{@user.slug}" : "Slug: #{@user.slug}", class: "" },
+      *(@user.slug.present? && author_pages_enabled? ? [{ text: "Open", url: public_author_path(@user.slug), icon: "external-link", target: "_blank" }] : [])
+    ] do %>
+    <%= render "postnhost/shared/elements/button_link",
+      text: "Back to Authors",
+      url: users_path,
+      variant: :secondary,
+      icon: "chevron-left",
+      extra_class: "w-full md:w-auto" %>
+    <%= render "postnhost/shared/elements/button_link",
+      text: "Edit Schema",
+      url: schema_edit_user_path(@user),
+      variant: :secondary,
+      icon: "layers",
+      extra_class: "w-full md:w-auto" %>
+  <% end %>
+
+  <%= render "form", user: @user, submit_text: "Update", cancel_url: users_path, show_sign_out: (@user == current_user) %>
+</div>

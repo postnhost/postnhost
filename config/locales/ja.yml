@@ -1,0 +1,50 @@
+ja:
+  postnhost:
+    public:
+      site:
+        schema_site_name: "postnhost"
+        blog_tagline: "ブログ"
+        blog_subtitle: "最新の洞察、チュートリアル、ストーリーをご覧ください"
+        blog_meta_title: "ブログ - postnhost"
+        blog_meta_description: "postnhostの最新の洞察、チュートリアル、ストーリーをご覧ください"
+        blog_meta_title_paginated: "ページ %{page} - %{blog_meta_title}"
+        name_footer_copyright: "postnhost.com"
+
+      blog:
+        page_title: "ページ %{page} - ブログ"
+        author_label: "著者"
+        no_articles: "まだ記事がありません"
+        no_articles_description: "新しいコンテンツをお楽しみに！"
+        back_to_articles: "記事一覧に戻る"
+        more_in_category: "%{category}"
+        available_in_languages: "他の言語で利用可能："
+        browse_all_articles: "すべての記事を見る"
+        read_more: "続きを読む"
+        read_article_aria_label: "記事を読む: %{title}"
+        top_picks: "おすすめ記事"
+
+      search:
+        title: "%{query} を検索しました"
+        heading: "%{query} の検索結果"
+        input_placeholder: "タイトルまたは内容で検索"
+        submit: "検索"
+
+      category:
+        title: "%{category} - postnhost"
+        page_title: "ページ %{page} - %{category} - postnhost"
+        page_heading: "ページ %{page} - %{category}"
+        no_articles: "記事が見つかりません"
+        no_articles_description: "このカテゴリーにはまだ公開された記事がありません。"
+
+      authors:
+        latest_from_author: "著者の最新記事"
+        no_articles: "まだ記事がありません"
+        no_articles_description: "この著者はまだ記事を公開していません。"
+
+      footer:
+        explore_categories: "カテゴリー別の記事"
+        pages: "ページ"
+
+      pagination:
+        previous: "前へ"
+        next: "次へ"

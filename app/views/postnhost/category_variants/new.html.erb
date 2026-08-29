@@ -1,0 +1,21 @@
+<% content_for :title, "New Translation - #{@category.name}" %>
+
+<div class="max-w-2xl">
+  <%= render 'postnhost/shared/elements/form_page_header',
+    title: 'New Translation',
+    description: "Create a #{@category_variant.language&.name || 'new'} translation for \"#{@category.name}\"" %>
+
+  <%= form_with model: @category_variant, url: category_variants_path(@category), local: true, class: "space-y-6" do |form| %>
+    <%= render 'postnhost/shared/elements/error_messages', resource: @category_variant %>
+
+    <%= render 'postnhost/category_variants/form', form: form, category_variant: @category_variant %>
+
+    <div class="flex items-center space-x-4">
+      <%= form.submit "Create Translation", class: button_classes %>
+      <%= render 'postnhost/shared/elements/button_link',
+        text: 'Cancel',
+        url: category_variants_path(@category),
+        variant: :secondary %>
+    </div>
+  <% end %>
+</div>

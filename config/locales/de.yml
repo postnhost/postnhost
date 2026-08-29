@@ -1,0 +1,50 @@
+de:
+  postnhost:
+    public:
+      site:
+        schema_site_name: "postnhost"
+        blog_tagline: "Blog"
+        blog_subtitle: "Entdecken Sie die neuesten Einblicke, Tutorials und Geschichten"
+        blog_meta_title: "Blog - postnhost"
+        blog_meta_description: "Entdecken Sie die neuesten Einblicke, Tutorials und Geschichten von postnhost"
+        blog_meta_title_paginated: "Seite %{page} - %{blog_meta_title}"
+        name_footer_copyright: "postnhost.com"
+
+      blog:
+        page_title: "Seite %{page} - Blog"
+        author_label: "Autor"
+        no_articles: "Noch keine Artikel"
+        no_articles_description: "Schauen Sie bald wieder vorbei für neue Inhalte!"
+        back_to_articles: "Zurück zu den Artikeln"
+        more_in_category: "%{category}"
+        available_in_languages: "Verfügbar in anderen Sprachen:"
+        browse_all_articles: "Alle Artikel durchsuchen"
+        read_more: "Weiterlesen"
+        read_article_aria_label: "Artikel lesen: %{title}"
+        top_picks: "Top-Auswahl"
+
+      search:
+        title: "Sie haben nach %{query} gesucht"
+        heading: "Suchergebnis fur %{query}"
+        input_placeholder: "Nach Titel oder Inhalt suchen"
+        submit: "Suchen"
+
+      category:
+        title: "%{category} - postnhost"
+        page_title: "Seite %{page} - %{category} - postnhost"
+        page_heading: "Seite %{page} - %{category}"
+        no_articles: "Keine Artikel gefunden"
+        no_articles_description: "Es gibt noch keine veröffentlichten Artikel in dieser Kategorie."
+
+      authors:
+        latest_from_author: "Neueste Beiträge vom Autor"
+        no_articles: "Noch keine Artikel"
+        no_articles_description: "Dieser Autor hat noch keine Artikel veröffentlicht."
+
+      footer:
+        explore_categories: "Beiträge nach Kategorien"
+        pages: "Seiten"
+
+      pagination:
+        previous: "Zurück"
+        next: "Weiter"

@@ -1,0 +1,69 @@
+<%= turbo_frame_tag (resource_type == "variant" ? "page_variant_actions" : "page_actions") do %>
+  <div class="space-y-3">
+    <% if resource_type == "page" %>
+      <% if resource.published? && resource.slug.present? %>
+        <%= link_to public_static_page_path(slug: resource.slug), target: "_blank", rel: "noopener", class: editor_button_classes do %>
+          <div class="flex items-center justify-center space-x-2">
+            <span>Open</span>
+            <%= icon("external-link", css_class: "w-4 h-4") %>
+          </div>
+        <% end %>
+      <% end %>
+    <% elsif resource_type == "variant" && resource.published? && !resource.generating? %>
+      <%= link_to localized_public_static_page_path(locale: resource.language.html_lang, slug: resource.page.slug), target: "_blank", rel: "noopener", class: editor_button_classes do %>
+        <div class="flex items-center justify-center space-x-2">
+          <span>Open</span>
+          <%= icon("external-link", css_class: "w-4 h-4") %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% unless resource_type == "variant" && resource.generating? %>
+      <% if resource.published? %>
+        <% if resource.unpublished_changes? %>
+          <%= link_to (resource_type == "variant" ? publish_page_variant_path(page, resource) : publish_page_path(resource)),
+              class: editor_button_classes(variant: :primary),
+              data: { turbo_method: :patch, publish_guard_target: "publishButton", action: "click->publish-guard#prevent" } do %>
+            Publish New Version
+          <% end %>
+        <% end %>
+
+        <%= link_to (resource_type == "variant" ? unpublish_page_variant_path(page, resource) : unpublish_page_path(resource)),
+            class: "#{editor_button_classes} #{'mb-4' if resource_type == 'variant'}",
+            data: { turbo_method: :patch } do %>
+          Unpublish
+        <% end %>
+      <% else %>
+        <%= link_to (resource_type == "variant" ? publish_page_variant_path(page, resource) : publish_page_path(resource)),
+            class: "#{editor_button_classes(variant: :primary)} #{'mb-4' if resource_type == 'variant'}",
+            data: { turbo_method: :patch, publish_guard_target: "publishButton", action: "click->publish-guard#prevent" } do %>
+          Publish Now
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="mt-5 pt-3 pb-3 border-t border-gray-100">
+    <h4 class="text-sm font-semibold text-gray-900 mb-4">Current Status</h4>
+    <div class="space-y-3">
+      <% if resource.published? %>
+        <div class="flex items-start">
+          <div class="w-2 h-2 bg-green-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+          <p class="text-sm text-gray-600">This <%= resource_type %> is published and visible to everyone</p>
+        </div>
+
+        <% if resource.unpublished_changes? %>
+          <div class="flex items-start">
+            <div class="w-2 h-2 bg-yellow-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+            <p class="text-sm text-gray-600">You have unpublished changes. Click "Publish New Version" to make them live.</p>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="flex items-start">
+          <div class="w-2 h-2 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+          <p class="text-sm text-gray-600">This <%= resource_type %> is a draft and only visible to you</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

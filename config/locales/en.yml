@@ -1,0 +1,87 @@
+# Files in the config/locales directory are used for internationalization and
+# are automatically loaded by Rails. If you want to use locales other than
+# English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t "hello"
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t("hello") %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more about the API, please read the Rails Internationalization guide
+# at https://guides.rubyonrails.org/i18n.html.
+#
+# Be aware that YAML interprets the following case-insensitive strings as
+# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
+# must be quoted to be interpreted as strings. For example:
+#
+#     en:
+#       "yes": yup
+#       enabled: "ON"
+
+en:
+  postnhost:
+    onboarding:
+      title: "Welcome to PostnHost"
+      step_indicator: "Step %{step} of %{total}"
+
+    public:
+      site:
+        schema_site_name: "postnhost"
+        blog_tagline: "Blog"
+        blog_subtitle: "Discover the latest insights, tutorials, and stories"
+        blog_meta_title: "Blog - postnhost"
+        blog_meta_description: "Discover the latest insights, tutorials, and stories from postnhost"
+        blog_meta_title_paginated: "Page %{page} - %{blog_meta_title}"
+        name_footer_copyright: "postnhost.com"
+
+      blog:
+        page_title: "Page %{page} - Blog"
+        author_label: "Author"
+        no_articles: "No articles yet"
+        no_articles_description: "Check back soon for new content!"
+        back_to_articles: "Back to Articles"
+        more_in_category: "%{category}"
+        available_in_languages: "Available in other languages:"
+        browse_all_articles: "Browse All Articles"
+        read_more: "Read More"
+        read_article_aria_label: "Read article: %{title}"
+        top_picks: "Top Picks"
+
+      search:
+        title: "You searched for %{query}"
+        heading: "Search result for %{query}"
+        input_placeholder: "Search by title or content"
+        submit: "Search"
+
+      category:
+        title: "%{category} - postnhost"
+        page_title: "Page %{page} - %{category} - postnhost"
+        page_heading: "Page %{page} - %{category}"
+        no_articles: "No articles found"
+        no_articles_description: "There are no published articles in this category yet."
+
+      authors:
+        latest_from_author: "Latest from Author"
+        no_articles: "No articles yet"
+        no_articles_description: "This author has not published any articles yet."
+
+      footer:
+        heading: "Footer"
+        explore_categories: "Browse posts by category"
+        pages: "Pages"
+
+      breadcrumbs:
+        home: "Home"
+
+      pagination:
+        previous: "Previous"
+        next: "Next"

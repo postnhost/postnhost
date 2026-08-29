@@ -1,0 +1,79 @@
+<div class="mb-6">
+  <h2 class="text-xl font-medium tracking-tight text-gray-700">Scripts</h2>
+  <p class="mt-1 max-w-2xl text-sm text-gray-500">Add analytics, verification, and other integration tags to every public page.</p>
+</div>
+
+<div class="space-y-8">
+  <%= form_with model: @new_site_script, url: settings_site_scripts_path(section: "scripts"), method: :post, class: "space-y-4" do |f| %>
+    <%= render "postnhost/shared/form_errors", resource: @new_site_script if @new_site_script.errors.any? %>
+
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,12rem)_minmax(0,1fr)]">
+      <div class="space-y-2">
+        <%= f.label :placement, "Placement", class: form_label_classes %>
+        <%= f.select :placement,
+          options_for_select(Postnhost::SiteScript::PLACEMENTS.map { |placement| [placement.humanize, placement] }, @new_site_script.placement || "head"),
+          {},
+          class: form_input_classes %>
+      </div>
+
+      <div class="space-y-2">
+        <%= f.label :script, "Script or tag", class: form_label_classes %>
+        <%= f.text_area :script,
+          rows: 5,
+          class: "#{form_textarea_classes} font-mono leading-6",
+          placeholder: '<script src="https://analytics.example.com/analytics.js" async></script>',
+          spellcheck: false %>
+      </div>
+    </div>
+
+    <%= f.submit "Add script", class: button_classes %>
+  <% end %>
+
+  <section aria-labelledby="existing-scripts-heading">
+    <div class="mb-4">
+      <h3 id="existing-scripts-heading" class="text-base font-medium text-gray-900">Existing scripts</h3>
+      <p class="mt-1 text-xs text-gray-500">Tags are rendered in the order shown within each placement.</p>
+    </div>
+
+    <% if @site_scripts.any? %>
+      <div class="divide-y divide-gray-200 overflow-hidden rounded-xl border border-gray-200">
+        <% @site_scripts.each do |site_script| %>
+          <%= form_with model: site_script, url: settings_site_script_path(site_script, section: "scripts"), method: :patch, class: "space-y-4 p-4" do |f| %>
+            <%= render "postnhost/shared/form_errors", resource: site_script if site_script.errors.any? %>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,12rem)_minmax(0,1fr)]">
+              <div class="space-y-2">
+                <%= f.label :placement, "Placement", class: form_label_classes %>
+                <%= f.select :placement,
+                  options_for_select(Postnhost::SiteScript::PLACEMENTS.map { |placement| [placement.humanize, placement] }, site_script.placement),
+                  {},
+                  class: form_input_classes %>
+              </div>
+
+              <div class="space-y-2">
+                <%= f.label :script, "Script or tag", class: form_label_classes %>
+                <%= f.text_area :script,
+                  rows: 5,
+                  class: "#{form_textarea_classes} font-mono leading-6",
+                  spellcheck: false %>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-end gap-3 border-t border-gray-100 pt-4">
+              <%= link_to "Delete",
+                settings_site_script_path(site_script, section: "scripts"),
+                data: { turbo_method: :delete, turbo_confirm: "Delete this script?" },
+                class: button_classes(variant: :danger) %>
+              <%= f.submit "Save changes", class: button_classes %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="rounded-xl border border-gray-200 bg-gray-50 px-5 py-6">
+        <p class="text-sm font-medium text-gray-900">No scripts added</p>
+        <p class="mt-1 max-w-xl text-xs leading-5 text-gray-500">Add your first integration above. Most analytics and verification tags belong in the head.</p>
+      </div>
+    <% end %>
+  </section>
+</div>

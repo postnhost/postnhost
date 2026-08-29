@@ -1,0 +1,68 @@
+<% content_for :title, "Settings" %>
+
+<div class="space-y-8">
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <aside class="lg:col-span-1">
+      <nav class="bg-white rounded-2xl border border-gray-200 p-2">
+        <%= link_to edit_settings_path(section: 'site'),
+          class: "group flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 #{@active_section == 'site' ? 'bg-gray-900 text-white' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'}" do %>
+          <%= icon('settings', css_class: "h-5 w-5 #{@active_section == 'site' ? 'text-white' : 'text-gray-500 group-hover:text-gray-700'}") %>
+          <span>Site</span>
+        <% end %>
+
+        <%= link_to edit_settings_path(section: 'assets'),
+          class: "group mt-1 flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 #{@active_section == 'assets' ? 'bg-gray-900 text-white' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'}" do %>
+          <%= icon('image', css_class: "h-5 w-5 #{@active_section == 'assets' ? 'text-white' : 'text-gray-500 group-hover:text-gray-700'}") %>
+          <span>Assets</span>
+        <% end %>
+
+        <%= link_to edit_settings_path(section: 'i18n'),
+          class: "group mt-1 flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 #{@active_section == 'i18n' ? 'bg-gray-900 text-white' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'}" do %>
+          <%= icon('language', css_class: "h-5 w-5 #{@active_section == 'i18n' ? 'text-white' : 'text-gray-500 group-hover:text-gray-700'}") %>
+          <span>I18n</span>
+        <% end %>
+
+        <%= link_to edit_settings_path(section: 'timezone'),
+          class: "group mt-1 flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 #{@active_section == 'timezone' ? 'bg-gray-900 text-white' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'}" do %>
+          <%= icon('clock', css_class: "h-5 w-5 #{@active_section == 'timezone' ? 'text-white' : 'text-gray-500 group-hover:text-gray-700'}") %>
+          <span>Timezone</span>
+        <% end %>
+
+        <%= link_to edit_settings_path(section: 'schema'),
+          class: "group mt-1 flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 #{@active_section == 'schema' ? 'bg-gray-900 text-white' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'}" do %>
+          <%= icon('layers', css_class: "h-5 w-5 #{@active_section == 'schema' ? 'text-white' : 'text-gray-500 group-hover:text-gray-700'}") %>
+          <span>Schema</span>
+        <% end %>
+
+        <%= link_to edit_settings_path(section: 'navigation'),
+          class: "group mt-1 flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 #{@active_section == 'navigation' ? 'bg-gray-900 text-white' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'}" do %>
+          <%= icon('bars', css_class: "h-5 w-5 #{@active_section == 'navigation' ? 'text-white' : 'text-gray-500 group-hover:text-gray-700'}") %>
+          <span>Navigation</span>
+        <% end %>
+
+        <%= link_to edit_settings_path(section: 'scripts'),
+          class: "group mt-1 flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 #{@active_section == 'scripts' ? 'bg-gray-900 text-white' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'}" do %>
+          <%= icon('code-bracket', css_class: "h-5 w-5 #{@active_section == 'scripts' ? 'text-white' : 'text-gray-500 group-hover:text-gray-700'}") %>
+          <span>Scripts</span>
+        <% end %>
+
+        <%= link_to edit_settings_path(section: 'feature_flags'),
+          class: "group mt-1 flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 #{@active_section == 'feature_flags' ? 'bg-gray-900 text-white' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'}" do %>
+          <%= icon('lightning', css_class: "h-5 w-5 #{@active_section == 'feature_flags' ? 'text-white' : 'text-gray-500 group-hover:text-gray-700'}") %>
+          <span>Feature Flags</span>
+        <% end %>
+
+      </nav>
+    </aside>
+
+    <section class="lg:col-span-3 bg-white rounded-2xl border border-gray-200 p-6">
+      <% if %w[site timezone assets i18n schema navigation feature_flags scripts].include?(@active_section) %>
+        <%= render "postnhost/settings/sections/#{@active_section}" %>
+      <% else %>
+        <div class="rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-900">
+          Unknown settings section.
+        </div>
+      <% end %>
+    </section>
+  </div>
+</div>

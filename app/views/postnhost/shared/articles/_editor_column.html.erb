@@ -1,0 +1,15 @@
+<div class="order-3 md:order-2 w-full md:w-3/5 bg-white border-t border-b border-gray-200 border-t-0">
+  <% if is_variant %>
+    <%= render 'postnhost/shared/articles/cover_image_preview', form: form, article: article %>
+  <% else %>
+    <%= render 'postnhost/articles/cover_image_upload', form: form, article: article %>
+  <% end %>
+
+  <%= render 'postnhost/shared/articles/title_field', form: form, placeholder: placeholder %>
+
+  <%= render 'postnhost/shared/articles/tiptap_editor',
+      form: form,
+      content: content,
+      resource_type: 'article',
+      resource_id: article.id %>
+</div>

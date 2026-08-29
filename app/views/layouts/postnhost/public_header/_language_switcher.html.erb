@@ -1,0 +1,43 @@
+<% if show_article_variant_language_switcher? %>
+  <div class="relative">
+    <label for="language-select" class="sr-only">Select Language</label>
+    <select id="language-select" onchange="window.location.href=this.value" class="appearance-none bg-white border border-gray-200 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 pr-7 sm:pr-8 text-xs sm:text-sm text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent cursor-pointer w-[110px] sm:w-[140px]" aria-label="Select Language">
+      <% localized_language_options(@article).each do |label, path| %>
+        <option value="<%= path %>"><%= label %></option>
+      <% end %>
+    </select>
+    <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </div>
+  </div>
+<% elsif show_page_variant_language_switcher? %>
+  <div class="relative">
+    <label for="language-select" class="sr-only">Select Language</label>
+    <select id="language-select" onchange="window.location.href=this.value" class="appearance-none bg-white border border-gray-200 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 pr-7 sm:pr-8 text-xs sm:text-sm text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent cursor-pointer w-[110px] sm:w-[140px]" aria-label="Select Language">
+      <% localized_language_options(@page).each do |label, path| %>
+        <option value="<%= path %>"><%= label %></option>
+      <% end %>
+    </select>
+    <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </div>
+  </div>
+<% elsif show_other_languages_switcher? %>
+  <div class="relative">
+    <label for="language-select" class="sr-only">Select Language</label>
+    <select id="language-select" onchange="window.location.href=this.value" class="appearance-none bg-white border border-gray-200 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 pr-7 sm:pr-8 text-xs sm:text-sm text-gray-700 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent cursor-pointer w-[110px] sm:w-[140px]" aria-label="Select Language">
+      <% default_language_options.each do |label, path| %>
+        <option value="<%= path %>"><%= label %></option>
+      <% end %>
+    </select>
+    <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </div>
+  </div>
+<% end %>

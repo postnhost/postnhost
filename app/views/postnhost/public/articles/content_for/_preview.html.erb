@@ -1,0 +1,9 @@
+<% content_for :title, @content.title_tag.present? ? @content.title_tag : @content.title %>
+<% content_for :og_title, @content.og_title if @content.og_title.present? %>
+<% content_for :schema_headline, @content.schema_headline if @content.schema_headline.present? %>
+<% if @content.use_excerpt_as_meta_description? && article_excerpt(@content).present? %>
+  <% content_for :meta_description, article_excerpt(@content) %>
+<% elsif @content.meta_description.present? %>
+  <% content_for :meta_description, @content.meta_description %>
+<% end %>
+<% content_for :lang, @actual_language.html_lang %>

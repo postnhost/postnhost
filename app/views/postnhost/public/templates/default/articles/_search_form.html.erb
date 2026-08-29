@@ -1,0 +1,12 @@
+<h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
+  <%= public_search_page? ? public_articles_index_heading : t("postnhost.public.search.submit") %>
+</h1>
+<%= form_with url: language_search_path(@current_language), method: :get, local: true, class: "max-w-3xl mx-auto" do %>
+  <label for="public-blog-search" class="sr-only"><%= t("postnhost.public.search.submit") %></label>
+  <div class="relative">
+    <%= text_field_tag :s, public_search_query, id: "public-blog-search", placeholder: t("postnhost.public.search.input_placeholder"), class: "w-full rounded-2xl border border-gray-200 bg-white px-5 py-3 pr-12 text-base text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900" %>
+    <button type="submit" class="absolute inset-y-1 right-1 inline-flex items-center justify-center rounded-xl px-3 text-gray-500 hover:text-gray-900 cursor-pointer" aria-label="<%= t("postnhost.public.search.submit") %>">
+      <%= icon("magnifying-glass", css_class: "size-5 shrink-0") %>
+    </button>
+  </div>
+<% end %>

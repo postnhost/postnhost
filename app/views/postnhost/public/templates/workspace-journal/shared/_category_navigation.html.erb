@@ -1,0 +1,10 @@
+<% if @sidebar_categories.any? %>
+  <div class="mt-6 hidden h-px w-24 bg-[#e4e2de] lg:mt-9 lg:block"></div>
+  <nav class="mt-5 hidden flex-col items-start gap-3 lg:mt-7 lg:flex" aria-label="<%= t("postnhost.public.footer.explore_categories") %>">
+    <% @sidebar_categories.each do |category| %>
+      <%= link_to localized_category_name(category, @current_language),
+            language_category_path(category.slug, @current_language),
+            class: "text-sm/6 text-[#77736e] hover:text-[#1f1f1f] cursor-pointer" %>
+    <% end %>
+  </nav>
+<% end %>

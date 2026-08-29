@@ -1,0 +1,40 @@
+<%
+  # Page header partial for consistent page titles
+  #
+  # Parameters:
+  #   title: (required) Page title
+  #   description: Subtitle/description text
+  #   stats: Array of stats hashes [{text: "...", class: "..."}]
+  #   actions block: Action buttons
+%>
+
+<div class="<%= page_header_classes %>">
+  <div>
+    <h1 class="text-3xl font-bold text-gray-900"><%= title %></h1>
+    <% if defined?(description) && description %>
+      <p class="mt-2 text-gray-600 max-w-lg"><%= description %></p>
+    <% end %>
+    <% if defined?(stats) && stats.any? %>
+      <div class="mt-2 flex items-center space-x-4 text-sm text-gray-500">
+        <% stats.each do |stat| %>
+          <% if stat[:url] %>
+            <%= link_to stat[:url], class: "#{stat[:class]} hover:text-gray-700 inline-flex items-center cursor-pointer", target: stat[:target] do %>
+              <%= stat[:text] %>
+              <% if stat[:icon] %>
+                <%= icon(stat[:icon], css_class: "w-3.5 h-3.5 ml-1") %>
+              <% end %>
+            <% end %>
+          <% else %>
+            <span class="<%= stat[:class] %>"><%= stat[:text] %></span>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <% if block_given? %>
+    <div class="flex flex-col space-y-3 md:flex-row md:items-center md:space-y-0 md:space-x-3 w-full md:w-auto">
+      <%= yield %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,40 @@
+<div class="space-y-5">
+  <p class="text-sm text-gray-600">
+    Final manual checks for host app integration. Most of these are inherited from the root app and can be customized there. You can find this checklist later in the README.
+  </p>
+
+  <div class="rounded-xl border border-gray-200 bg-gray-50 p-4">
+    <ul class="space-y-3 text-sm text-gray-700">
+      <li>
+        <span class="font-medium text-gray-900">1. Favicon</span><br>
+        Inherited from the root app. Update host favicon files/links if needed.
+      </li>
+      <li>
+        <span class="font-medium text-gray-900">2. 404 / 500 pages</span><br>
+        Inherited from root app static error pages (`public/404.html` and `public/500.html`).
+      </li>
+      <li>
+        <span class="font-medium text-gray-900">3. robots.txt</span><br>
+        Inherited from root app (`public/robots.txt`). Confirm the sitemap URL matches your mount path.
+      </li>
+      <li>
+        <span class="font-medium text-gray-900">4. Public template styling</span><br>
+        Customize by running <code>rails g postnhost:views --views_scope=minimal</code> (or <code>full</code>) and editing copied templates in the host app.
+      </li>
+      <li>
+        <span class="font-medium text-gray-900">5. S3 upload settings</span><br>
+        Configure credentials/bucket/endpoint in host app credentials and initializer (`config/initializers/postnhost.rb`).
+      </li>
+    </ul>
+  </div>
+
+  <%= form_with url: postnhost.onboarding_path, method: :patch do %>
+    <%= hidden_field_tag :step, "post_install_done" %>
+    <button type="submit" class="group relative w-full cursor-pointer overflow-hidden rounded-xl bg-gray-900 px-4 py-3 font-medium text-white transition-all duration-300 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2">
+      <span class="relative flex items-center justify-center">
+        Go to Dashboard
+        <%= icon("arrow-right", css_class: "ml-2 h-4 w-4 transition-transform group-hover:translate-x-1") %>
+      </span>
+    </button>
+  <% end %>
+</div>

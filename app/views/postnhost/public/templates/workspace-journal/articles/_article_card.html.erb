@@ -1,0 +1,44 @@
+<article class="group break-words">
+  <% if category_article(item).cover_image? %>
+    <%= link_to category_article_url(item), class: "mb-5 block cursor-pointer", "aria-label": t("postnhost.public.blog.read_article_aria_label", title: item.title) do %>
+      <%= render "postnhost/public/templates/workspace-journal/shared/thumbnail_cover_image",
+            publication: category_article(item),
+            index: local_assigns.fetch(:index) { item_counter + local_assigns.fetch(:index_offset, 0) },
+            image_class: "aspect-[16/9] w-full rounded-md border border-[#e8e6e1] bg-[#f7f6f3] object-cover" %>
+    <% end %>
+  <% end %>
+
+  <% if category_article(item).categories.any? %>
+    <%= link_to localized_category_name(category_article(item).categories.first, @current_language),
+          language_category_path(category_article(item).categories.first.slug, @current_language),
+          class: "text-sm/6 font-medium text-[#85827d] hover:text-[#1f1f1f] cursor-pointer" %>
+  <% end %>
+
+  <%= link_to category_article_url(item), class: "mt-2 block cursor-pointer", "aria-label": t("postnhost.public.blog.read_article_aria_label", title: item.title) do %>
+    <h2 class="text-xl/7 font-semibold text-[#1f1f1f] group-hover:text-[#5f5d59]">
+      <%= item.title %>
+    </h2>
+
+    <% if article_excerpt(item).present? %>
+      <p class="mt-3 line-clamp-3 text-sm/6 text-[#77736e]">
+        <%= article_excerpt(item) %>
+      </p>
+    <% end %>
+  <% end %>
+
+  <div class="mt-5 flex items-center gap-3">
+    <% if author_name(category_article_author_user(item)).present? %>
+      <%= render "postnhost/public/templates/workspace-journal/shared/author_avatar", user: category_article_author_user(item), size_class: "size-11", text_size_class: "text-sm" %>
+      <div class="min-w-0">
+        <p class="truncate text-sm/6 font-medium text-[#1f1f1f]"><%= author_name(category_article_author_user(item)) %></p>
+        <time datetime="<%= category_article(item).published_at.to_date.iso8601 %>" class="block truncate text-sm/6 text-[#a6a29d]">
+          <%= l category_article(item).published_at.to_date, format: :long %>
+        </time>
+      </div>
+    <% else %>
+      <time datetime="<%= category_article(item).published_at.to_date.iso8601 %>" class="text-sm/6 text-[#85827d]">
+        <%= l category_article(item).published_at.to_date, format: :long %>
+      </time>
+    <% end %>
+  </div>
+</article>

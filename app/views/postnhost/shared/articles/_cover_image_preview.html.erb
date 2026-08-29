@@ -1,0 +1,30 @@
+<div class="px-6 py-4 border-b border-gray-100 <%= 'hidden' unless article.cover_image? %>"
+     data-controller="collapsible-sidebar"
+     data-collapsible-sidebar-storage-key-value="article-cover-image-preview-<%= article.id %>">
+  <div data-collapsible-sidebar-target="section" data-section-id="cover-image-preview">
+    <button type="button"
+            class="inline-flex items-center text-left mb-2 cursor-pointer"
+            data-role="section-toggle"
+            data-action="click->collapsible-sidebar#toggle"
+            data-collapsible-sidebar-id-param="cover-image-preview"
+            aria-expanded="true"
+            aria-controls="cover-image-preview-section-<%= article.id %>">
+      <span class="text-sm font-medium text-gray-900">Cover Image (ogimage)</span>
+      <span data-role="section-icon" class="ml-1 inline-flex text-gray-400 transition-transform duration-200 rotate-0">
+        <%= icon("chevron-down", css_class: "w-4 h-4") %>
+      </span>
+    </button>
+
+    <!-- Preview with Alt Text -->
+    <div class="space-y-2" data-role="section-content" id="cover-image-preview-section-<%= article.id %>">
+      <div class="relative">
+        <%= image_tag(article.cover_image? ? article.cover_image.url : '',
+              alt: article.cover_image_alt,
+              width: 1200,
+              height: 630,
+              class: "w-full object-cover") %>
+      </div>
+      <%= form.text_field :cover_image_alt, value: article.cover_image_alt.presence, class: "#{'hidden' unless article.cover_image_alt.presence} w-full px-3 py-1.5 border border-gray-200 rounded-lg text-xs bg-gray-100 cursor-not-allowed", disabled: true, readonly: true %>
+    </div>
+  </div>
+</div>

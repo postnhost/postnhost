@@ -1,0 +1,27 @@
+<% flash.each do |type, message| %>
+  <% unless message.nil? %>
+    <div data-controller="flash-message" data-flash-message-target="message" class="<%= flash_class(type) %> px-3 py-2 rounded-lg font-medium relative text-sm max-w-md mx-auto" role="alert" data-turbo-temporary>
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <% if type.to_s == 'notice' %>
+            <%= icon("info-circle", css_class: "h-4 w-4 text-blue-600") %>
+          <% elsif type.to_s == 'success' %>
+            <%= icon("check-circle", css_class: "h-4 w-4 text-green-600") %>
+          <% elsif type.to_s == 'error' %>
+            <%= icon("alert-circle", css_class: "h-4 w-4 text-red-600") %>
+          <% elsif type.to_s == 'alert' %>
+            <%= icon("warning", css_class: "h-4 w-4 text-yellow-600") %>
+          <% end %>
+        </div>
+        <div class="ml-2 flex-1">
+          <%= message.html_safe %>
+        </div>
+      </div>
+
+      <!-- Close Button -->
+      <button type="button" data-action="click->flash-message#close" class="absolute top-2.5 right-3 text-gray-400 hover:text-gray-600 transition-colors duration-200 cursor-pointer">
+        <%= icon("close", css_class: "w-3 h-3") %>
+      </button>
+    </div>
+  <% end %>
+<% end %>

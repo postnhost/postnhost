@@ -1,0 +1,105 @@
+<%= turbo_frame_tag (resource_type == "variant" ? "article_variant_actions" : "article_actions") do %>
+  <div class="space-y-3">
+    <% if resource_type == "article" %>
+      <% if resource.published? %>
+        <%= link_to public_article_path(resource.slug), target: "_blank", class: editor_button_classes do %>
+          <div class="flex items-center justify-center space-x-2">
+            <span>Open</span>
+            <%= icon("external-link", css_class: "w-4 h-4") %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <% if !resource.published? || resource.unpublished_changes? %>
+        <%= link_to preview_article_path(resource), target: "_blank", class: editor_button_classes do %>
+          <div class="flex items-center justify-center space-x-2">
+            <span>Preview</span>
+            <%= icon("external-link", css_class: "w-4 h-4") %>
+          </div>
+        <% end %>
+      <% end %>
+    <% elsif resource_type == "variant" && resource.published? && !resource.generating? %>
+      <%= link_to localized_public_article_path(resource.language.html_lang, resource.article.slug), target: "_blank", class: editor_button_classes do %>
+        <div class="flex items-center justify-center space-x-2">
+          <span>Open</span>
+          <%= icon("external-link", css_class: "w-4 h-4") %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% unless resource_type == "variant" && resource.generating? %>
+      <% if resource.published? %>
+        <% if resource.unpublished_changes? %>
+          <%= link_to (resource_type == "variant" ? publish_article_variant_path(article, resource) : publish_article_path(resource)),
+              method: :patch,
+              class: editor_button_classes(variant: :primary),
+              data: { turbo_method: :patch, publish_guard_target: "publishButton", action: "click->publish-guard#prevent" } do %>
+            Publish New Version
+          <% end %>
+        <% end %>
+
+        <%= link_to (resource_type == "variant" ? unpublish_article_variant_path(article, resource) : unpublish_article_path(resource)),
+            method: :patch,
+            class: "#{editor_button_classes} #{'mb-4' if resource_type == 'variant'}",
+            data: { turbo_method: :patch } do %>
+          Unpublish
+        <% end %>
+      <% else %>
+        <%= link_to (resource_type == "variant" ? publish_article_variant_path(article, resource) : publish_article_path(resource)),
+            method: :patch,
+            class: "#{editor_button_classes(variant: :primary)} #{'mb-4' if resource_type == 'variant'}",
+            data: { turbo_method: :patch, publish_guard_target: "publishButton", action: "click->publish-guard#prevent" } do %>
+          Publish Now
+        <% end %>
+
+        <% if resource_type == "article" %>
+          <%= render "postnhost/shared/articles/schedule_actions", resource: resource, form: (local_assigns[:form] if local_assigns[:form].present?) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="mt-5 pt-3 pb-3 border-t border-gray-100">
+    <h4 class="text-sm font-semibold text-gray-900 mb-4">Current Status</h4>
+    <div class="space-y-3">
+      <% if resource_type == "article" && resource.scheduled_at.present? && !resource.published? %>
+        <div class="flex items-start">
+          <div class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+          <p class="text-sm text-gray-600">Scheduled to publish on <%= admin_datetime(resource.scheduled_at) %></p>
+        </div>
+      <% end %>
+
+      <% if resource.published? %>
+        <div class="flex items-start">
+          <div class="w-2 h-2 bg-green-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+          <p class="text-sm text-gray-600">This <%= resource_type %> is published and visible to everyone</p>
+        </div>
+
+        <% if resource.unpublished_changes? %>
+          <div class="flex items-start">
+            <div class="w-2 h-2 bg-yellow-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+            <p class="text-sm text-gray-600">You have unpublished changes. Click "Publish Now" to make them live.</p>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="flex items-start">
+          <div class="w-2 h-2 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+          <p class="text-sm text-gray-600">This <%= resource_type %> is a draft and only visible to you</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <% if resource_type == 'article' && resource.versions.any? %>
+    <div class="mt-5 pt-3 border-t border-gray-100">
+      <h4 class="text-sm font-semibold text-gray-900 mb-3">Version History</h4>
+      <div class="space-y-2">
+        <p class="text-sm text-gray-600"><%= resource.versions.count %> <%= resource.published? ? 'published' : 'previously published' %> version<%= resource.versions.count == 1 ? '' : 's' %></p>
+        <%= link_to versions_article_path(resource), class: "#{editor_button_classes} flex items-center justify-center", data: { turbo: false, turbo_prefetch: false } do %>
+          <%= icon("clock", css_class: "w-4 h-4 mr-2") %>
+          <span>View History</span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

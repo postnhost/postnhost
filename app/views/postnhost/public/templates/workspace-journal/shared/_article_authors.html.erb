@@ -1,0 +1,27 @@
+<% if authors.any? || local_assigns[:published_at].present? %>
+  <div class="mt-5 flex flex-col gap-4 text-left sm:flex-row sm:items-center sm:justify-between lg:mt-7">
+    <% if authors.any? %>
+      <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+        <% authors.each do |author| %>
+          <div class="flex min-w-0 items-center gap-3.5">
+            <%= render "postnhost/public/templates/workspace-journal/shared/author_avatar", user: author, size_class: "size-12", text_size_class: "text-sm" %>
+            <div class="min-w-0">
+              <% if author_pages_enabled? %>
+                <%= link_to author_name(author), language_author_path(author.slug, current_language), class: "block truncate text-sm/6 font-medium text-[#1f1f1f] hover:text-[#5f5d59] cursor-pointer" %>
+              <% else %>
+                <span class="block truncate text-sm/6 font-medium text-[#1f1f1f]"><%= author_name(author) %></span>
+              <% end %>
+              <p class="truncate text-sm/6 text-[#a6a29d]"><%= article_author_label(author) %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if local_assigns[:published_at].present? %>
+      <time datetime="<%= local_assigns[:published_at].to_date.iso8601 %>" class="text-sm/6 text-[#85827d]">
+        <%= l local_assigns[:published_at].to_date, format: :long %>
+      </time>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,70 @@
+<!-- Basic Meta Tags -->
+<title data-turbo-track="reload"><%= page_title %></title>
+<% if render_description_meta_tags? %>
+  <meta name="description" content="<%= meta_description_content %>" data-turbo-track="reload">
+<% end %>
+<meta name="robots" content="<%= robots_content %>" data-turbo-track="reload">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="<%= canonical_url %>" data-turbo-track="reload">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="<%= og_title %>" data-turbo-track="reload">
+<% if render_description_meta_tags? %>
+  <meta property="og:description" content="<%= meta_description_content %>" data-turbo-track="reload">
+<% end %>
+<meta property="og:url" content="<%= page_url %>" data-turbo-track="reload">
+<meta property="og:type" content="<%= @article ? 'article' : 'website' %>" data-turbo-track="reload">
+<meta property="og:site_name" content="<%= schema_site_name %>" data-turbo-track="reload">
+<% if article_cover_for_seo(@article) %>
+  <meta property="og:image" content="<%= article_cover_for_seo(@article).cover_image.url %>" data-turbo-track="reload">
+  <meta property="og:image:secure_url" content="<%= article_cover_for_seo(@article).cover_image.url %>" data-turbo-track="reload">
+  <meta property="og:image:width" content="1200" data-turbo-track="reload">
+  <meta property="og:image:height" content="630" data-turbo-track="reload">
+  <% if article_cover_for_seo(@article).cover_image_alt.present? %>
+    <meta property="og:image:alt" content="<%= article_cover_for_seo(@article).cover_image_alt %>" data-turbo-track="reload">
+  <% end %>
+<% else %>
+  <meta property="og:image" content="<%= setting_og_image_absolute_url %>" data-turbo-track="reload">
+  <meta property="og:image:secure_url" content="<%= setting_og_image_absolute_url %>" data-turbo-track="reload">
+  <meta property="og:image:width" content="1200" data-turbo-track="reload">
+  <meta property="og:image:height" content="630" data-turbo-track="reload">
+  <meta property="og:image:alt" content="postnhost - Modern blogging platform" data-turbo-track="reload">
+<% end %>
+
+<!-- Twitter Card data -->
+<meta name="twitter:card" content="summary_large_image" data-turbo-track="reload">
+<meta name="twitter:title" content="<%= page_title %>" data-turbo-track="reload">
+<% if render_description_meta_tags? %>
+  <meta name="twitter:description" content="<%= meta_description_content %>" data-turbo-track="reload">
+<% end %>
+<meta name="twitter:url" content="<%= page_url %>" data-turbo-track="reload">
+<% if article_cover_for_seo(@article) %>
+  <meta name="twitter:image" content="<%= article_cover_for_seo(@article).cover_image.url %>" data-turbo-track="reload">
+  <% if article_cover_for_seo(@article).cover_image_alt.present? %>
+    <meta name="twitter:image:alt" content="<%= article_cover_for_seo(@article).cover_image_alt %>" data-turbo-track="reload">
+  <% end %>
+<% else %>
+  <meta name="twitter:image" content="<%= setting_og_image_absolute_url %>" data-turbo-track="reload">
+  <meta name="twitter:image:alt" content="postnhost - Modern blogging platform" data-turbo-track="reload">
+<% end %>
+
+<!-- Article specific meta tags -->
+<% if @article %>
+  <% if @article.is_a?(Postnhost::Snapshot::Article) %>
+    <meta property="article:published_time" content="<%= @article.published_at.iso8601 %>" data-turbo-track="reload">
+  <% end %>
+  <meta property="article:modified_time" content="<%= @article.updated_at.iso8601 %>" data-turbo-track="reload">
+  <% article_authors(@article).each do |author| %>
+    <% if author_pages_enabled? %>
+      <meta property="article:author" content="<%= language_author_url(author.slug, @current_language) %>" data-turbo-track="reload">
+    <% end %>
+    <meta name="author" content="<%= author_name(author) %>" data-turbo-track="reload">
+  <% end %>
+  <% if @article.categories.any? %>
+    <meta property="article:section" content="<%= @article.categories.first.name %>" data-turbo-track="reload">
+  <% end %>
+<% end %>
+
+<!-- Hreflang tags -->
+<%= yield :hreflang if content_for?(:hreflang) %>

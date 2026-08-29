@@ -1,0 +1,50 @@
+fr:
+  postnhost:
+    public:
+      site:
+        schema_site_name: "postnhost"
+        blog_tagline: "Blog"
+        blog_subtitle: "Découvrez les dernières idées, tutoriels et histoires"
+        blog_meta_title: "Blog - postnhost"
+        blog_meta_description: "Découvrez les dernières idées, tutoriels et histoires de postnhost"
+        blog_meta_title_paginated: "Page %{page} - %{blog_meta_title}"
+        name_footer_copyright: "postnhost.com"
+
+      blog:
+        page_title: "Page %{page} - Blog"
+        author_label: "Auteur"
+        no_articles: "Pas encore d'articles"
+        no_articles_description: "Revenez bientôt pour du nouveau contenu !"
+        back_to_articles: "Retour aux articles"
+        more_in_category: "%{category}"
+        available_in_languages: "Disponible dans d'autres langues :"
+        browse_all_articles: "Parcourir tous les articles"
+        read_more: "À lire aussi"
+        read_article_aria_label: "Lire l'article : %{title}"
+        top_picks: "Sélection"
+
+      search:
+        title: "Vous avez recherche %{query}"
+        heading: "Resultat de recherche pour %{query}"
+        input_placeholder: "Rechercher par titre ou contenu"
+        submit: "Rechercher"
+
+      category:
+        title: "%{category} - postnhost"
+        page_title: "Page %{page} - %{category} - postnhost"
+        page_heading: "Page %{page} - %{category}"
+        no_articles: "Aucun article trouvé"
+        no_articles_description: "Il n'y a pas encore d'articles publiés dans cette catégorie."
+
+      authors:
+        latest_from_author: "Les derniers articles de l’auteur"
+        no_articles: "Pas encore d'articles"
+        no_articles_description: "Cet auteur n'a pas encore publié d'articles."
+
+      footer:
+        explore_categories: "Articles par catégorie"
+        pages: "Pages"
+
+      pagination:
+        previous: "Précédent"
+        next: "Suivant"

@@ -1,0 +1,26 @@
+<% if authors.any? || local_assigns[:published_at].present? %>
+  <div class="mt-10 flex flex-col gap-y-4 border-y border-[#d9d9d9] py-5 text-left sm:flex-row sm:items-center sm:justify-between sm:gap-x-6">
+    <% if authors.any? %>
+      <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-4">
+        <% authors.each do |author| %>
+          <div class="flex min-w-0 items-center gap-x-4">
+            <%= render "postnhost/public/templates/swiss-editorial/shared/author_avatar", user: author, size_class: "h-14 w-14", text_size_class: "text-base" %>
+            <div class="min-w-0">
+              <% if author_pages_enabled? %>
+                <%= link_to author_name(author), language_author_path(author.slug, current_language), class: "block text-[15px] font-semibold text-[#0a0a0a] hover:text-[#d4322c] cursor-pointer" %>
+              <% else %>
+                <span class="block text-[15px] font-semibold text-[#0a0a0a]"><%= author_name(author) %></span>
+              <% end %>
+              <p class="text-[13px] text-[#6b6b6b]"><%= article_author_label(author) %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+    <% if local_assigns[:published_at].present? %>
+      <time datetime="<%= local_assigns[:published_at].to_date.iso8601 %>" class="text-[12px] font-medium uppercase text-[#6b6b6b]">
+        <%= l local_assigns[:published_at].to_date, format: :long %>
+      </time>
+    <% end %>
+  </div>
+<% end %>

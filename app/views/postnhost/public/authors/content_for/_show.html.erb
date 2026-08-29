@@ -1,0 +1,24 @@
+<% content_for :title, author_name(@author) %>
+<% content_for :url, language_author_url(@author.slug, @current_language) %>
+<% content_for :meta_description, @author.bio if @author.bio.present? %>
+<% content_for :lang, @current_language.html_lang %>
+
+<% if @other_languages.any? %>
+  <% content_for :hreflang do %>
+    <% if @current_language.default? %>
+      <link rel="alternate" hreflang="<%= @current_language.html_lang %>" href="<%= public_author_url(@author.slug) %>">
+      <link rel="alternate" hreflang="x-default" href="<%= public_author_url(@author.slug) %>">
+    <% else %>
+      <link rel="alternate" hreflang="<%= @current_language.html_lang %>" href="<%= localized_public_author_url(@current_language.html_lang, @author.slug) %>">
+    <% end %>
+
+    <% @other_languages.each do |language| %>
+      <% if language.default? %>
+        <link rel="alternate" hreflang="<%= language.html_lang %>" href="<%= public_author_url(@author.slug) %>">
+        <link rel="alternate" hreflang="x-default" href="<%= public_author_url(@author.slug) %>">
+      <% else %>
+        <link rel="alternate" hreflang="<%= language.html_lang %>" href="<%= localized_public_author_url(language.html_lang, @author.slug) %>">
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

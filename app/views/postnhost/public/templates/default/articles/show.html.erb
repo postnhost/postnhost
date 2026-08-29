@@ -1,0 +1,111 @@
+<%= render "postnhost/public/articles/content_for/show" %>
+
+<!-- Cover Image -->
+<% if @article.cover_image? %>
+  <div class="bg-white border-b border-gray-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <%= render "postnhost/public/templates/default/shared/hero_cover_image", publication: @article, alt_text: @content.title %>
+    </div>
+  </div>
+<% end %>
+
+<% if user_signed_in? %>
+  <div class="bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+      <div class="flex justify-center">
+        <%= link_to(@article_variant.present? ? edit_article_variant_path(@article.article_id, @article_variant.article_variant_id) : edit_article_path(@article.article_id),
+            data: { turbo_prefetch: false },
+            class: "inline-flex items-center justify-center font-medium rounded-xl transition-all duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 px-4 py-2 bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 focus:ring-gray-500 cursor-pointer") do %>
+          <%= icon("edit", css_class: "w-4 h-4 mr-2") %>
+          Edit
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<!-- Article Header -->
+<% cache [public_site_revision, @article, @article_variant, article_authors_cache_key(@article), "header"].compact do %>
+  <div class="bg-white border-b border-gray-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="text-center">
+        <div class="flex flex-wrap items-center justify-center gap-2 mb-6">
+          <% if @article.categories.any? %>
+            <% @article.categories.each do |category| %>
+              <%= link_to localized_category_name(category, @current_language), language_category_path(category.slug, @current_language),
+                  class: 'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors' %>
+            <% end %>
+          <% end %>
+          <span class="text-sm text-gray-500">
+            <%= l @article.published_at.to_date, format: :long %>
+          </span>
+        </div>
+
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          <%= @content.title %>
+        </h1>
+
+        <%= render "postnhost/public/templates/default/shared/article_authors", authors: article_authors(@article), current_language: @current_language %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<!-- Article Content -->
+<% cache [public_site_revision, @article, @article_variant, "content"].compact do %>
+  <article class="bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="prose prose-gray max-w-none py-8">
+        <%= render_article_content(@content.content) %>
+      </div>
+    </div>
+  </article>
+<% end %>
+
+<!-- Language Variants -->
+<% if @available_variants.count > 1 || (@article.published? && @available_variants.any?) %>
+  <div class="bg-white py-8 border-t border-gray-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p class="text-lg font-semibold text-gray-900 mb-6"><%= t('postnhost.public.blog.available_in_languages') %></p>
+      <div class="flex flex-wrap gap-3">
+        <% if @article.published? %>
+          <%= link_to public_article_path(@article.slug),
+              class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-colors #{'bg-gray-900 text-white' if @content == @article} #{'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50' if @content != @article}" do %>
+            <%= @primary_language.name %>
+          <% end %>
+        <% end %>
+
+        <% @available_variants.each do |variant| %>
+          <%= link_to localized_public_article_path(variant.language.html_lang, @article.slug),
+              class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-colors #{'bg-gray-900 text-white' if @content == variant} #{'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50' if @content != variant}" do %>
+            <%= variant.language.name %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<!-- Read More Suggestions -->
+<%= render "postnhost/public/templates/default/articles/suggestions" %>
+
+<!-- Back to Articles -->
+<div class="bg-white border-t border-gray-200 py-8">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <%= link_to language_root_path(@current_language), class: 'inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors' do %>
+        <%= icon("arrow-left-long", css_class: "w-4 h-4 mr-2") %>
+        <%= t('postnhost.public.blog.back_to_articles') %>
+      <% end %>
+
+      <div class="flex flex-wrap items-center gap-4 sm:justify-end">
+        <% if @article.categories.any? %>
+          <%= link_to language_category_path(@article.categories.first.slug, @current_language), class: 'inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors cursor-pointer' do %>
+            <%= t('postnhost.public.blog.more_in_category', category: localized_category_name(@article.categories.first, @current_language)) %>
+            <%= icon("arrow-right-long", css_class: "w-4 h-4 ml-2") %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

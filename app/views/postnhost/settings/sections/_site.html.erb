@@ -1,0 +1,41 @@
+<div class="mb-6">
+  <h2 class="text-xl font-medium tracking-tight text-gray-700">Site</h2>
+  <p class="mt-1 max-w-2xl text-sm text-gray-500">Configure the canonical origin and public article pagination.</p>
+</div>
+
+<%= form_with model: @setting, url: settings_path(section: "site"), method: :patch, class: "space-y-6" do |f| %>
+  <%= render "postnhost/shared/form_errors", resource: @setting %>
+
+  <div class="space-y-2">
+    <%= f.label :site_url, "Site URL", class: form_label_classes %>
+    <%= f.url_field :site_url,
+      class: form_input_classes,
+      placeholder: "https://example.com",
+      autocomplete: "url" %>
+    <p class="text-xs text-gray-500">Optional dashboard override for canonical links, structured data, and sitemap URLs.</p>
+  </div>
+
+  <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-gray-200 bg-gray-50 p-4">
+    <%= f.check_box :site_indexing,
+      { class: "mt-0.5 h-4 w-4 cursor-pointer rounded border-gray-300 text-gray-900 focus:ring-gray-900" },
+      "index",
+      "noindex" %>
+    <span class="space-y-1">
+      <span class="block text-sm font-medium text-gray-900">Allow search engines to index this site</span>
+      <span class="block text-xs text-gray-500">Turn this off to output noindex, nofollow on every public page.</span>
+    </span>
+  </label>
+
+  <div class="space-y-2">
+    <%= f.label :public_page_size, "Articles per page", class: form_label_classes %>
+    <%= f.number_field :public_page_size,
+      class: form_input_classes,
+      min: Postnhost::Setting::PUBLIC_PAGE_SIZE_RANGE.begin,
+      max: Postnhost::Setting::PUBLIC_PAGE_SIZE_RANGE.end,
+      placeholder: 12,
+      step: 1 %>
+    <p class="text-xs text-gray-500">Optional dashboard override for public article, category, and author listings. Default: <%= Postnhost.config.public_page_size %>. Choose between 1 and 100.</p>
+  </div>
+
+  <%= f.submit "Save Site Settings", class: button_classes %>
+<% end %>

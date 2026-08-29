@@ -1,0 +1,50 @@
+<% content_for :title, "New Category" %>
+
+<div class="max-w-2xl">
+  <%= render 'postnhost/shared/elements/form_page_header',
+    title: 'New Category',
+    description: 'Create a new category for organizing your articles' %>
+
+  <%= form_with model: @category, url: postnhost.categories_path, local: true, class: "space-y-6" do |form| %>
+    <%= render 'postnhost/shared/elements/error_messages', resource: @category %>
+
+    <%= render 'postnhost/shared/elements/form_card' do %>
+      <div>
+        <%= form.label :name, class: form_label_classes %>
+        <%= form.text_field :name,
+            class: form_input_classes,
+            placeholder: "Enter category name" %>
+      </div>
+
+      <div>
+        <%= form.label :slug, class: form_label_classes %>
+        <div class="flex">
+          <span class="inline-flex items-center px-4 py-3 border-r-0 border-gray-200 bg-gray-50 text-gray-500 text-sm font-medium rounded-l-xl">
+            /
+          </span>
+          <%= form.text_field :slug,
+              class: "block w-full rounded-r-xl border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-900 transition-all duration-200 focus:border-gray-900 focus:bg-white focus:ring-0",
+              placeholder: "category-slug" %>
+        </div>
+        <p class="mt-1 text-sm text-gray-500">URL-friendly version of the category name</p>
+      </div>
+
+      <div>
+        <%= form.label :meta_description, "Description", class: form_label_classes %>
+        <%= form.text_area :meta_description,
+            rows: 3,
+            class: form_textarea_classes,
+            placeholder: "Optional description for this category" %>
+        <p class="mt-1 text-sm text-gray-500">This will be used for SEO meta descriptions and public category pages</p>
+      </div>
+    <% end %>
+
+    <div class="flex items-center space-x-4">
+      <%= form.submit "Create Category", class: button_classes %>
+      <%= render 'postnhost/shared/elements/button_link',
+        text: 'Cancel',
+        url: postnhost.categories_path,
+        variant: :secondary %>
+    </div>
+  <% end %>
+</div>

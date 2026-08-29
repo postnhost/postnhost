@@ -1,0 +1,17 @@
+<%
+  # Icon button partial for action icons (edit, view, delete)
+  #
+  # Parameters:
+  #   icon: (required) Icon name
+  #   url: (required) Button URL
+  #   variant: :default, :danger
+  #   method: HTTP method for link_to
+  #   data: Data attributes hash
+%>
+
+<%= link_to url,
+    class: icon_button_classes(variant: local_assigns[:variant] || :default),
+    method: local_assigns[:method],
+    data: local_assigns[:data] do %>
+  <%= icon(icon, css_class: "w-4 h-4") %>
+<% end %>

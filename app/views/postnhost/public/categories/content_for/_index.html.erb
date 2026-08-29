@@ -1,0 +1,29 @@
+<% content_for :title, public_category_title(@category) %>
+<% content_for :url, public_category_index_url(@category) %>
+<% unless paginated_public_page? %>
+  <% content_for :meta_description, public_category_description(@category) if public_category_description(@category).present? %>
+<% end %>
+<% content_for :lang, @current_language.html_lang %>
+
+<%# Hreflang tags for language variants %>
+<% unless @localized_category_fallback %>
+  <% content_for :hreflang do %>
+    <% if @current_language.default? %>
+      <link rel="alternate" hreflang="<%= @current_language.html_lang %>" href="<%= public_category_url(@category.slug) %>">
+    <% else %>
+      <link rel="alternate" hreflang="<%= @current_language.html_lang %>" href="<%= localized_public_category_url(@current_language.html_lang, @category.slug) %>">
+    <% end %>
+
+    <% @other_languages.each do |language| %>
+      <% next unless language.default? || @published_category_language_ids.include?(language.id) %>
+
+      <% if language.default? %>
+        <link rel="alternate" hreflang="<%= language.html_lang %>" href="<%= public_category_url(@category.slug) %>">
+      <% else %>
+        <link rel="alternate" hreflang="<%= language.html_lang %>" href="<%= localized_public_category_url(language.html_lang, @category.slug) %>">
+      <% end %>
+    <% end %>
+
+    <link rel="alternate" hreflang="x-default" href="<%= public_category_url(@category.slug) %>">
+  <% end %>
+<% end %>

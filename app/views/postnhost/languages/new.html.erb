@@ -1,0 +1,45 @@
+<% content_for :title, "New Language" %>
+
+<div class="max-w-2xl">
+  <%= render 'postnhost/shared/elements/form_page_header',
+    title: 'New Language',
+    description: 'Add a new language for your articles and categories' %>
+
+  <%= form_with model: @language, local: true, class: "space-y-6" do |form| %>
+    <%= render 'postnhost/shared/elements/error_messages', resource: @language %>
+
+    <%= render 'postnhost/shared/elements/form_card' do %>
+      <div>
+        <%= form.label :name, class: form_label_classes %>
+        <%= form.text_field :name,
+            class: form_input_classes,
+            placeholder: "Enter language name (e.g., English, Spanish)" %>
+      </div>
+
+      <div>
+        <%= form.label :html_lang, "Language Code", class: form_label_classes %>
+        <%= form.text_field :html_lang,
+            class: form_input_classes,
+            placeholder: "Enter HTML language code (e.g., en, es, fr)" %>
+        <p class="mt-1 text-sm text-gray-500">ISO 639-1 language code for HTML lang attribute</p>
+      </div>
+
+      <div>
+        <div class="flex items-center">
+          <%= form.check_box :default,
+              class: "h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded" %>
+          <%= form.label :default, "Default Language", class: "ml-2 block text-sm font-medium text-gray-700" %>
+        </div>
+        <p class="mt-1 text-sm text-gray-500">Set as the default language for new content</p>
+      </div>
+    <% end %>
+
+    <div class="flex items-center space-x-4">
+      <%= form.submit "Create Language", class: button_classes %>
+      <%= render 'postnhost/shared/elements/button_link',
+        text: 'Cancel',
+        url: languages_path,
+        variant: :secondary %>
+    </div>
+  <% end %>
+</div>

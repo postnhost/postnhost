@@ -1,0 +1,82 @@
+<% variants.each do |variant| %>
+  <div class="px-6 py-4 hover:bg-gray-50 transition-colors duration-200">
+    <div class="flex items-center gap-2 md:gap-4">
+      <div class="flex items-center justify-center w-6 md:w-8 flex-shrink-0">
+        <input
+          type="checkbox"
+          name="ids[]"
+          value="<%= variant.id %>"
+          data-bulk-selection-target="checkbox"
+          data-action="change->bulk-selection#toggle"
+          <%= "disabled" if variant.generating? %>
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 <%= variant.generating? ? 'cursor-not-allowed opacity-50' : 'cursor-pointer' %>"
+        >
+      </div>
+      <div class="flex-1 min-w-0">
+        <% if variant.generating? %>
+          <div class="block">
+            <div class="font-medium text-gray-900">
+              <%= variant.title.present? ? variant.title : 'Untitled Translation' %>
+            </div>
+            <% if variant.meta_description.present? %>
+              <div class="text-sm text-gray-500 mt-1 line-clamp-2">
+                <%= variant.meta_description %>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <%= link_to edit_page_variant_path(variant.page, variant), class: "block group" do %>
+            <div class="font-medium text-gray-900 group-hover:text-gray-600 transition-colors">
+              <%= variant.title.present? ? variant.title : 'Untitled Translation' %>
+            </div>
+            <% if variant.meta_description.present? %>
+              <div class="text-sm text-gray-500 mt-1 line-clamp-2">
+                <%= variant.meta_description %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="hidden md:block md:w-32 flex-shrink-0">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+          <%= variant.language.name %>
+        </span>
+      </div>
+
+      <div class="hidden md:block md:w-28 flex-shrink-0">
+        <% if variant.generating? %>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+            <%= icon("spinner", css_class: "animate-spin -ml-1 mr-1.5 h-3 w-3 text-purple-800") %>
+            Translating
+          </span>
+        <% else %>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= variant.published? ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
+            <%= variant.published? ? 'Published' : 'Draft' %>
+          </span>
+        <% end %>
+      </div>
+
+      <div class="w-16 md:w-24 flex items-center justify-end space-x-2 flex-shrink-0">
+        <% if variant.generating? %>
+          <span class="text-gray-300 cursor-not-allowed inline-flex" title="Editing is available when translation finishes">
+            <%= icon("edit", css_class: "w-4 h-4") %>
+          </span>
+        <% else %>
+          <%= link_to edit_page_variant_path(variant.page, variant), class: "text-gray-400 hover:text-gray-600 transition-colors cursor-pointer" do %>
+            <%= icon("edit", css_class: "w-4 h-4") %>
+          <% end %>
+        <% end %>
+
+        <%= link_to page_variant_path(variant.page, variant), method: :delete,
+            class: "text-gray-400 hover:text-red-600 transition-colors cursor-pointer",
+            data: {
+              turbo_method: :delete,
+              turbo_confirm: "Are you sure you want to delete this translation? This action cannot be undone."
+            } do %>
+          <%= icon("trash", css_class: "w-4 h-4") %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

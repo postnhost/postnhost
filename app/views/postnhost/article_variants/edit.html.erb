@@ -1,0 +1,48 @@
+<% content_for :title, "Editing #{@article.title}" %>
+
+<div data-controller="auto-save publish-guard editor-mobile-sidebars">
+  <%= form_with model: @article_variant, url: article_variant_path(@article, @article_variant), local: true, data: { auto_save_target: "form" } do |form| %>
+  <%= render 'postnhost/shared/articles/error_messages', resource: @article_variant, resource_type: "variant" %>
+
+  <div class="md:hidden px-4 py-3 bg-white border-b border-gray-200">
+    <div class="grid grid-cols-2 gap-2">
+      <button type="button"
+              data-action="click->editor-mobile-sidebars#toggleMeta"
+              class="w-full bg-white border border-gray-300 text-gray-700 py-2.5 px-4 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition duration-200 text-sm font-medium cursor-pointer">
+        Details
+      </button>
+      <button type="button"
+              data-action="click->editor-mobile-sidebars#toggleActions"
+              class="w-full bg-white border border-gray-300 text-gray-700 py-2.5 px-4 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition duration-200 text-sm font-medium cursor-pointer">
+        Actions
+      </button>
+    </div>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <%= render 'postnhost/shared/articles/meta_sidebar',
+        form: form,
+        resource: @article_variant,
+        article: @article,
+        is_variant: true,
+        languages: nil,
+        categories: nil,
+        mobile_target: "metaSidebar" %>
+
+    <%= render 'postnhost/shared/articles/editor_column',
+        form: form,
+        article: @article,
+        content: @article_variant.content,
+        is_variant: true,
+        placeholder: "Translation Title" %>
+
+    <%= render 'postnhost/shared/articles/action_buttons',
+        form: form,
+        resource: @article_variant,
+        resource_type: "variant",
+        article: @article,
+        is_variant: true,
+        mobile_target: "actionsSidebar" %>
+  </div>
+<% end %>
+</div>

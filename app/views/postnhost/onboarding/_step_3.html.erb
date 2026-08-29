@@ -1,0 +1,62 @@
+<%= form_with url: postnhost.onboarding_path, method: :patch, class: "space-y-5" do %>
+  <%= hidden_field_tag :step, 3 %>
+
+  <p class="text-sm text-gray-600">
+    Configure where your public site lives and how it appears to visitors and search engines.
+  </p>
+
+  <% if @locale.to_s != "en" %>
+    <div class="space-y-3 rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-900">
+      <p class="font-medium">Non-English default locale selected</p>
+      <p class="text-yellow-950">
+        Add <code class="rounded bg-yellow-100 px-1.5 py-0.5 text-xs font-mono text-yellow-950">config.i18n.fallbacks = [:en]</code>
+        to <code class="rounded bg-yellow-100 px-1.5 py-0.5 text-xs font-mono text-yellow-950">config/application.rb</code>
+        to keep missing translations safe.
+      </p>
+    </div>
+  <% end %>
+
+  <div class="space-y-3">
+    <div class="grid gap-x-4 gap-y-3 sm:grid-cols-2">
+      <div class="space-y-1">
+        <%= label_tag :site_url, "Site URL", class: "block cursor-pointer text-sm font-medium text-gray-700" %>
+        <%= url_field_tag :site_url,
+            @site_url,
+            placeholder: "https://example.com",
+            autocomplete: "url",
+            spellcheck: false,
+            aria: { describedby: "site_url_help" },
+            class: "block w-full rounded-xl border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-900 placeholder-gray-500 transition-all duration-200 focus:border-gray-900 focus:bg-white focus:ring-0" %>
+      </div>
+
+      <% @site_copy.each do |key, value| %>
+        <div class="space-y-1">
+          <label for="translation_<%= key.parameterize %>" class="block cursor-pointer text-sm font-medium text-gray-700"><%= site_copy_label(key) %></label>
+          <%= text_field_tag "translations[#{key}]",
+              value,
+              id: "translation_#{key.parameterize}",
+              class: "block w-full rounded-xl border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-900 placeholder-gray-500 transition-all duration-200 focus:border-gray-900 focus:bg-white focus:ring-0" %>
+        </div>
+      <% end %>
+    </div>
+
+    <%= hidden_field_tag :site_indexing, "noindex", id: nil %>
+    <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
+      <%= check_box_tag :site_indexing,
+          "index",
+          @site_indexing == "index",
+          class: "mt-0.5 h-4 w-4 cursor-pointer rounded border-gray-300 text-gray-900 focus:ring-gray-900" %>
+      <span class="space-y-0.5">
+        <span class="block text-sm font-medium text-gray-900">Allow search engines to index this site</span>
+        <span class="block text-xs text-gray-500">Turn this off to output noindex, nofollow on every public page.</span>
+      </span>
+    </label>
+  </div>
+
+  <button type="submit" class="group relative w-full cursor-pointer overflow-hidden rounded-xl bg-gray-900 px-4 py-3 font-medium text-white transition-all duration-300 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2">
+    <span class="relative flex items-center justify-center">
+      Continue
+      <%= icon("arrow-right", css_class: "ml-2 h-4 w-4 transition-transform group-hover:translate-x-1") %>
+    </span>
+  </button>
+<% end %>

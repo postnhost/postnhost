@@ -1,0 +1,120 @@
+<%= render "postnhost/public/articles/content_for/show" %>
+
+<article class="mx-auto max-w-[1800px] px-6 pt-8 lg:px-10 lg:pt-14">
+  <div class="grid grid-cols-1 gap-8 lg:gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,820px)_minmax(0,1fr)]">
+    <aside class="max-w-[260px] xl:sticky xl:top-28 xl:col-start-1 xl:row-start-1 xl:self-start xl:pb-16">
+      <%= link_to language_root_path(@current_language), class: "inline-flex items-center gap-2 text-sm/6 text-[#85827d] hover:text-[#1f1f1f] cursor-pointer" do %>
+        <%= icon("arrow-left-long", css_class: "size-5") %>
+        <%= t("postnhost.public.blog.back_to_articles") %>
+      <% end %>
+
+      <% if @article.categories.any? %>
+        <div class="mt-5 h-px w-24 bg-[#e4e2de] lg:mt-9"></div>
+        <nav class="mt-4 flex flex-col items-start gap-3 lg:mt-7" aria-label="<%= t("postnhost.public.footer.explore_categories") %>">
+          <% @article.categories.each do |category| %>
+            <%= link_to localized_category_name(category, @current_language),
+                  language_category_path(category.slug, @current_language),
+                  class: "text-sm/6 text-[#77736e] hover:text-[#1f1f1f] cursor-pointer" %>
+          <% end %>
+        </nav>
+      <% end %>
+    </aside>
+
+    <div class="min-w-0 lg:mx-auto lg:w-full lg:max-w-[820px] xl:col-start-2 xl:row-start-1 xl:mx-0 xl:max-w-none">
+      <% cache [public_site_revision, @article, @article_variant, article_authors_cache_key(@article), "workspace-journal_header"].compact do %>
+        <header>
+          <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm/6 text-[#85827d]">
+            <time datetime="<%= @article.published_at.to_date.iso8601 %>">
+              <%= l @article.published_at.to_date, format: :long %>
+            </time>
+            <% if @article.categories.any? %>
+              <span aria-hidden="true">/</span>
+              <%= link_to localized_category_name(@article.categories.first, @current_language),
+                    language_category_path(@article.categories.first.slug, @current_language),
+                    class: "underline decoration-[#c7c3bc] underline-offset-4 hover:text-[#1f1f1f] cursor-pointer" %>
+            <% end %>
+          </div>
+
+          <h1 class="mt-5 break-words text-[2.5rem] font-semibold leading-[0.98] text-[#111111] sm:text-[3.5rem]">
+            <%= @content.title %>
+          </h1>
+
+          <%= render "postnhost/public/templates/workspace-journal/shared/article_authors", authors: article_authors(@article), current_language: @current_language %>
+        </header>
+      <% end %>
+
+      <% if @article.cover_image? %>
+        <div class="mt-8 lg:mt-12">
+          <%= render "postnhost/public/templates/workspace-journal/shared/hero_cover_image",
+                publication: @article,
+                alt_text: @content.title,
+                image_class: "aspect-[16/9] w-full rounded-md border border-[#e8e6e1] bg-[#f7f6f3] object-cover" %>
+        </div>
+      <% end %>
+
+      <% if user_signed_in? %>
+        <div class="pt-5 lg:pt-7">
+          <%= link_to(@article_variant.present? ? edit_article_variant_path(@article.article_id, @article_variant.article_variant_id) : edit_article_path(@article.article_id),
+                data: { turbo_prefetch: false },
+                class: "inline-flex items-center gap-2 rounded-md border border-[#e4e2de] px-3 py-2 text-sm/6 font-medium text-[#5f5d59] hover:bg-[#f7f6f3] hover:text-[#1f1f1f] cursor-pointer") do %>
+            <%= icon("edit", css_class: "size-4") %>
+            Edit
+          <% end %>
+        </div>
+      <% end %>
+
+      <% cache [public_site_revision, @article, @article_variant, "workspace-journal_content"].compact do %>
+        <div class="pt-8 lg:pt-12">
+          <div class="prose prose-zinc max-w-none prose-headings:font-semibold prose-headings:leading-tight prose-headings:text-[#111111] prose-p:font-serif prose-p:text-lg prose-p:leading-8 prose-p:text-[#2f2f2f] prose-a:text-[#1f1f1f] prose-a:underline prose-a:decoration-[#c7c3bc] prose-a:underline-offset-4 prose-blockquote:border-l-[#d8d5cf] prose-blockquote:text-[#5f5d59]">
+            <%= render_article_content(@content.content) %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</article>
+
+<% if @available_variants.count > 1 || (@article.published? && @available_variants.any?) %>
+  <section class="mx-auto max-w-[1800px] px-6 pt-8 lg:px-10 lg:pt-10">
+    <div class="grid grid-cols-1 gap-8 lg:gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,820px)_minmax(0,1fr)]">
+      <div class="lg:mx-auto lg:w-full lg:max-w-[820px] xl:col-start-2 xl:mx-0 xl:max-w-none">
+        <div class="border-y border-[#eeeeec] py-5">
+          <p class="mb-3 text-sm/6 font-semibold text-[#1f1f1f]"><%= t("postnhost.public.blog.available_in_languages") %></p>
+          <div class="flex flex-wrap gap-2">
+            <% if @article.published? %>
+              <%= link_to public_article_path(@article.slug), class: "rounded-md px-3 py-2 text-sm/6 font-medium #{@content == @article ? 'bg-[#1f1f1f] text-white' : 'bg-[#f7f6f3] text-[#5f5d59] hover:bg-[#eeeeec] hover:text-[#1f1f1f]'} cursor-pointer" do %>
+                <%= @primary_language.name %>
+              <% end %>
+            <% end %>
+
+            <% @available_variants.each do |variant| %>
+              <%= link_to localized_public_article_path(variant.language.html_lang, @article.slug), class: "rounded-md px-3 py-2 text-sm/6 font-medium #{@content == variant ? 'bg-[#1f1f1f] text-white' : 'bg-[#f7f6f3] text-[#5f5d59] hover:bg-[#eeeeec] hover:text-[#1f1f1f]'} cursor-pointer" do %>
+                <%= variant.language.name %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<% end %>
+
+<%= render "postnhost/public/templates/workspace-journal/articles/suggestions" %>
+
+<div class="mx-auto max-w-[1800px] px-6 pt-8 lg:px-10 lg:pt-10">
+  <div class="grid grid-cols-1 gap-8 lg:gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,820px)_minmax(0,1fr)]">
+    <div class="flex flex-col gap-4 border-t border-[#eeeeec] pt-5 sm:flex-row sm:items-center sm:justify-between lg:mx-auto lg:w-full lg:max-w-[820px] lg:pt-6 xl:col-start-2 xl:mx-0 xl:max-w-none">
+      <%= link_to language_root_path(@current_language), class: "inline-flex items-center gap-2 text-sm/6 text-[#85827d] hover:text-[#1f1f1f] cursor-pointer" do %>
+        <%= icon("arrow-left-long", css_class: "size-4") %>
+        <%= t("postnhost.public.blog.back_to_articles") %>
+      <% end %>
+
+      <% if @article.categories.any? %>
+        <%= link_to language_category_path(@article.categories.first.slug, @current_language), class: "inline-flex items-center gap-2 text-sm/6 text-[#85827d] hover:text-[#1f1f1f] cursor-pointer" do %>
+          <%= t("postnhost.public.blog.more_in_category", category: localized_category_name(@article.categories.first, @current_language)) %>
+          <%= icon("arrow-right-long", css_class: "size-4") %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

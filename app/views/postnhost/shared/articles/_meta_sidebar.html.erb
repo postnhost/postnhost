@@ -1,0 +1,322 @@
+<div class="order-2 md:order-1 hidden md:block w-full md:w-1/5 bg-white border border-gray-200 p-4 md:p-6 border-t-0 md:sticky md:top-0 md:self-start md:min-h-screen"
+     data-editor-mobile-sidebars-target="<%= local_assigns[:mobile_target] %>"
+     data-controller="collapsible-sidebar"
+     data-collapsible-sidebar-storage-key-value="<%= is_variant ? "article-variant-sidebar-#{resource.id}" : "article-sidebar-#{resource.id}" %>">
+  <div class="md:hidden flex items-center justify-between mb-4">
+    <h3 class="text-sm font-semibold text-gray-900">Details</h3>
+    <button type="button"
+            class="text-gray-500 hover:text-gray-700 cursor-pointer"
+            data-action="click->editor-mobile-sidebars#closeMeta">
+      <%= icon("close", css_class: "w-4 h-4") %>
+    </button>
+  </div>
+  <div class="space-y-6">
+    <div data-collapsible-sidebar-target="section" data-section-id="title-tag">
+      <button type="button"
+              class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+              data-role="section-toggle"
+              data-action="click->collapsible-sidebar#toggle"
+              data-collapsible-sidebar-id-param="title-tag"
+              aria-expanded="true"
+              aria-controls="sidebar-section-title-tag">
+        <span class="text-sm font-medium text-gray-900">Title Tag</span>
+        <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 rotate-0">
+          <%= icon("chevron-down", css_class: "w-4 h-4") %>
+        </span>
+      </button>
+      <div data-role="section-content" id="sidebar-section-title-tag">
+        <%= form.text_field :title_tag, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm", placeholder: (is_variant ? "Falls back to variant title if empty." : "Fallbacks to article title if empty."), autocomplete: "off" %>
+      </div>
+    </div>
+
+    <div data-collapsible-sidebar-target="section" data-section-id="meta-description">
+      <button type="button"
+              class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+              data-role="section-toggle"
+              data-action="click->collapsible-sidebar#toggle"
+              data-collapsible-sidebar-id-param="meta-description"
+              aria-expanded="true"
+              aria-controls="sidebar-section-meta-description">
+        <span class="text-sm font-medium text-gray-900">Meta Description</span>
+        <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 rotate-0">
+          <%= icon("chevron-down", css_class: "w-4 h-4") %>
+        </span>
+      </button>
+      <div data-role="section-content" id="sidebar-section-meta-description">
+        <%= form.text_area :meta_description, rows: 3, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm resize-none", placeholder: "Brief description for SEO...", autocomplete: "off" %>
+        <p class="mt-2 text-xs text-gray-500">Recommended: 150-160 characters.</p>
+      </div>
+    </div>
+
+    <% if is_variant %>
+      <div data-collapsible-sidebar-target="section" data-section-id="language">
+        <button type="button"
+                class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+                data-role="section-toggle"
+                data-action="click->collapsible-sidebar#toggle"
+                data-collapsible-sidebar-id-param="language"
+                aria-expanded="true"
+                aria-controls="sidebar-section-language">
+          <span class="text-sm font-medium text-gray-900">Language</span>
+          <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 rotate-0">
+            <%= icon("chevron-down", css_class: "w-4 h-4") %>
+          </span>
+        </button>
+        <div data-role="section-content" id="sidebar-section-language">
+          <%= form.text_field :language, disabled: true, value: resource.language&.name, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm disabled:bg-gray-100" %>
+        </div>
+      </div>
+
+      <div data-collapsible-sidebar-target="section" data-section-id="og-title" data-default-collapsed="true">
+        <button type="button"
+                class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+                data-role="section-toggle"
+                data-action="click->collapsible-sidebar#toggle"
+                data-collapsible-sidebar-id-param="og-title"
+                aria-expanded="false"
+                aria-controls="sidebar-section-og-title">
+          <span class="text-sm font-medium text-gray-900">OG Title</span>
+          <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 -rotate-90">
+            <%= icon("chevron-down", css_class: "w-4 h-4") %>
+          </span>
+        </button>
+        <div data-role="section-content" id="sidebar-section-og-title" class="hidden">
+          <%= form.text_field :og_title, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm", placeholder: "Fallbacks to Title Tag / title if empty", autocomplete: "off" %>
+        </div>
+      </div>
+
+      <div data-collapsible-sidebar-target="section" data-section-id="schema-headline" data-default-collapsed="true">
+        <button type="button"
+                class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+                data-role="section-toggle"
+                data-action="click->collapsible-sidebar#toggle"
+                data-collapsible-sidebar-id-param="schema-headline"
+                aria-expanded="false"
+                aria-controls="sidebar-section-schema-headline">
+          <span class="text-sm font-medium text-gray-900">headline (Schema)</span>
+          <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 -rotate-90">
+            <%= icon("chevron-down", css_class: "w-4 h-4") %>
+          </span>
+        </button>
+        <div data-role="section-content" id="sidebar-section-schema-headline" class="hidden">
+          <%= form.text_field :schema_headline, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm", placeholder: "Fallbacks to Title Tag / title if empty", autocomplete: "off" %>
+        </div>
+      </div>
+
+      <div data-collapsible-sidebar-target="section" data-section-id="excerpt" data-default-collapsed="true">
+        <button type="button"
+                class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+                data-role="section-toggle"
+                data-action="click->collapsible-sidebar#toggle"
+                data-collapsible-sidebar-id-param="excerpt"
+                aria-expanded="false"
+                aria-controls="sidebar-section-excerpt">
+          <span class="text-sm font-medium text-gray-900">Custom Excerpt</span>
+          <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 -rotate-90">
+            <%= icon("chevron-down", css_class: "w-4 h-4") %>
+          </span>
+        </button>
+        <div data-role="section-content" id="sidebar-section-excerpt" class="hidden">
+          <%= form.text_area :custom_excerpt, rows: 4, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm resize-none", placeholder: "Optional custom excerpt for cards and snippets...", autocomplete: "off" %>
+          <p class="mt-2 text-xs text-gray-500">Maximum <%= Postnhost::Article.custom_excerpt_max_chars %> characters. If empty, cards fall back to the first sentences from content.</p>
+          <label class="mt-3 flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+            <%= form.check_box :use_excerpt_as_meta_description, class: "h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900 cursor-pointer" %>
+            <span class="cursor-pointer">Use excerpt as meta description</span>
+          </label>
+        </div>
+      </div>
+    <% else %>
+      <div data-collapsible-sidebar-target="section" data-section-id="authors">
+        <button type="button"
+                class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+                data-role="section-toggle"
+                data-action="click->collapsible-sidebar#toggle"
+                data-collapsible-sidebar-id-param="authors"
+                aria-expanded="true"
+                aria-controls="sidebar-section-authors">
+          <span class="text-sm font-medium text-gray-900">Authors</span>
+          <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 rotate-0">
+            <%= icon("chevron-down", css_class: "w-4 h-4") %>
+          </span>
+        </button>
+        <div data-role="section-content" id="sidebar-section-authors">
+          <%= render "postnhost/articles/author_manager", form: form, article: resource, users: users %>
+        </div>
+      </div>
+
+      <div data-collapsible-sidebar-target="section" data-section-id="categories">
+        <button type="button"
+                class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+                data-role="section-toggle"
+                data-action="click->collapsible-sidebar#toggle"
+                data-collapsible-sidebar-id-param="categories"
+                aria-expanded="true"
+                aria-controls="sidebar-section-categories">
+          <span class="text-sm font-medium text-gray-900">Categories</span>
+          <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 rotate-0">
+            <%= icon("chevron-down", css_class: "w-4 h-4") %>
+          </span>
+        </button>
+        <div data-role="section-content" id="sidebar-section-categories">
+          <%= render 'postnhost/articles/category_manager', form: form, article: resource, categories: categories %>
+        </div>
+      </div>
+
+      <div data-collapsible-sidebar-target="section" data-section-id="og-title" data-default-collapsed="true">
+        <button type="button"
+                class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+                data-role="section-toggle"
+                data-action="click->collapsible-sidebar#toggle"
+                data-collapsible-sidebar-id-param="og-title"
+                aria-expanded="false"
+                aria-controls="sidebar-section-og-title">
+          <span class="text-sm font-medium text-gray-900">OG Title</span>
+          <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 -rotate-90">
+            <%= icon("chevron-down", css_class: "w-4 h-4") %>
+          </span>
+        </button>
+        <div data-role="section-content" id="sidebar-section-og-title" class="hidden">
+          <%= form.text_field :og_title, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm", placeholder: "Fallbacks to Title Tag / title if empty", autocomplete: "off" %>
+        </div>
+      </div>
+
+      <div data-collapsible-sidebar-target="section" data-section-id="excerpt" data-default-collapsed="true">
+        <button type="button"
+                class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+                data-role="section-toggle"
+                data-action="click->collapsible-sidebar#toggle"
+                data-collapsible-sidebar-id-param="excerpt"
+                aria-expanded="false"
+                aria-controls="sidebar-section-excerpt">
+          <span class="text-sm font-medium text-gray-900">Custom Excerpt</span>
+          <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 -rotate-90">
+            <%= icon("chevron-down", css_class: "w-4 h-4") %>
+          </span>
+        </button>
+        <div data-role="section-content" id="sidebar-section-excerpt" class="hidden">
+          <%= form.text_area :custom_excerpt, rows: 4, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm resize-none", placeholder: "Optional custom excerpt for cards and snippets...", autocomplete: "off" %>
+          <p class="mt-2 text-xs text-gray-500">Maximum <%= Postnhost::Article.custom_excerpt_max_chars %> characters. If empty, cards fall back to the first sentences from content.</p>
+          <label class="mt-3 flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+            <%= form.check_box :use_excerpt_as_meta_description, class: "h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900 cursor-pointer" %>
+            <span class="cursor-pointer">Use excerpt as meta description</span>
+          </label>
+        </div>
+      </div>
+
+      <div data-collapsible-sidebar-target="section" data-section-id="suggested-articles" data-default-collapsed="true">
+        <button type="button"
+                class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+                data-role="section-toggle"
+                data-action="click->collapsible-sidebar#toggle"
+                data-collapsible-sidebar-id-param="suggested-articles"
+                aria-expanded="false"
+                aria-controls="sidebar-section-suggested-articles">
+          <span class="text-sm font-medium text-gray-900">Suggested Articles</span>
+          <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 -rotate-90">
+            <%= icon("chevron-down", css_class: "w-4 h-4") %>
+          </span>
+        </button>
+        <div data-role="section-content" id="sidebar-section-suggested-articles" class="hidden">
+          <p class="mb-2 text-xs text-gray-500">If none are specified, 3 suggestions are auto selected.</p>
+          <%= render 'postnhost/articles/suggestion_manager', form: form, article: resource, articles: articles %>
+        </div>
+      </div>
+
+      <div data-collapsible-sidebar-target="section" data-section-id="url-slug">
+        <button type="button"
+                class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+                data-role="section-toggle"
+                data-action="click->collapsible-sidebar#toggle"
+                data-collapsible-sidebar-id-param="url-slug"
+                aria-expanded="true"
+                aria-controls="sidebar-section-url-slug">
+          <span class="text-sm font-medium text-gray-900">URL Slug</span>
+          <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 rotate-0">
+            <%= icon("chevron-down", css_class: "w-4 h-4") %>
+          </span>
+        </button>
+        <div data-role="section-content" id="sidebar-section-url-slug">
+          <%= form.text_field :slug, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm", placeholder: "article-url-slug", autocomplete: "off" %>
+          <p class="mt-2 text-xs text-gray-500">Slug changes will be reflected immediately.</p>
+        </div>
+      </div>
+
+      <div data-collapsible-sidebar-target="section" data-section-id="top-picks" data-default-collapsed="true">
+        <button type="button"
+                class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+                data-role="section-toggle"
+                data-action="click->collapsible-sidebar#toggle"
+                data-collapsible-sidebar-id-param="top-picks"
+                aria-expanded="false"
+                aria-controls="sidebar-section-top-picks">
+          <span class="text-sm font-medium text-gray-900">Top Picks Block</span>
+          <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 -rotate-90">
+            <%= icon("chevron-down", css_class: "w-4 h-4") %>
+          </span>
+        </button>
+        <div data-role="section-content" id="sidebar-section-top-picks" class="hidden">
+          <label class="flex items-start gap-2 text-sm text-gray-700 cursor-pointer">
+            <%= form.check_box :top_pick, class: "mt-0.5 h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900 cursor-pointer" %>
+            <span class="cursor-pointer">Show this article in the public Top Picks block.</span>
+          </label>
+        </div>
+      </div>
+
+      <div data-collapsible-sidebar-target="section" data-section-id="schema" data-default-collapsed="true">
+        <button type="button"
+                class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+                data-role="section-toggle"
+                data-action="click->collapsible-sidebar#toggle"
+                data-collapsible-sidebar-id-param="schema"
+                aria-expanded="false"
+                aria-controls="sidebar-section-schema">
+          <span class="text-sm font-medium text-gray-900">Schema</span>
+          <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 -rotate-90">
+            <%= icon("chevron-down", css_class: "w-4 h-4") %>
+          </span>
+        </button>
+        <div data-role="section-content" id="sidebar-section-schema" class="hidden space-y-4">
+          <div>
+            <label class="mb-1 block text-xs font-medium text-gray-700">headline (Schema)</label>
+            <%= form.text_field :schema_headline, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm", placeholder: "Fallbacks to Title Tag / title if empty", autocomplete: "off" %>
+          </div>
+          <div>
+            <label class="mb-1 block text-xs font-medium text-gray-700">articleType (Schema)</label>
+            <%= form.select :schema_article_type,
+              options_for_select(schema_article_type_options, resource.schema_article_type),
+              { include_blank: "Use site default" },
+              class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm bg-white" %>
+            <p class="mt-2 text-xs text-gray-500">Leave blank to use the site-level default article schema type.</p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="pt-4 border-t border-gray-100" data-collapsible-sidebar-target="section" data-section-id="timestamps">
+      <button type="button"
+              class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+              data-role="section-toggle"
+              data-action="click->collapsible-sidebar#toggle"
+              data-collapsible-sidebar-id-param="timestamps"
+              aria-expanded="true"
+              aria-controls="sidebar-section-timestamps">
+        <span class="text-sm font-medium text-gray-900">Timestamps</span>
+        <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 rotate-0">
+          <%= icon("chevron-down", css_class: "w-4 h-4") %>
+        </span>
+      </button>
+      <div data-role="section-content" id="sidebar-section-timestamps">
+        <div class="text-sm text-gray-600 space-y-1">
+          <p><strong>Created:</strong> <%= admin_datetime(resource.created_at) %></p>
+          <p><strong>Updated:</strong> <%= admin_datetime(resource.updated_at) %></p>
+          <% if !is_variant && resource.article_snapshot.present? %>
+            <p><strong>Published:</strong> <%= admin_datetime(resource.article_snapshot.published_at) %></p>
+          <% end %>
+          <% if !is_variant && resource.publication_error.present? %>
+            <p class="text-red-700"><strong>Publication error:</strong> <%= resource.publication_error %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
