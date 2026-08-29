@@ -128,7 +128,7 @@ jobs:
           sudo apt-get install -y libvips42
 
       - name: Set up Chrome
-        uses: browser-actions/setup-chrome@v1
+        uses: browser-actions/setup-chrome@v2
 
       - name: Prepare test database
         run: bundle exec rake prepare_test_db
