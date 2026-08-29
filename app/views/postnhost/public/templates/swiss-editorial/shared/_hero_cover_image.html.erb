@@ -1,0 +1,11 @@
+<% if publication.cover_image? %>
+  <%= image_tag publication.cover_image.thumbnail.url,
+        loading: "eager",
+        fetchpriority: "high",
+        alt: publication.cover_image_alt.presence || local_assigns[:alt_text] || publication.title,
+        width: 1200,
+        height: 630,
+        class: local_assigns.fetch(:image_class, "h-auto w-full"),
+        srcset: "#{publication.cover_image.thumbnail.url} 520w, #{publication.cover_image.medium.url} 1024w, #{publication.cover_image.url} 1200w",
+        sizes: "(max-width: 639px) 100vw, (max-width: 1279px) 90vw, 1200px" %>
+<% end %>

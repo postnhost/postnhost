@@ -1,0 +1,132 @@
+<div class="order-2 md:order-1 hidden md:block w-full md:w-1/5 bg-white border border-gray-200 p-4 md:p-6 border-t-0 md:sticky md:top-0 md:self-start md:min-h-screen"
+     data-editor-mobile-sidebars-target="<%= local_assigns[:mobile_target] %>"
+     data-controller="collapsible-sidebar"
+     data-collapsible-sidebar-storage-key-value="<%= is_variant ? "page-variant-sidebar-#{resource.id}" : "page-sidebar-#{resource.id}" %>">
+  <div class="md:hidden flex items-center justify-between mb-4">
+    <h3 class="text-sm font-semibold text-gray-900">Details</h3>
+    <button type="button"
+            class="text-gray-500 hover:text-gray-700 cursor-pointer"
+            data-action="click->editor-mobile-sidebars#closeMeta">
+      <%= icon("close", css_class: "w-4 h-4") %>
+    </button>
+  </div>
+
+  <div class="space-y-6">
+    <div data-collapsible-sidebar-target="section" data-section-id="title-tag">
+      <button type="button"
+              class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+              data-role="section-toggle"
+              data-action="click->collapsible-sidebar#toggle"
+              data-collapsible-sidebar-id-param="title-tag"
+              aria-expanded="true"
+              aria-controls="sidebar-section-title-tag">
+        <span class="text-sm font-medium text-gray-900">Title Tag</span>
+        <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 rotate-0">
+          <%= icon("chevron-down", css_class: "w-4 h-4") %>
+        </span>
+      </button>
+      <div data-role="section-content" id="sidebar-section-title-tag">
+        <%= form.text_field :title_tag, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm", placeholder: "Fallbacks to page title if empty", autocomplete: "off" %>
+      </div>
+    </div>
+
+    <div data-collapsible-sidebar-target="section" data-section-id="meta-description">
+      <button type="button"
+              class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+              data-role="section-toggle"
+              data-action="click->collapsible-sidebar#toggle"
+              data-collapsible-sidebar-id-param="meta-description"
+              aria-expanded="true"
+              aria-controls="sidebar-section-meta-description">
+        <span class="text-sm font-medium text-gray-900">Meta Description</span>
+        <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 rotate-0">
+          <%= icon("chevron-down", css_class: "w-4 h-4") %>
+        </span>
+      </button>
+      <div data-role="section-content" id="sidebar-section-meta-description">
+        <%= form.text_area :meta_description, rows: 4, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm resize-none", placeholder: "Brief description for SEO...", autocomplete: "off" %>
+        <p class="mt-2 text-xs text-gray-500">Recommended: 150-160 characters.</p>
+      </div>
+    </div>
+
+    <div data-collapsible-sidebar-target="section" data-section-id="og-title" data-default-collapsed="true">
+      <button type="button"
+              class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+              data-role="section-toggle"
+              data-action="click->collapsible-sidebar#toggle"
+              data-collapsible-sidebar-id-param="og-title"
+              aria-expanded="false"
+              aria-controls="sidebar-section-og-title">
+        <span class="text-sm font-medium text-gray-900">OG Title</span>
+        <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 -rotate-90">
+          <%= icon("chevron-down", css_class: "w-4 h-4") %>
+        </span>
+      </button>
+      <div data-role="section-content" id="sidebar-section-og-title" class="hidden">
+        <%= form.text_field :og_title, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm", placeholder: "Fallbacks to Title Tag / title if empty", autocomplete: "off" %>
+      </div>
+    </div>
+
+    <% if is_variant %>
+      <div data-collapsible-sidebar-target="section" data-section-id="language">
+        <button type="button"
+                class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+                data-role="section-toggle"
+                data-action="click->collapsible-sidebar#toggle"
+                data-collapsible-sidebar-id-param="language"
+                aria-expanded="true"
+                aria-controls="sidebar-section-language">
+          <span class="text-sm font-medium text-gray-900">Language</span>
+          <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 rotate-0">
+            <%= icon("chevron-down", css_class: "w-4 h-4") %>
+          </span>
+        </button>
+        <div data-role="section-content" id="sidebar-section-language">
+          <%= form.text_field :language, disabled: true, value: resource.language&.name, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm disabled:bg-gray-100" %>
+        </div>
+      </div>
+    <% else %>
+      <div data-collapsible-sidebar-target="section" data-section-id="url-slug">
+        <button type="button"
+                class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+                data-role="section-toggle"
+                data-action="click->collapsible-sidebar#toggle"
+                data-collapsible-sidebar-id-param="url-slug"
+                aria-expanded="true"
+                aria-controls="sidebar-section-url-slug">
+          <span class="text-sm font-medium text-gray-900">URL Slug</span>
+          <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 rotate-0">
+            <%= icon("chevron-down", css_class: "w-4 h-4") %>
+          </span>
+        </button>
+        <div data-role="section-content" id="sidebar-section-url-slug">
+          <%= form.text_field :slug, class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm", placeholder: "page-url-slug", autocomplete: "off" %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="pt-4 border-t border-gray-100" data-collapsible-sidebar-target="section" data-section-id="timestamps">
+      <button type="button"
+              class="w-full flex items-center justify-between text-left mb-2 cursor-pointer"
+              data-role="section-toggle"
+              data-action="click->collapsible-sidebar#toggle"
+              data-collapsible-sidebar-id-param="timestamps"
+              aria-expanded="true"
+              aria-controls="sidebar-section-timestamps">
+        <span class="text-sm font-medium text-gray-900">Timestamps</span>
+        <span data-role="section-icon" class="inline-flex text-gray-400 transition-transform duration-200 rotate-0">
+          <%= icon("chevron-down", css_class: "w-4 h-4") %>
+        </span>
+      </button>
+      <div data-role="section-content" id="sidebar-section-timestamps">
+        <div class="text-sm text-gray-600 space-y-1">
+          <p><strong>Created:</strong> <%= admin_datetime(resource.created_at) %></p>
+          <p><strong>Updated:</strong> <%= admin_datetime(resource.updated_at) %></p>
+          <% if !is_variant && resource.page_snapshot.present? %>
+            <p><strong>Published:</strong> <%= admin_datetime(resource.page_snapshot.published_at) %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+/node_modules
+
+# Local package manager logs
+yarn-error.log
+npm-debug.log*
+
+# Local macOS/system files
+.DS_Store
+
+# Local Bundler config (machine-specific)
+/.bundle
+
+# Dummy app runtime artifacts
+/spec/dummy/log/*.log
+/spec/dummy/log/test.log*
+/spec/dummy/storage/*.sqlite3
+/spec/dummy/storage/*.sqlite3-*
+/spec/dummy/tmp/capybara/
+/spec/dummy/public/uploads/
+
+# Generated build diagnostics are not distributed.
+/app/assets/builds/**/*.map
+
+# Generated SimpleCov reports
+/coverage/
+
+# Generated gem release artifacts
+/pkg/
+
+# Local release checklist
+/RELEASE.md

@@ -1,0 +1,87 @@
+<div class="order-2 md:order-3 hidden md:block w-full md:w-1/5 bg-white border border-gray-200 p-4 md:p-6 border-t-0 md:sticky md:top-0 md:self-start md:min-h-screen"
+     data-editor-mobile-sidebars-target="<%= local_assigns[:mobile_target] %>">
+  <div class="md:hidden flex items-center justify-between mb-4">
+    <h3 class="text-sm font-semibold text-gray-900">Actions</h3>
+    <button type="button"
+            class="text-gray-500 hover:text-gray-700 cursor-pointer"
+            data-action="click->editor-mobile-sidebars#closeActions">
+      <%= icon("close", css_class: "w-4 h-4") %>
+    </button>
+  </div>
+  <div class="space-y-4">
+    <button
+      type="button"
+      data-auto-save-target="saveButton"
+      data-action="click->auto-save#save"
+      disabled
+      class="w-full bg-white border border-gray-300 text-gray-700 py-2.5 px-4 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition duration-200 text-sm font-medium cursor-pointer opacity-50">
+      Saved
+    </button>
+
+    <% if is_variant %>
+      <%= link_to edit_article_path(article), class: "w-full bg-white border border-gray-300 text-gray-700 py-2.5 px-4 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition duration-200 text-sm font-medium text-center block cursor-pointer" do %>
+        <div class="flex items-center justify-center space-x-2">
+          <%= icon("arrow-left", css_class: "w-4 h-4") %>
+          <span>Back to Original</span>
+        </div>
+      <% end %>
+
+      <div class="border-b border-gray-100 pb-4">
+        <%= link_to article_variants_path(article), data: { turbo_prefetch: false }, class: "w-full bg-white border border-gray-300 text-gray-700 py-2.5 px-4 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition duration-200 text-sm font-medium text-center block cursor-pointer" do %>
+          <div class="flex items-center justify-center space-x-2">
+            <%= icon("language", css_class: "w-4 h-4") %>
+            <span>All Translations</span>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="border-b border-gray-100 pb-4">
+        <%= link_to article_variants_path(article), data: { turbo_prefetch: false }, class: "w-full bg-white border border-gray-300 text-gray-700 py-2.5 px-4 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition duration-200 text-sm font-medium text-center block" do %>
+          <div class="flex items-center justify-center space-x-2">
+            <%= icon("language", css_class: "w-4 h-4") %>
+            <span>Translations</span>
+            <% if article.article_variants.any? %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-800">
+                <%= article.article_variants_count %>
+              </span>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%= render "postnhost/shared/articles/post_actions",
+        resource: resource,
+        resource_type: resource_type,
+        article: article,
+        form: local_assigns[:form] %>
+
+
+    <div class="pt-4">
+      <% if is_variant %>
+        <%= render "postnhost/shared/elements/button_link",
+          text: "Delete",
+          url: article_variant_path(article, resource),
+          variant: :danger,
+          icon: "trash",
+          extra_class: "w-full",
+          data: {
+            turbo_method: :delete,
+            turbo_confirm: "Are you sure you want to delete this variant? This action cannot be undone."
+          } %>
+      <% else %>
+        <%= render "postnhost/shared/elements/button_link",
+          text: "Delete",
+          url: resource,
+          variant: :danger,
+          icon: "trash",
+          extra_class: "w-full",
+          data: {
+            turbo_method: :delete,
+            turbo_confirm: "Are you sure you want to delete this article? This action cannot be undone."
+          } %>
+      <% end %>
+    </div>
+
+  </div>
+</div>

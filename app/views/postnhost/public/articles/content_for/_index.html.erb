@@ -1,0 +1,30 @@
+<% content_for :title, public_articles_index_title %>
+<% content_for :url, public_blog_index_url %>
+<% content_for :robots, "noindex, nofollow" if public_search_endpoint? %>
+<% unless paginated_public_page? %>
+  <% content_for :meta_description, t("postnhost.public.site.blog_meta_description") %>
+<% end %>
+<% content_for :lang, @current_language.html_lang %>
+
+<%# Hreflang tags for language variants %>
+<% if @other_languages.any? %>
+  <% content_for :hreflang do %>
+    <!-- Current language -->
+    <% if @current_language.default? %>
+      <link rel="alternate" hreflang="<%= @current_language.html_lang %>" href="<%= root_url %>">
+      <link rel="alternate" hreflang="x-default" href="<%= root_url %>">
+    <% else %>
+      <link rel="alternate" hreflang="<%= @current_language.html_lang %>" href="<%= localized_root_url(@current_language.html_lang) %>">
+    <% end %>
+
+    <!-- Other languages -->
+    <% @other_languages.each do |language| %>
+      <% if language.default? %>
+        <link rel="alternate" hreflang="<%= language.html_lang %>" href="<%= root_url %>">
+        <link rel="alternate" hreflang="x-default" href="<%= root_url %>">
+      <% else %>
+        <link rel="alternate" hreflang="<%= language.html_lang %>" href="<%= localized_root_url(language.html_lang) %>">
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

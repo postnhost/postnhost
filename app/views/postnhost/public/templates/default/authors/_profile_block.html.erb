@@ -1,0 +1,29 @@
+<div class="bg-white border border-gray-200 rounded-2xl p-6 md:p-8">
+  <div class="flex flex-col sm:flex-row sm:items-start gap-5 sm:gap-6">
+    <div class="shrink-0">
+      <%= render "postnhost/public/templates/default/shared/author_avatar", user: author, size_class: "w-20 h-20", text_size_class: "text-xl" %>
+    </div>
+
+    <div class="min-w-0 flex-1">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
+        <%= author_name(author) %>
+      </h1>
+      <% if author.position.present? %>
+        <p class="mt-2 text-sm font-medium uppercase tracking-wide text-gray-500"><%= author.position %></p>
+      <% end %>
+      <% if author.bio.present? %>
+        <p class="mt-3 text-base text-gray-600 leading-relaxed"><%= author.bio %></p>
+      <% end %>
+
+      <% if author_social_links(author).any? %>
+        <div class="mt-5 flex flex-wrap items-center gap-4">
+          <% author_social_links(author).each do |social| %>
+            <%= link_to social[:url], target: "_blank", rel: "noopener noreferrer", class: "inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer", aria: { label: social[:label] }, title: social[:label] do %>
+              <%= icon(social[:icon], css_class: "w-5 h-5") %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

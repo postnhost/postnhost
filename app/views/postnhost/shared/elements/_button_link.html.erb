@@ -1,0 +1,24 @@
+<%
+  # Button link partial - renders a link styled as a button
+  #
+  # Parameters:
+  #   text: (required) Button text
+  #   url: (required) Button URL
+  #   variant: :primary (default), :secondary, :danger
+  #   icon: Icon name (optional)
+  #   method: HTTP method (optional)
+  #   data: Data attributes (optional)
+  #   extra_class: Additional CSS classes (optional)
+  #   target: Link target (optional, e.g. '_blank')
+%>
+
+<%= link_to url,
+    class: "#{button_classes(variant: local_assigns[:variant] || :primary)} #{local_assigns[:extra_class]}",
+    method: local_assigns[:method],
+    target: local_assigns[:target],
+    data: local_assigns[:data] do %>
+  <% if local_assigns[:icon] %>
+    <%= icon(icon, css_class: "w-4 h-4 mr-2") %>
+  <% end %>
+  <%= text %>
+<% end %>

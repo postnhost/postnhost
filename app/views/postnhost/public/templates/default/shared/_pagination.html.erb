@@ -1,0 +1,35 @@
+<% if pagy.pages > 1 %>
+  <nav class="flex items-center justify-center space-x-2" aria-label="<%= t('postnhost.public.pagination.navigation', default: 'Pagination') %>">
+    <% if pagy.previous %>
+      <%= link_to pagination_url(pagy, pagy.previous), class: "inline-flex items-center justify-center p-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700 cursor-pointer", aria: { label: t("postnhost.public.pagination.previous") } do %>
+        <%= icon("chevron-left", css_class: "h-5 w-5") %>
+      <% end %>
+    <% else %>
+      <span class="inline-flex items-center justify-center p-2 text-sm font-medium text-gray-600 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed opacity-50" role="link" aria-label="<%= t('postnhost.public.pagination.previous') %>" aria-disabled="true">
+        <%= icon("chevron-left", css_class: "h-5 w-5") %>
+      </span>
+    <% end %>
+
+    <% pagination_series(pagy).each do |item| %>
+      <% if item.is_a?(Integer) %>
+        <% if item == pagy.page %>
+          <span class="px-3 py-2 text-sm font-medium text-white bg-gray-900 border border-gray-900 rounded-lg" aria-current="page"><%= item %></span>
+        <% else %>
+          <%= link_to item, pagination_url(pagy, item), class: "px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700 cursor-pointer" %>
+        <% end %>
+      <% elsif item == :gap %>
+        <span class="px-3 py-2 text-sm font-medium text-gray-300">…</span>
+      <% end %>
+    <% end %>
+
+    <% if pagy.next %>
+      <%= link_to pagination_url(pagy, pagy.next), class: "inline-flex items-center justify-center p-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700 cursor-pointer", aria: { label: t("postnhost.public.pagination.next") } do %>
+        <%= icon("chevron-right", css_class: "h-5 w-5") %>
+      <% end %>
+    <% else %>
+      <span class="inline-flex items-center justify-center p-2 text-sm font-medium text-gray-600 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed opacity-50" role="link" aria-label="<%= t('postnhost.public.pagination.next') %>" aria-disabled="true">
+        <%= icon("chevron-right", css_class: "h-5 w-5") %>
+      </span>
+    <% end %>
+  </nav>
+<% end %>

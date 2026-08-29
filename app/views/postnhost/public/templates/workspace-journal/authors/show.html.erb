@@ -1,0 +1,33 @@
+<%= render "postnhost/public/authors/content_for/show" %>
+
+<section class="mx-auto max-w-[1800px] px-6 pb-8 pt-10 lg:px-10 lg:pb-10 lg:pt-12">
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[300px_minmax(0,1fr)]">
+    <aside class="lg:sticky lg:top-28 lg:self-start lg:border-r lg:border-[#eeeeec] lg:pb-16 lg:pr-16">
+      <%= render "postnhost/public/templates/workspace-journal/authors/profile_block", author: @author %>
+    </aside>
+
+    <div class="min-w-0">
+      <div class="mb-6 border-b border-[#eeeeec] pb-4 lg:mb-8">
+        <h2 class="text-lg/6 font-semibold text-[#1f1f1f]"><%= t("postnhost.public.authors.latest_from_author") %></h2>
+      </div>
+
+      <% if category_articles.any? %>
+        <div class="grid grid-cols-1 gap-x-16 gap-y-10 md:grid-cols-2 lg:gap-y-14">
+          <%= render partial: "postnhost/public/templates/workspace-journal/authors/article_card",
+                collection: category_articles,
+                as: :item,
+                cached: ->(item) { [public_site_revision, item, "workspace-journal_author_card"] } %>
+        </div>
+
+        <div class="pt-8 lg:pt-10">
+          <%= render "postnhost/public/templates/workspace-journal/shared/pagination", pagy: @pagy %>
+        </div>
+      <% else %>
+        <div class="border-y border-[#eeeeec] py-10 text-center lg:py-12">
+          <h3 class="text-xl/7 font-semibold text-[#1f1f1f]"><%= t("postnhost.public.authors.no_articles") %></h3>
+          <p class="mt-3 text-sm/6 text-[#77736e]"><%= t("postnhost.public.authors.no_articles_description") %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

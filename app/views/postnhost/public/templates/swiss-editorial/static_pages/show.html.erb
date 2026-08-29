@@ -1,0 +1,17 @@
+<%= render "postnhost/public/static_pages/content_for/show" %>
+
+<header class="mx-auto max-w-[1440px] px-6 py-16">
+  <div class="grid grid-cols-1 lg:grid-cols-12">
+    <div class="lg:col-span-8 lg:col-start-3">
+      <h1 class="break-words text-[42px] font-extrabold leading-[0.95] sm:text-[56px] md:text-[84px]"><%= @content.title %></h1>
+    </div>
+  </div>
+</header>
+
+<article class="mx-auto max-w-[1440px] px-6">
+  <div class="grid grid-cols-1 lg:grid-cols-12">
+    <div class="prose prose-zinc max-w-none prose-headings:font-semibold prose-headings:leading-tight prose-a:text-[#d4322c] prose-blockquote:border-l-[#d4322c] lg:col-span-7 lg:col-start-3">
+      <%= render_article_content(@content.content) %>
+    </div>
+  </div>
+</article>

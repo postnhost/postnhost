@@ -1,0 +1,175 @@
+<% content_for :title, "Author Schema" %>
+
+<div class="space-y-8">
+  <%= render "postnhost/shared/elements/page_header",
+    title: "Author Schema",
+    description: "Advanced Person schema settings for this author profile",
+    stats: [
+      { text: "Author: #{@user.name}" },
+      { text: author_pages_enabled? ? "Slug: /authors/#{@user.slug}" : "Slug: #{@user.slug}" },
+      *(@user.slug.present? && author_pages_enabled? ? [{ text: "Open", url: public_author_path(@user.slug), icon: "external-link", target: "_blank" }] : [])
+    ] do %>
+    <%= render "postnhost/shared/elements/button_link",
+      text: "Back to Author",
+      url: edit_user_path(@user),
+      variant: :secondary,
+      icon: "chevron-left",
+      extra_class: "w-full md:w-auto" %>
+  <% end %>
+
+  <section class="bg-white rounded-2xl border border-gray-200 p-6 space-y-6">
+    <div>
+      <h2 class="text-lg font-medium text-gray-900">Derived Defaults</h2>
+      <p class="mt-1 text-sm text-gray-500">These values are used automatically when no schema override exists.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+      <div class="rounded-xl border border-gray-200 p-4">
+        <p><span class="font-medium">name:</span> <%= @user.name.presence || "Not set" %></p>
+        <p class="mt-2"><span class="font-medium">jobTitle:</span> <%= @user.position.presence || "Author" %></p>
+        <p class="mt-2"><span class="font-medium">description:</span> <%= @user.bio.presence || "Not set" %></p>
+      </div>
+      <div class="rounded-xl border border-gray-200 p-4">
+        <p><span class="font-medium">url:</span> <%= author_pages_enabled? ? public_author_url(@user.slug) : "Author pages disabled" %></p>
+        <p class="mt-2"><span class="font-medium">@id:</span> <%= author_pages_enabled? ? "#{public_author_url(@user.slug)}#person" : "Author pages disabled" %></p>
+        <p class="mt-2"><span class="font-medium">Default language:</span> <%= @schema_default_locale_key %></p>
+      </div>
+    </div>
+
+    <div class="rounded-xl border border-gray-200 p-4 space-y-4">
+      <h3 class="text-base font-medium text-gray-900">Schema Fields</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label for="schema_derived_author_slug" class="<%= form_label_classes %>">slug</label>
+          <%= text_field_tag "schema_derived_author_slug",
+            @user.slug,
+            id: "schema_derived_author_slug",
+            class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm disabled:bg-gray-100",
+            readonly: true,
+            disabled: true %>
+        </div>
+
+        <div class="space-y-2">
+          <label for="schema_derived_author_url" class="<%= form_label_classes %>">url</label>
+          <%= text_field_tag "schema_derived_author_url",
+            author_pages_enabled? ? public_author_url(@user.slug) : "Author pages disabled",
+            id: "schema_derived_author_url",
+            class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm disabled:bg-gray-100",
+            readonly: true,
+            disabled: true %>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label for="schema_derived_author_id" class="<%= form_label_classes %>">@id</label>
+        <%= text_field_tag "schema_derived_author_id",
+          author_pages_enabled? ? "#{public_author_url(@user.slug)}#person" : "Author pages disabled",
+          id: "schema_derived_author_id",
+          class: "w-full px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm disabled:bg-gray-100",
+          readonly: true,
+          disabled: true %>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white rounded-2xl border border-gray-200 p-6 space-y-6">
+    <div>
+      <h2 class="text-lg font-medium text-gray-900">Schema Overrides</h2>
+      <p class="mt-1 text-sm text-gray-500">Leave language-specific fields blank to inherit default language values.</p>
+    </div>
+
+    <%= form_with url: schema_edit_user_path(@user), method: :get, class: "space-y-2" do %>
+      <label for="schema-locale-selector" class="<%= form_label_classes %>">Language</label>
+      <%= select_tag :locale,
+        options_for_select(@schema_locale_keys, @schema_selected_locale_key),
+        id: "schema-locale-selector",
+        class: form_input_classes,
+        onchange: "this.form.requestSubmit()" %>
+    <% end %>
+
+    <%= form_with url: schema_update_user_path(@user), method: :patch, class: "space-y-6" do %>
+      <%= render "postnhost/shared/elements/error_messages", resource: @user %>
+      <%= hidden_field_tag :locale_key, @schema_selected_locale_key %>
+
+      <div class="rounded-xl border border-gray-200 p-4 space-y-4">
+        <h3 class="text-base font-medium text-gray-900">Localized Text</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label for="schema_translation_name" class="<%= form_label_classes %>">name</label>
+            <%= text_field_tag "schema_translations[name]", @schema_translation_entries["name"], id: "schema_translation_name", class: form_input_classes %>
+          </div>
+
+          <div class="space-y-2">
+            <label for="schema_translation_job_title" class="<%= form_label_classes %>">jobTitle</label>
+            <%= text_field_tag "schema_translations[job_title]", @schema_translation_entries["job_title"], id: "schema_translation_job_title", class: form_input_classes %>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label for="schema_translation_bio" class="<%= form_label_classes %>">description</label>
+          <%= text_area_tag "schema_translations[bio]", @schema_translation_entries["bio"], id: "schema_translation_bio", rows: 3, class: form_textarea_classes %>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label for="schema_translation_knows_about" class="<%= form_label_classes %>">knowsAbout (Optional, one per line)</label>
+            <%= text_area_tag "schema_translations[knows_about]", @schema_translation_entries["knows_about"], id: "schema_translation_knows_about", rows: 3, class: form_textarea_classes %>
+          </div>
+
+          <div class="space-y-2">
+            <label for="schema_translation_awards" class="<%= form_label_classes %>">awards (Optional, one per line)</label>
+            <%= text_area_tag "schema_translations[awards]", @schema_translation_entries["awards"], id: "schema_translation_awards", rows: 3, class: form_textarea_classes %>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label for="schema_translation_alumni_of" class="<%= form_label_classes %>">alumniOf.name (Optional)</label>
+          <%= text_field_tag "schema_translations[alumni_of]", @schema_translation_entries["alumni_of"], id: "schema_translation_alumni_of", class: form_input_classes %>
+        </div>
+      </div>
+
+      <div class="rounded-xl border border-gray-200 p-4 space-y-4">
+        <h3 class="text-base font-medium text-gray-900">Global Advanced Fields</h3>
+
+        <div class="space-y-2">
+          <label for="schema_profile_same_as" class="<%= form_label_classes %>">sameAs (Optional, one URL per line)</label>
+          <%= text_area_tag "schema_profile[same_as]",
+            schema_array_to_multiline(@schema_profile_values["same_as"]),
+            id: "schema_profile_same_as",
+            rows: 3,
+            class: form_textarea_classes,
+            placeholder: "Auto-included from Social Links profile fields. Add only extra URLs here.\nhttps://wikipedia.org/wiki/Author_Name\nhttps://www.imdb.com/name/nm0000000/" %>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label for="schema_profile_image_url" class="<%= form_label_classes %>">image.url (Optional)</label>
+            <%= url_field_tag "schema_profile[image_url]", @schema_profile_values["image_url"], id: "schema_profile_image_url", class: form_input_classes, placeholder: "Leave blank to use Author Image." %>
+          </div>
+
+          <div class="space-y-2">
+            <label for="schema_profile_alumni_type" class="<%= form_label_classes %>">alumniOf.@type (Optional)</label>
+            <%= select_tag "schema_profile[alumni_type]",
+              options_for_select(schema_author_alumni_type_options, @schema_profile_values["alumni_type"]),
+              include_blank: "Not set",
+              id: "schema_profile_alumni_type",
+              class: form_input_classes %>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label for="schema_profile_knows_language" class="<%= form_label_classes %>">knowsLanguage (Optional, one code per line)</label>
+          <%= text_area_tag "schema_profile[knows_language]",
+            schema_array_to_multiline(@schema_profile_values["knows_language"]),
+            id: "schema_profile_knows_language",
+            rows: 3,
+            class: form_textarea_classes,
+            placeholder: "en\nfr\nde" %>
+        </div>
+      </div>
+
+      <%= submit_tag "Save Author Schema", class: button_classes %>
+    <% end %>
+  </section>
+</div>

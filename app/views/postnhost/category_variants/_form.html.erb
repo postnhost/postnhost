@@ -1,0 +1,29 @@
+<%= render 'postnhost/shared/elements/form_card' do %>
+  <% if category_variant.language %>
+    <div>
+      <label class="<%= form_label_classes %>">Language</label>
+      <div class="flex items-center space-x-2 py-3">
+        <span class="<%= stats_badge_classes(variant: :gray) %>">
+          <%= category_variant.language.name %>
+        </span>
+      </div>
+      <%= form.hidden_field :language_id %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, class: form_label_classes %>
+    <%= form.text_field :name,
+        class: form_input_classes,
+        placeholder: "Translated category name" %>
+  </div>
+
+  <div>
+    <%= form.label :meta_description, "Description", class: form_label_classes %>
+    <%= form.text_area :meta_description,
+        rows: 3,
+        class: form_textarea_classes,
+        placeholder: "Translated description for this category" %>
+    <p class="mt-1 text-sm text-gray-500">This will be used for SEO meta descriptions in this language</p>
+  </div>
+<% end %>

@@ -1,0 +1,9 @@
+<% content_for :title, "New Author" %>
+
+<div class="space-y-8">
+  <%= render "postnhost/shared/elements/form_page_header",
+    title: "New Author",
+    description: "Create a new author account for article attribution and CMS access" %>
+
+  <%= render "form", user: @user, submit_text: "Create", cancel_url: users_path %>
+</div>

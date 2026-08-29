@@ -1,0 +1,85 @@
+<!-- AI Translation Modal -->
+<dialog data-dialog-target="dialog" class="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+  <div class="p-8">
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h2 class="text-2xl font-semibold text-gray-900">Translate with AI</h2>
+        <% if postnhost_openai_api_key_configured? %>
+          <p class="text-gray-600 mt-1">Select languages to translate "<%= subject_title %>" using AI.</p>
+        <% else %>
+          <p class="text-gray-600 mt-1">AI translation requires an OpenAI API key.</p>
+        <% end %>
+      </div>
+      <button data-action="dialog#close" class="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
+        <%= icon("close", css_class: "w-6 h-6") %>
+      </button>
+    </div>
+
+    <% unless postnhost_openai_api_key_configured? %>
+      <div class="rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-900 space-y-3">
+        <p class="font-medium">openai_api_key is not configured</p>
+        <p class="text-yellow-950">
+          Set <code class="rounded bg-yellow-100 px-1.5 py-0.5 text-xs font-mono text-yellow-950">config.openai_api_key</code>
+          in <code class="rounded bg-yellow-100 px-1.5 py-0.5 text-xs font-mono text-yellow-950">config/initializers/postnhost.rb</code>,
+          or add <code class="rounded bg-yellow-100 px-1.5 py-0.5 text-xs font-mono text-yellow-950">postnhost.openai_access_token</code>
+          to your Rails credentials (<code class="rounded bg-yellow-100 px-1.5 py-0.5 text-xs font-mono text-yellow-950">bin/rails credentials:edit</code>).
+          See the <a href="https://github.com/postnhost/postnhost/blob/main/README.md" target="_blank" class="text-yellow-950 hover:text-yellow-700">README</a> for details.
+        </p>
+      </div>
+      <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200 mt-8">
+        <button type="button" data-action="dialog#close" class="<%= button_classes(variant: :secondary) %> cursor-pointer">
+          Close
+        </button>
+      </div>
+    <% else %>
+    <%= form_with url: form_url, method: :post, data: { turbo: false } do |f| %>
+      <!-- Language Selection -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-lg font-medium text-gray-900">Available Languages</h3>
+          <div class="flex space-x-3">
+            <button type="button" data-action="click->ai-translation#selectAll" class="text-sm text-gray-600 hover:text-gray-900 transition-colors cursor-pointer">Select All</button>
+            <span class="text-gray-300">|</span>
+            <button type="button" data-action="click->ai-translation#selectNone" class="text-sm text-gray-600 hover:text-gray-900 transition-colors cursor-pointer">Select None</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-80 overflow-y-auto">
+          <% available_languages.each do |language| %>
+            <label class="flex items-center p-4 border border-gray-200 rounded-xl hover:bg-gray-50 hover:border-gray-300 cursor-pointer transition-all duration-200">
+              <input
+                type="checkbox"
+                name="language_ids[]"
+                value="<%= language.id %>"
+                data-ai-translation-target="checkbox"
+                data-action="change->ai-translation#toggleCheckbox"
+                class="h-4 w-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900 focus:ring-2"
+              >
+              <div class="ml-4">
+                <div class="text-sm font-medium text-gray-900"><%= language.name %></div>
+                <div class="text-xs text-gray-500"><%= language.html_lang %></div>
+              </div>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+        <button type="button" data-action="dialog#close" class="<%= button_classes(variant: :secondary) %>">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          data-ai-translation-target="submitButton"
+          disabled
+          class="<%= button_classes(disabled: true) %>"
+        >
+          Select languages to translate
+        </button>
+      </div>
+    <% end %>
+    <% end %>
+  </div>
+</dialog>

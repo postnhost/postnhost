@@ -1,0 +1,100 @@
+<%= render "postnhost/public/articles/content_for/show" %>
+
+<article class="bg-[#fafaf7]">
+  <header class="mx-auto max-w-[1440px] px-6 pb-10 pt-20">
+    <div class="grid grid-cols-1 lg:grid-cols-12">
+      <div class="lg:col-span-8 lg:col-start-3">
+        <% if @article.categories.any? %>
+          <div class="text-[11px] font-bold uppercase text-[#d4322c]">
+            <%= localized_category_name(@article.categories.first, @current_language) %>
+          </div>
+        <% end %>
+        <h1 class="mt-3 break-words text-[42px] font-extrabold leading-[0.95] sm:text-[56px] md:text-[84px]"><%= @content.title %></h1>
+
+        <%= render "postnhost/public/templates/swiss-editorial/shared/article_authors", authors: article_authors(@article), current_language: @current_language, published_at: @article.published_at %>
+      </div>
+    </div>
+  </header>
+
+  <% if @article.cover_image? %>
+    <div class="mx-auto max-w-[1180px] px-6">
+      <div class="border-y border-[#d9d9d9] py-6">
+        <%= render "postnhost/public/templates/swiss-editorial/shared/hero_cover_image", publication: @article, alt_text: @content.title %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if user_signed_in? %>
+    <div class="mx-auto max-w-[1440px] px-6 pt-6 text-center">
+      <%= link_to(@article_variant.present? ? edit_article_variant_path(@article.article_id, @article_variant.article_variant_id) : edit_article_path(@article.article_id),
+            data: { turbo_prefetch: false },
+            class: "inline-flex items-center border border-[#0a0a0a] px-4 py-2 text-[12px] font-semibold uppercase text-[#0a0a0a] hover:bg-[#0a0a0a] hover:text-[#fafaf7] cursor-pointer") do %>
+        <%= icon("edit", css_class: "mr-2 h-4 w-4") %>
+        Edit
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="mx-auto max-w-[1440px] px-6 pt-10">
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-12">
+      <div class="prose prose-zinc max-w-none prose-headings:font-semibold prose-headings:leading-tight prose-a:text-[#d4322c] prose-blockquote:border-l-[#d4322c] lg:col-span-7 lg:col-start-3">
+        <%= render_article_content(@content.content) %>
+      </div>
+
+      <aside class="lg:col-span-2">
+        <div class="sticky top-36 space-y-8">
+          <% if @article.categories.any? %>
+            <div class="border-t-2 border-[#0a0a0a] pt-4">
+              <div class="space-y-2">
+                <% @article.categories.each do |category| %>
+                  <%= link_to localized_category_name(category, @current_language),
+                        language_category_path(category.slug, @current_language),
+                        class: "block text-[13px] leading-5 text-[#6b6b6b] hover:text-[#d4322c] cursor-pointer" %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+
+        </div>
+      </aside>
+    </div>
+  </div>
+</article>
+
+<% if @available_variants.count > 1 || (@article.published? && @available_variants.any?) %>
+  <section class="mx-auto max-w-[1440px] px-6 pt-12">
+    <div class="border-y border-[#d9d9d9] py-6">
+      <p class="mb-4 text-[12px] font-bold uppercase text-[#0a0a0a]"><%= t("postnhost.public.blog.available_in_languages") %></p>
+      <div class="flex flex-wrap gap-2">
+        <% if @article.published? %>
+          <%= link_to public_article_path(@article.slug), class: "border px-3 py-2 text-[12px] font-semibold uppercase #{@content == @article ? 'border-[#0a0a0a] bg-[#0a0a0a] text-[#fafaf7]' : 'border-[#d9d9d9] text-[#0a0a0a] hover:border-[#0a0a0a]'} cursor-pointer" do %>
+            <%= @primary_language.name %>
+          <% end %>
+        <% end %>
+        <% @available_variants.each do |variant| %>
+          <%= link_to localized_public_article_path(variant.language.html_lang, @article.slug), class: "border px-3 py-2 text-[12px] font-semibold uppercase #{@content == variant ? 'border-[#0a0a0a] bg-[#0a0a0a] text-[#fafaf7]' : 'border-[#d9d9d9] text-[#0a0a0a] hover:border-[#0a0a0a]'} cursor-pointer" do %>
+            <%= variant.language.name %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </section>
+<% end %>
+
+<%= render "postnhost/public/templates/swiss-editorial/articles/suggestions" %>
+
+<div class="mx-auto max-w-[1440px] px-6 pt-12">
+  <div class="flex flex-col gap-4 border-t border-[#d9d9d9] pt-8 sm:flex-row sm:items-center sm:justify-between">
+    <%= link_to language_root_path(@current_language), class: "inline-flex items-center text-[12px] font-semibold uppercase text-[#6b6b6b] hover:text-[#d4322c] cursor-pointer" do %>
+      <%= icon("arrow-left-long", css_class: "mr-2 h-4 w-4") %>
+      <%= t("postnhost.public.blog.back_to_articles") %>
+    <% end %>
+
+    <% if @article.categories.any? %>
+      <%= link_to language_category_path(@article.categories.first.slug, @current_language), class: "inline-flex items-center text-[12px] font-semibold uppercase text-[#6b6b6b] hover:text-[#d4322c] cursor-pointer" do %>
+        <%= t("postnhost.public.blog.more_in_category", category: localized_category_name(@article.categories.first, @current_language)) %>
+        <%= icon("arrow-right-long", css_class: "ml-2 h-4 w-4") %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

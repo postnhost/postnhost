@@ -1,0 +1,35 @@
+<% if pagy.pages > 1 %>
+  <nav class="flex items-center justify-center gap-1 border-y border-zinc-950/10 py-4 lg:py-6">
+    <% if pagy.previous %>
+      <%= link_to pagination_url(pagy, pagy.previous), class: "inline-flex size-10 items-center justify-center rounded-md text-zinc-600 hover:bg-zinc-950/5 hover:text-zinc-950 cursor-pointer", aria: { label: t("postnhost.public.pagination.previous") } do %>
+        <%= icon("chevron-left", css_class: "size-5") %>
+      <% end %>
+    <% else %>
+      <span class="inline-flex size-10 items-center justify-center rounded-md text-zinc-300" role="link" aria-label="<%= t("postnhost.public.pagination.previous") %>" aria-disabled="true">
+        <%= icon("chevron-left", css_class: "size-5") %>
+      </span>
+    <% end %>
+
+    <% pagination_series(pagy).each do |item| %>
+      <% if item.is_a?(Integer) %>
+        <% if item == pagy.page %>
+          <span class="inline-flex size-10 items-center justify-center rounded-md bg-zinc-950 text-sm font-medium text-[#fbfaf7]" aria-current="page"><%= item %></span>
+        <% else %>
+          <%= link_to item, pagination_url(pagy, item), class: "inline-flex size-10 items-center justify-center rounded-md text-sm font-medium text-zinc-600 hover:bg-zinc-950/5 hover:text-zinc-950 cursor-pointer" %>
+        <% end %>
+      <% elsif item == :gap %>
+        <span class="inline-flex size-10 items-center justify-center text-sm text-zinc-400">…</span>
+      <% end %>
+    <% end %>
+
+    <% if pagy.next %>
+      <%= link_to pagination_url(pagy, pagy.next), class: "inline-flex size-10 items-center justify-center rounded-md text-zinc-600 hover:bg-zinc-950/5 hover:text-zinc-950 cursor-pointer", aria: { label: t("postnhost.public.pagination.next") } do %>
+        <%= icon("chevron-right", css_class: "size-5") %>
+      <% end %>
+    <% else %>
+      <span class="inline-flex size-10 items-center justify-center rounded-md text-zinc-300" role="link" aria-label="<%= t("postnhost.public.pagination.next") %>" aria-disabled="true">
+        <%= icon("chevron-right", css_class: "size-5") %>
+      </span>
+    <% end %>
+  </nav>
+<% end %>

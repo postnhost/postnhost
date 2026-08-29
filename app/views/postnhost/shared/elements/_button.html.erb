@@ -1,0 +1,20 @@
+<%
+  # Button partial - renders an actual button element
+  #
+  # Parameters:
+  #   text: (required) Button text
+  #   variant: :primary (default), :secondary, :danger
+  #   icon: Icon name (optional)
+  #   disabled: Boolean (optional)
+  #   data: Data attributes (optional)
+  #   extra_class: Additional CSS classes (optional)
+%>
+
+<button type="button"
+        class="<%= button_classes(variant: local_assigns[:variant] || :primary, disabled: local_assigns[:disabled] || false) %> <%= local_assigns[:extra_class] %>"
+        <%= 'disabled' if local_assigns[:disabled] %>>
+  <% if local_assigns[:icon] %>
+    <%= icon(icon, css_class: "w-4 h-4 mr-2") %>
+  <% end %>
+  <%= text %>
+</button>

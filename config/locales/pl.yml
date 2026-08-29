@@ -1,0 +1,55 @@
+pl:
+  postnhost:
+    public:
+      site:
+        schema_site_name: "PostnHost"
+        blog_tagline: "Blog"
+        blog_subtitle: "Odkryj najnowsze spostrzeżenia, tutoriale i historie"
+        blog_meta_title: "Blog – PostnHost"
+        blog_meta_description: "Odkryj najnowsze spostrzeżenia, poradniki i historie z PostnHost."
+        blog_meta_title_paginated: "Strona %{page} – %{blog_meta_title}"
+        name_footer_copyright: "postnhost.com"
+
+      blog:
+        page_title: "Strona %{page} – Blog"
+        author_label: "Autor"
+        no_articles: "Nie ma jeszcze artykułów"
+        no_articles_description: "Wkrótce pojawią się nowe treści."
+        back_to_articles: "Powrót do artykułów"
+        more_in_category: "Więcej w kategorii %{category}"
+        available_in_languages: "Dostępne w innych językach:"
+        browse_all_articles: "Przeglądaj wszystkie artykuły"
+        read_more: "Powiązane artykuły"
+        read_article_aria_label: "Przeczytaj „%{title}”"
+        top_picks: "Polecane"
+
+      search:
+        title: "Wyniki wyszukiwania dla „%{query}”"
+        heading: "Wyniki wyszukiwania dla „%{query}”"
+        input_placeholder: "Szukaj po tytule lub treści"
+        submit: "Szukaj"
+
+      category:
+        title: "%{category} – PostnHost"
+        page_title: "Strona %{page} – %{category} – PostnHost"
+        page_heading: "Strona %{page} – %{category}"
+        no_articles: "Nie znaleziono artykułów"
+        no_articles_description: "W tej kategorii nie ma jeszcze opublikowanych artykułów."
+
+      authors:
+        latest_from_author: "Najnowsze artykuły tego autora"
+        no_articles: "Nie ma jeszcze artykułów"
+        no_articles_description: "Ten autor nie opublikował jeszcze żadnych artykułów."
+
+      footer:
+        heading: "Stopka"
+        explore_categories: "Wpisy według kategorii"
+        pages: "Strony"
+
+      breadcrumbs:
+        home: "Strona główna"
+
+      pagination:
+        navigation: "Paginacja"
+        previous: "Poprzednia"
+        next: "Następna"

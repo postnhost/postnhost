@@ -1,0 +1,128 @@
+<% content_for :title, "Translations for #{@page.title}" %>
+
+<%= turbo_stream_from "page_variants_#{@page.id}" %>
+<div class="space-y-8" data-controller="ai-translation dialog" data-action="click->dialog#backdropClose">
+  <%= render 'postnhost/shared/elements/page_header',
+    title: 'Page Translations',
+    description: "Manage translations for \"#{@page.title.present? ? @page.title : 'Untitled Page'}\"",
+    stats: [
+      { text: "#{@pagy.count} translations", class: '' },
+      { text: "#{@available_languages.count} available languages", class: '' }
+    ] do %>
+    <%= render 'postnhost/shared/elements/button_link',
+      text: 'Back to Page',
+      url: edit_page_path(@page),
+      variant: :secondary,
+      icon: 'chevron-left',
+      extra_class: 'w-full md:w-auto' %>
+
+    <% if @available_languages.any? %>
+      <button
+        data-action="dialog#open"
+        class="<%= button_classes %> w-full md:w-auto">
+        <%= icon("sparkles", css_class: "w-4 h-4 mr-2") %>
+        Translate with AI
+      </button>
+
+      <div class="relative w-full md:w-auto" data-controller="dropdown">
+        <button
+          data-action="click->dropdown#toggle"
+          class="<%= button_classes %> w-full md:w-auto">
+          <%= icon("language", css_class: "w-4 h-4 mr-2") %>
+          Manual Translation
+          <%= icon("chevron-down", css_class: "w-4 h-4 ml-2") %>
+        </button>
+
+        <div data-dropdown-target="menu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden z-20 hidden">
+          <div class="py-1">
+            <% @available_languages.each do |language| %>
+              <%= link_to new_page_variant_path(@page, language_id: language.id), data: { turbo_prefetch: false}, class: "flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150" do %>
+                <div class="flex-1">
+                  <div class="font-medium"><%= language.name %></div>
+                  <div class="text-xs text-gray-500"><%= language.html_lang %></div>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <span class="<%= button_classes(variant: :secondary, disabled: true) %> w-full md:w-auto">
+        All languages translated
+      </span>
+    <% end %>
+  <% end %>
+
+  <% if @variants.any? %>
+    <%= form_with url: "#", method: :patch, data: { controller: "bulk-selection" } do |form| %>
+      <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div data-bulk-selection-target="bulkActions" class="hidden px-6 py-4 bg-gray-50 border-b border-gray-200">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium text-gray-700">
+              <span data-bulk-selection-target="selectedCount">0</span> translation(s) selected
+            </span>
+            <div class="flex space-x-3">
+              <%= form.button type: "submit",
+                  formaction: bulk_publish_page_variants_path(@page),
+                  data: { turbo_confirm: "Publish selected translation(s)?" },
+                  class: "#{button_classes} bg-green-600 hover:bg-green-700" do %>
+                Publish
+              <% end %>
+              <%= form.button type: "submit",
+                  formaction: bulk_unpublish_page_variants_path(@page),
+                  data: { turbo_confirm: "Unpublish selected translation(s)?" },
+                  class: "#{button_classes(variant: :secondary)} border border-gray-300" do %>
+                Unpublish
+              <% end %>
+              <%= form.button type: "submit",
+                  formaction: bulk_destroy_page_variants_path(@page),
+                  formmethod: "delete",
+                  data: { turbo_confirm: "Are you sure you want to delete the selected translation(s)? This action cannot be undone." },
+                  class: "#{button_classes} bg-red-600 hover:bg-red-700" do %>
+                Delete
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+      <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+        <div class="flex items-center gap-2 md:gap-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <div class="flex items-center justify-center w-6 md:w-8">
+            <input
+              type="checkbox"
+              data-bulk-selection-target="checkAll"
+              data-action="change->bulk-selection#toggleAll"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
+            >
+          </div>
+          <div class="flex-1">Translation</div>
+          <div class="hidden md:block md:w-32">Language</div>
+          <div class="hidden md:block md:w-28">Status</div>
+          <div class="w-16 md:w-24 text-right">Actions</div>
+        </div>
+      </div>
+
+        <div id="variants_list" class="divide-y divide-gray-200">
+          <%= render partial: "variants_list", locals: { variants: @variants } %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Pagination -->
+    <% if @pagy.pages > 1 %>
+      <div class="mt-8 flex justify-center">
+        <%== pagination_nav(@pagy) %>
+      </div>
+    <% end %>
+  <% else %>
+    <%= render 'postnhost/shared/elements/empty_state',
+      icon: 'translate',
+      title: 'No translations',
+      description: 'Use "Translate with AI" to automatically create translations, or "Manual Translation" to create them manually.' %>
+  <% end %>
+
+  <%= render "postnhost/shared/ai_translation_modal",
+      subject_title: (@page.title.present? ? @page.title : "this page"),
+      form_url: page_translations_path(@page),
+      available_languages: @available_languages %>
+</div>

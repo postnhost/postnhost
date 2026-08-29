@@ -1,0 +1,343 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+.flash-close-button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  line-height: 1;
+}
+
+/* Flash message container positioning */
+[data-controller="flash-message"] {
+  position: relative;
+  padding-right: 3rem;
+  /* Space for close button */
+}
+
+/* Dialog backdrop styling and centering */
+dialog[data-dialog-target="dialog"] {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-shadow: 0 0 0 100vw rgb(0 0 0 / 0.5);
+}
+
+/* Prevent scrolling while dialog is open */
+body:has(dialog[data-dialog-target="dialog"][open]) {
+  overflow: hidden;
+}
+
+/* TipTap Editor Styles */
+.ProseMirror {
+  outline: none;
+}
+
+/* Syntax-highlighted code blocks shared by the editor and public prose. */
+.prose pre,
+.ProseMirror pre {
+  overflow-x: auto;
+  border-radius: 0.75rem;
+  background-color: #0f172a;
+  color: #e2e8f0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  tab-size: 2;
+}
+
+.ProseMirror pre {
+  padding-right: 9rem;
+}
+
+.prose pre code,
+.ProseMirror pre code {
+  display: block;
+  min-width: max-content;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  white-space: pre;
+}
+
+.prose pre code::before,
+.prose pre code::after,
+.ProseMirror pre code::before,
+.ProseMirror pre code::after {
+  content: none;
+}
+
+.prose :where(.hljs-comment, .hljs-quote, .c, .ch, .cm, .cp, .cpf, .c1, .cs),
+.ProseMirror :where(.hljs-comment, .hljs-quote, .c, .ch, .cm, .cp, .cpf, .c1, .cs) {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.prose :where(.hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-section, .hljs-link, .k, .kc, .kd, .kn, .kp, .kr, .kt),
+.ProseMirror :where(.hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-section, .hljs-link, .k, .kc, .kd, .kn, .kp, .kr, .kt) {
+  color: #f472b6;
+}
+
+.prose :where(.hljs-string, .hljs-regexp, .hljs-addition, .s, .sa, .sb, .sc, .dl, .sd, .s2, .se, .sh, .si, .sx, .sr, .s1, .ss, .gi),
+.ProseMirror :where(.hljs-string, .hljs-regexp, .hljs-addition, .s, .sa, .sb, .sc, .dl, .sd, .s2, .se, .sh, .si, .sx, .sr, .s1, .ss, .gi) {
+  color: #86efac;
+}
+
+.prose :where(.hljs-number, .hljs-symbol, .hljs-bullet, .m, .mb, .mf, .mh, .mi, .il, .mo),
+.ProseMirror :where(.hljs-number, .hljs-symbol, .hljs-bullet, .m, .mb, .mf, .mh, .mi, .il, .mo) {
+  color: #fbbf24;
+}
+
+.prose :where(.hljs-title, .hljs-title.class_, .hljs-title.function_, .hljs-function, .nc, .ne, .nf, .fm),
+.ProseMirror :where(.hljs-title, .hljs-title.class_, .hljs-title.function_, .hljs-function, .nc, .ne, .nf, .fm) {
+  color: #93c5fd;
+}
+
+.prose :where(.hljs-type, .hljs-built_in, .hljs-builtin-name, .nb, .bp),
+.ProseMirror :where(.hljs-type, .hljs-built_in, .hljs-builtin-name, .nb, .bp) {
+  color: #c4b5fd;
+}
+
+.prose :where(.hljs-attr, .hljs-attribute, .hljs-selector-attr, .hljs-selector-class, .hljs-selector-id, .na),
+.ProseMirror :where(.hljs-attr, .hljs-attribute, .hljs-selector-attr, .hljs-selector-class, .hljs-selector-id, .na) {
+  color: #67e8f9;
+}
+
+.prose :where(.hljs-variable, .hljs-template-variable, .hljs-params, .nv, .vc, .vg, .vi, .vm),
+.ProseMirror :where(.hljs-variable, .hljs-template-variable, .hljs-params, .nv, .vc, .vg, .vi, .vm) {
+  color: #fdba74;
+}
+
+.prose :where(.hljs-meta, .hljs-meta .hljs-keyword, .hljs-doctag, .cp, .cpf, .nd),
+.ProseMirror :where(.hljs-meta, .hljs-meta .hljs-keyword, .hljs-doctag, .cp, .cpf, .nd) {
+  color: #f9a8d4;
+}
+
+.prose :where(.hljs-deletion, .gd, .gr, .gt),
+.ProseMirror :where(.hljs-deletion, .gd, .gr, .gt) {
+  color: #fca5a5;
+}
+
+.prose :where(.hljs-emphasis, .ge),
+.ProseMirror :where(.hljs-emphasis, .ge) {
+  font-style: italic;
+}
+
+.prose :where(.hljs-strong, .gs),
+.ProseMirror :where(.hljs-strong, .gs) {
+  font-weight: 700;
+}
+
+/* Prevent links from being clickable in editor */
+.ProseMirror a {
+  pointer-events: none;
+  cursor: text;
+}
+
+/* Task list styling for TipTap */
+.ProseMirror ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.ProseMirror ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.ProseMirror ul[data-type="taskList"] li label {
+  margin-right: 0.5rem;
+  user-select: none;
+}
+
+.ProseMirror ul[data-type="taskList"] li input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+/* Toolbar button states */
+.tiptap-toolbar button.is-active {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+/* Image resize extension styles */
+.ProseMirror .image-resizer {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.ProseMirror .image-resizer img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.ProseMirror .image-resizer .resize-handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #3b82f6;
+  border: 2px solid white;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: nw-resize;
+  z-index: 10;
+}
+
+.ProseMirror .image-resizer .resize-handle.top-left {
+  top: -5px;
+  left: -5px;
+  cursor: nw-resize;
+}
+
+.ProseMirror .image-resizer .resize-handle.top-right {
+  top: -5px;
+  right: -5px;
+  cursor: ne-resize;
+}
+
+.ProseMirror .image-resizer .resize-handle.bottom-left {
+  bottom: -5px;
+  left: -5px;
+  cursor: sw-resize;
+}
+
+.ProseMirror .image-resizer .resize-handle.bottom-right {
+  bottom: -5px;
+  right: -5px;
+  cursor: se-resize;
+}
+
+/* Image alignment styles */
+.ProseMirror .image-resizer.align-left {
+  float: left;
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.ProseMirror .image-resizer.align-right {
+  float: right;
+  margin-left: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.ProseMirror .image-resizer.align-center {
+  display: block;
+  margin: 1rem auto;
+}
+
+.prose-lg :where(img):not(:where([class~=not-prose], [class~=not-prose] *)),
+.prose-lg :where(picture):not(:where([class~=not-prose], [class~=not-prose] *)) {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.prose :where(img):not(:where([class~=not-prose], [class~=not-prose] *)) {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.ProseMirror .selectedCell {
+  background-color: #dbeafe;
+}
+
+.ProseMirror table p {
+  margin: 0;
+}
+
+
+.ProseMirror .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: -2px;
+  width: 4px;
+  background-color: #3b82f6;
+  pointer-events: none;
+}
+
+.ProseMirror.resize-cursor {
+  cursor: col-resize;
+}
+
+/* Hide image resize handles on mobile and tablets (below lg breakpoint: 1024px) */
+@media (max-width: 1023px) {
+
+  .ProseMirror [style*="cursor: nwse-resize"],
+  .ProseMirror [style*="cursor: nesw-resize"] {
+    display: none !important;
+  }
+
+  /* Make images full width on mobile - override inline styles */
+  .prose .image-container {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .prose .image-container .image-wrapper {
+    width: 100% !important;
+  }
+
+  .prose .image-container img,
+  .prose img {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Responsive YouTube embeds */
+.youtube-embed,
+.prose iframe[src*="youtube"] {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 9;
+}
+
+/* Image alignment containers */
+.prose .image-container {
+  display: flex;
+}
+
+.prose .image-container .image-wrapper {
+  max-width: 100%;
+}
+
+.prose .image-container .image-wrapper img,
+.prose img:not(.image-container img) {
+  max-width: 100%;
+  height: auto;
+}
+
+.prose table {
+  border-collapse: collapse;
+}
+
+.prose th,
+.prose td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 0.75rem;
+}
+
+.prose th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+.prose table td:has(> p:not(:empty)),
+.prose table th:has(> p:not(:empty)),
+.prose table tr:has(> td > p:not(:empty)),
+.prose table tr:has(> th > p:not(:empty)) {}
+
+.prose table td>p:not(:empty):not(:where([class~=not-prose], [class~=not-prose] *)),
+.prose table th>p:not(:empty):not(:where([class~=not-prose], [class~=not-prose] *)) {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}

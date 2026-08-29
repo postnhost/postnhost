@@ -1,0 +1,57 @@
+<div class="mb-6">
+  <h2 class="text-xl font-medium tracking-tight text-gray-700">I18n</h2>
+  <p class="mt-1 text-sm text-gray-500">Edit postnhost locale keys.</p>
+</div>
+
+<%= render 'postnhost/shared/form_errors', resource: @setting if @setting.errors.any? %>
+
+<div class="mb-6">
+  <% if @locale_keys.any? %>
+    <%= form_with url: edit_settings_path, method: :get, class: "space-y-2" do %>
+      <%= hidden_field_tag :section, 'i18n' %>
+      <label for="locale-selector" class="<%= form_label_classes %>">Locale</label>
+      <%= select_tag :locale,
+        options_for_select(@locale_keys, @selected_locale_key),
+        id: 'locale-selector',
+        class: form_input_classes,
+        onchange: 'this.form.requestSubmit()' %>
+    <% end %>
+  <% else %>
+    <p class="text-sm text-gray-500">No languages found. Create a language first to edit i18n settings.</p>
+  <% end %>
+</div>
+
+<% if @locale_keys.any? %>
+  <%= form_with url: settings_path(section: 'i18n'), method: :patch, class: "space-y-6" do %>
+    <%= hidden_field_tag :locale_key, @selected_locale_key %>
+
+    <% translation_entries_primary.each do |key, value| %>
+      <div class="space-y-2">
+        <label for="translation_<%= key.parameterize %>" class="<%= form_label_classes %>"><%= site_copy_label(key, include_key: true) %></label>
+        <%= text_field_tag "translations[#{key}]",
+          value,
+          id: "translation_#{key.parameterize}",
+          class: form_input_classes %>
+      </div>
+    <% end %>
+
+    <% if translation_entries_advanced.any? %>
+      <details class="rounded-xl">
+        <summary class="text-sm font-medium text-gray-700 cursor-pointer select-none">Advanced</summary>
+        <div class="mt-4 space-y-4">
+          <% translation_entries_advanced.each do |key, value| %>
+            <div class="space-y-2">
+              <label for="translation_<%= key.parameterize %>" class="<%= form_label_classes %>"><%= key %></label>
+              <%= text_field_tag "translations[#{key}]",
+                value,
+                id: "translation_#{key.parameterize}",
+                class: form_input_classes %>
+            </div>
+          <% end %>
+        </div>
+      </details>
+    <% end %>
+
+    <%= submit_tag 'Save I18n', class: button_classes %>
+  <% end %>
+<% end %>

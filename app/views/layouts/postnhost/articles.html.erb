@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="<%= content_for?(:lang) ? yield(:lang) : 'en' %>">
+  <head>
+    <title><%= content_for?(:title) ? yield(:title) : "postnhost" %></title>
+    <meta name="description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : "postnhost dashboard - Manage your account and projects" %>">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag(*postnhost_stylesheet_assets, 'data-turbo-track': 'reload') %>
+    <%= javascript_include_tag 'postnhost/application', 'data-turbo-track': 'reload', type: "module" %>
+    <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
+    <%= render 'layouts/postnhost/favicon' %>
+
+    <%= yield :head %>
+  </head>
+
+  <body class="min-h-screen bg-white">
+    <%= render 'layouts/postnhost/header', layout_name: 'postnhost/articles' %>
+
+    <!-- Flash Messages for mobile - shown below header -->
+    <div class="md:hidden px-6">
+      <%= render 'postnhost/shared/flash_messages' %>
+    </div>
+
+    <!-- Main content area -->
+    <main class="flex-grow w-full">
+      <div class="w-full">
+        <%= yield %>
+      </div>
+    </main>
+  </body>
+</html>

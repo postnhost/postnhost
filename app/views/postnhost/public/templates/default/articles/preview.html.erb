@@ -1,0 +1,102 @@
+<%= render "postnhost/public/articles/content_for/preview" %>
+
+<!-- Preview Banner -->
+<div class="bg-yellow-50 border-b border-t border-yellow-200 mt-8">
+  <div class="flex items-center justify-center py-2">
+    <span class="text-xs font-medium text-yellow-800">Preview Mode</span>
+  </div>
+</div>
+
+<!-- Cover Image -->
+<% if @content.cover_image? %>
+  <div class="bg-white border-b border-gray-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <%= image_tag @content.cover_image.url,
+            loading: 'eager',
+            fetchpriority: 'high',
+            alt: @content.cover_image_alt.presence || @content.title,
+            width: 1200,
+            height: 630,
+            srcset: "#{@content.cover_image.thumbnail.url} 520w, #{@content.cover_image.medium.url} 1024w, #{@content.cover_image.url} 1200w",
+            sizes: "(max-width: 640px) 173px, (max-width: 1279px) 342px, 1200px",
+            class: 'w-full object-cover rounded-lg' %>
+    </div>
+  </div>
+<% end %>
+
+<!-- Article Header -->
+<div class="bg-white border-b border-gray-200">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="text-center">
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-6">
+        <% if @article.categories.any? %>
+          <% @article.categories.each do |category| %>
+            <%= link_to localized_category_name(category, @current_language), language_category_path(category.slug, @current_language),
+                class: 'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors' %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+        <%= @content.title %>
+      </h1>
+
+      <%= render "postnhost/public/templates/default/shared/article_authors", authors: article_authors(@article), current_language: @current_language %>
+    </div>
+  </div>
+</div>
+
+<!-- Article Content -->
+<div class="bg-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="prose prose-gray max-w-none py-8">
+      <%= render_article_content(@content.content) %>
+    </div>
+  </div>
+</div>
+
+<!-- Language Variants -->
+<% if @available_variants.count > 1 || (@article.published? && @available_variants.any?) %>
+  <div class="bg-white py-8 border-t border-gray-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p class="text-lg font-semibold text-gray-900 mb-6"><%= t('postnhost.public.blog.available_in_languages') %></p>
+      <div class="flex flex-wrap gap-3">
+        <% if @article.published? %>
+          <%= link_to public_article_path(@article.slug),
+              class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-colors #{'bg-gray-900 text-white' if @content == @article} #{'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50' if @content != @article}" do %>
+            <%= @article.language&.name %>
+          <% end %>
+        <% else %>
+          <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium bg-gray-900 text-white">
+            <%= @article.language&.name %>
+          </span>
+        <% end %>
+
+        <% @available_variants.each do |variant| %>
+          <% if variant.published? %>
+            <%= link_to localized_public_article_path(variant.language.html_lang, @article.slug),
+                class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium bg-white border border-gray-200 text-gray-700 hover:bg-gray-50" do %>
+              <%= variant.language.name %>
+            <% end %>
+          <% else %>
+            <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium bg-white border border-gray-200 text-gray-700">
+              <%= variant.language.name %>
+            </span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<!-- Back to Editor -->
+<div class="bg-white border-t border-gray-200 py-8">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-center">
+      <%= link_to edit_article_path(@article), class: 'inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors' do %>
+        <%= icon("arrow-left-long", css_class: "w-4 h-4 mr-2") %>
+        Back to Editor
+      <% end %>
+    </div>
+  </div>
+</div>

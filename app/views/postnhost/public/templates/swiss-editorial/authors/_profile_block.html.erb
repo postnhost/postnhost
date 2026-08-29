@@ -1,0 +1,32 @@
+<section class="grid grid-cols-1 gap-8 md:grid-cols-12">
+  <div class="md:col-span-3">
+    <%= render "postnhost/public/templates/swiss-editorial/shared/author_avatar", user: author, size_class: "aspect-square w-full max-w-[260px]", text_size_class: "text-5xl" %>
+  </div>
+
+  <div class="md:col-span-9 md:pl-8">
+    <h1 class="break-words text-[42px] font-extrabold leading-[0.95] sm:text-[58px] md:text-[96px]"><%= author_name(author) %></h1>
+
+    <% if author.position.present? %>
+      <p class="mt-5 text-[12px] font-semibold uppercase text-[#6b6b6b]"><%= author.position %></p>
+    <% end %>
+
+    <% if author.bio.present? %>
+      <p class="mt-6 max-w-3xl text-[21px] leading-8 text-[#1f1f1f]"><%= author.bio %></p>
+    <% end %>
+
+    <% if author_social_links(author).any? %>
+      <div class="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-t border-[#d9d9d9] pt-6">
+        <% author_social_links(author).each do |social| %>
+          <%= link_to social[:url],
+                target: "_blank",
+                rel: "noopener noreferrer",
+                class: "inline-flex items-center text-[#0a0a0a] hover:text-[#d4322c] cursor-pointer",
+                aria: { label: social[:label] },
+                title: social[:label] do %>
+            <%= icon(social[:icon], css_class: "h-4 w-4") %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</section>

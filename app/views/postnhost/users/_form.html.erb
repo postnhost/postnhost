@@ -1,0 +1,160 @@
+<%= form_with model: user, local: true, multipart: true, class: "space-y-6" do |form| %>
+  <%= render "postnhost/shared/elements/error_messages", resource: user %>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+    <div class="order-1 lg:order-2 lg:col-span-1">
+      <div class="lg:sticky lg:top-6 space-y-6">
+        <%= render "postnhost/shared/elements/form_card" do %>
+          <div class="space-y-4">
+            <%= form.submit submit_text, class: "#{button_classes} w-full" %>
+            <%= render "postnhost/shared/elements/button_link",
+              text: "Cancel",
+              url: cancel_url,
+              variant: :secondary,
+              extra_class: "w-full justify-center" %>
+
+            <% if local_assigns.fetch(:show_sign_out, false) %>
+              <div>
+                <%= button_to "Sign Out", session_path, method: :delete, class: "#{button_classes(variant: :secondary)} w-full" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
+        <%= render "postnhost/shared/elements/form_card" do %>
+          <div class="space-y-2">
+            <h4 class="text-base font-medium text-gray-900">Credentials</h4>
+          </div>
+
+          <div>
+            <%= form.label :password, class: form_label_classes %>
+            <%= form.password_field :password, autocomplete: "new-password", required: user.new_record?, class: form_input_classes %>
+            <p class="mt-1 text-xs text-gray-500">Leave blank to keep existing password when editing.</p>
+          </div>
+
+          <div>
+            <%= form.label :password_confirmation, class: form_label_classes %>
+            <%= form.password_field :password_confirmation, autocomplete: "new-password", required: user.new_record?, class: form_input_classes %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="order-2 lg:order-1 lg:col-span-2 space-y-6">
+      <%= render "postnhost/shared/elements/form_card" do %>
+        <div class="space-y-2">
+          <%= form.label :avatar_file, "Author Image", class: form_label_classes %>
+          <div class="flex items-center gap-4">
+            <%= render "postnhost/users/avatar",
+              user: user,
+              size_class: "w-16 h-16 min-w-16 min-h-16",
+              text_size_class: "text-base",
+              mobile_visibility_class: "flex" %>
+            <%= form.file_field :avatar_file, accept: "image/png,image/jpeg,image/gif,image/webp,image/heic", class: "#{form_input_classes} cursor-pointer" %>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <%= form.label :name, "Author Name", class: form_label_classes %>
+            <%= form.text_field :name, class: form_input_classes, placeholder: "Enter author name" %>
+          </div>
+
+          <div>
+            <%= form.label :email, class: form_label_classes %>
+            <%= form.email_field :email, autocomplete: "email", required: true, class: form_input_classes, placeholder: "author@example.com" %>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <%= form.label :position, class: form_label_classes %>
+            <%= form.text_field :position, class: form_input_classes, placeholder: "Editor in Chief" %>
+            <p class="mt-1 text-xs text-gray-500">If left blank, the default label "Author" will be used.</p>
+
+          </div>
+
+          <div>
+            <%= form.label :slug, "Slug", class: form_label_classes %>
+            <div class="flex">
+              <span class="inline-flex items-center px-4 py-3 border-r-0 border-gray-200 bg-gray-50 text-gray-500 text-sm font-medium rounded-l-xl">
+                authors/
+              </span>
+              <%= form.text_field :slug, class: "block w-full rounded-r-xl border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-900 transition-all duration-200 focus:border-gray-900 focus:bg-white focus:ring-0", placeholder: "author-slug" %>
+            </div>
+            <p class="mt-1 text-xs text-gray-500">Auto-generated from Author Name. You can edit it before saving.</p>
+          </div>
+        </div>
+
+        <div>
+          <%= form.label :bio, "BIO", class: form_label_classes %>
+          <%= form.text_area :bio, rows: 3, class: form_textarea_classes, placeholder: "Short biography shown on the public author profile." %>
+        </div>
+
+        <details class="group rounded-xl border border-gray-200 p-4">
+          <summary class="cursor-pointer list-none flex items-center justify-between">
+            <span class="text-base font-medium text-gray-900">Social Links</span>
+            <%= icon("chevron-down", css_class: "w-4 h-4 text-gray-400 transition-transform duration-200 group-open:rotate-180") %>
+          </summary>
+          <p class="mt-2 text-xs text-gray-500">Links shown on the public author profile.</p>
+
+          <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <%= form.label :website_url, "Website", class: form_label_classes %>
+              <%= form.url_field :website_url, class: form_input_classes, placeholder: "https://example.com" %>
+            </div>
+
+            <div>
+              <%= form.label :x_url, "X", class: form_label_classes %>
+              <%= form.url_field :x_url, class: form_input_classes, placeholder: "https://x.com/username" %>
+            </div>
+
+            <div>
+              <%= form.label :linkedin_url, "LinkedIn", class: form_label_classes %>
+              <%= form.url_field :linkedin_url, class: form_input_classes, placeholder: "https://linkedin.com/in/username" %>
+            </div>
+
+            <div>
+              <%= form.label :facebook_url, "Facebook", class: form_label_classes %>
+              <%= form.url_field :facebook_url, class: form_input_classes, placeholder: "https://facebook.com/username" %>
+            </div>
+
+            <div>
+              <%= form.label :youtube_url, "YouTube", class: form_label_classes %>
+              <%= form.url_field :youtube_url, class: form_input_classes, placeholder: "https://youtube.com/@channel" %>
+            </div>
+
+            <div>
+              <%= form.label :instagram_url, "Instagram", class: form_label_classes %>
+              <%= form.url_field :instagram_url, class: form_input_classes, placeholder: "https://instagram.com/username" %>
+            </div>
+
+            <div>
+              <%= form.label :threads_url, "Threads", class: form_label_classes %>
+              <%= form.url_field :threads_url, class: form_input_classes, placeholder: "https://threads.net/@username" %>
+            </div>
+
+            <div>
+              <%= form.label :tiktok_url, "TikTok", class: form_label_classes %>
+              <%= form.url_field :tiktok_url, class: form_input_classes, placeholder: "https://tiktok.com/@username" %>
+            </div>
+
+            <div>
+              <%= form.label :mastodon_url, "Mastodon", class: form_label_classes %>
+              <%= form.url_field :mastodon_url, class: form_input_classes, placeholder: "https://mastodon.social/@username" %>
+            </div>
+
+            <div>
+              <%= form.label :bluesky_url, "Bluesky", class: form_label_classes %>
+              <%= form.url_field :bluesky_url, class: form_input_classes, placeholder: "https://bsky.app/profile/username" %>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <%= form.submit submit_text, class: "#{button_classes} w-full md:w-auto" %>
+          </div>
+        </details>
+      <% end %>
+    </div>
+  </div>
+<% end %>

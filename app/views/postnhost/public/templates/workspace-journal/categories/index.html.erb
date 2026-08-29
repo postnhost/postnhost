@@ -1,0 +1,58 @@
+<%= render "postnhost/public/categories/content_for/index" %>
+
+<% if category_articles.any? %>
+  <section class="mx-auto max-w-[1800px] px-6 pb-8 pt-10 lg:px-10 lg:pb-10 lg:pt-12">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[300px_minmax(0,1fr)]">
+      <aside class="lg:sticky lg:top-28 lg:self-start lg:border-r lg:border-[#eeeeec] lg:pb-16 lg:pr-16">
+        <h1 class="text-[2.5rem] font-semibold leading-none text-[#111111] sm:text-[3rem] lg:text-[2.875rem]">
+          <%= public_category_heading(@category) %>
+        </h1>
+
+        <% if show_public_category_description?(@category) %>
+          <p class="mt-4 max-w-[18rem] text-sm/6 text-[#77736e] lg:mt-6">
+            <%= public_category_description(@category) %>
+          </p>
+        <% end %>
+
+        <%= render "postnhost/public/templates/workspace-journal/shared/category_navigation" %>
+      </aside>
+
+      <div class="min-w-0">
+        <div class="grid grid-cols-1 gap-x-16 gap-y-10 md:grid-cols-2 lg:gap-y-14">
+          <%= render partial: "postnhost/public/templates/workspace-journal/categories/article_card",
+                collection: category_articles,
+                as: :item,
+                cached: ->(item) { [public_site_revision, item, article_authors_cache_key(item), "workspace-journal_category_card"] } %>
+        </div>
+
+        <div class="pt-8 lg:pt-10">
+          <%= render "postnhost/public/templates/workspace-journal/shared/pagination", pagy: @pagy %>
+        </div>
+      </div>
+    </div>
+  </section>
+<% else %>
+  <section class="mx-auto max-w-[1800px] px-6 py-12 lg:px-10 lg:py-16">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-12 xl:grid-cols-[300px_minmax(0,1fr)]">
+      <aside class="lg:border-r lg:border-[#eeeeec] lg:pr-16">
+        <h1 class="text-[2.5rem] font-semibold leading-none text-[#111111] sm:text-[3rem] lg:text-[2.875rem]">
+          <%= public_category_heading(@category) %>
+        </h1>
+
+        <% if show_public_category_description?(@category) %>
+          <p class="mt-4 max-w-[18rem] text-sm/6 text-[#77736e] lg:mt-6">
+            <%= public_category_description(@category) %>
+          </p>
+        <% end %>
+
+        <%= render "postnhost/public/templates/workspace-journal/shared/category_navigation" %>
+      </aside>
+
+      <div class="border-y border-[#eeeeec] py-10 text-center lg:py-12">
+        <h2 class="text-xl/7 font-semibold text-[#1f1f1f]"><%= t("postnhost.public.category.no_articles") %></h2>
+        <p class="mt-3 text-sm/6 text-[#77736e]"><%= t("postnhost.public.category.no_articles_description") %></p>
+        <%= link_to t("postnhost.public.blog.browse_all_articles"), language_root_path(@current_language), class: "mt-6 inline-flex items-center rounded-md bg-[#1f1f1f] px-4 py-2 text-sm/6 font-medium text-white hover:bg-[#3b3a37] cursor-pointer lg:mt-8" %>
+      </div>
+    </div>
+  </section>
+<% end %>

@@ -1,0 +1,58 @@
+es:
+  date:
+    formats:
+      long: "%d de %B de %Y"
+  postnhost:
+    public:
+      site:
+        schema_site_name: "PostnHost"
+        blog_tagline: "Blog"
+        blog_subtitle: "Descubre las últimas perspectivas, tutoriales e historias"
+        blog_meta_title: "Blog — PostnHost"
+        blog_meta_description: "Descubre las últimas perspectivas, tutoriales e historias de PostnHost."
+        blog_meta_title_paginated: "Página %{page} — %{blog_meta_title}"
+        name_footer_copyright: "postnhost.com"
+
+      blog:
+        page_title: "Página %{page} — Blog"
+        author_label: "Autor"
+        no_articles: "Aún no hay artículos"
+        no_articles_description: "Vuelve pronto para descubrir nuevo contenido."
+        back_to_articles: "Volver a los artículos"
+        more_in_category: "Más en %{category}"
+        available_in_languages: "Disponible en otros idiomas:"
+        browse_all_articles: "Ver todos los artículos"
+        read_more: "Artículos relacionados"
+        read_article_aria_label: "Leer «%{title}»"
+        top_picks: "Destacados"
+
+      search:
+        title: "Resultados de búsqueda para «%{query}»"
+        heading: "Resultados de búsqueda para «%{query}»"
+        input_placeholder: "Buscar por título o contenido"
+        submit: "Buscar"
+
+      category:
+        title: "%{category} — PostnHost"
+        page_title: "Página %{page} — %{category} — PostnHost"
+        page_heading: "Página %{page} — %{category}"
+        no_articles: "No se encontraron artículos"
+        no_articles_description: "Todavía no hay artículos publicados en esta categoría."
+
+      authors:
+        latest_from_author: "Últimos artículos de este autor"
+        no_articles: "Aún no hay artículos"
+        no_articles_description: "Este autor aún no ha publicado ningún artículo."
+
+      footer:
+        heading: "Pie de página"
+        explore_categories: "Artículos por categoría"
+        pages: "Páginas"
+
+      breadcrumbs:
+        home: "Inicio"
+
+      pagination:
+        navigation: "Paginación"
+        previous: "Anterior"
+        next: "Siguiente"

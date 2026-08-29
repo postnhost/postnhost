@@ -1,0 +1,225 @@
+<div data-controller="tiptap-editor"
+     data-tiptap-editor-content-value="<%= content %>"
+     data-tiptap-editor-resource-type-value="<%= resource_type %>"
+     data-tiptap-editor-resource-id-value="<%= resource_id %>"
+     data-tiptap-editor-mount-path-value="<%= postnhost.root_path %>"
+     class="relative">
+  <!-- Toolbar -->
+  <div class="sticky top-0 z-20 bg-white border-b border-gray-100 px-6 py-1">
+    <div class="flex flex-wrap gap-1 items-center justify-between">
+      <div class="flex flex-wrap gap-1 items-center">
+      <!-- Undo/Redo -->
+      <button type="button" data-action="undo" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("undo", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+      <button type="button" data-action="redo" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("redo", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <!-- Headings -->
+      <button type="button" data-action="heading-2" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("heading-2", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <button type="button" data-action="heading-3" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("heading-3", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <!-- Lists -->
+      <button type="button" data-action="bullet-list" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("bullet-list", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <button type="button" data-action="ordered-list" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("ordered-list", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <!-- Blockquote -->
+      <button type="button" data-action="blockquote" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("blockquote", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <!-- Text Formatting -->
+      <button type="button" data-action="bold" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("bold", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <button type="button" data-action="italic" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("italic", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <button type="button" data-action="strike" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("strike", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <!-- Code Block -->
+      <button type="button" data-action="code-block" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200" title="Code block" aria-label="Code block">
+        <%= icon("code-block", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <button type="button" data-action="code" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("code", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <button type="button" data-action="underline" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("underline", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <button type="button" data-action="link" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("link", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <button type="button" data-action="image" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200" title="Upload image">
+        <%= icon("image-add", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <button type="button" data-action="youtube" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200" title="Embed YouTube video">
+        <%= icon("youtube", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <!-- Table Dropdown -->
+      <div class="relative" data-controller="dropdown">
+        <button type="button" data-action="click->dropdown#toggle table" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200" title="Table">
+          <%= icon("table", css_class: "w-5 h-5", subfolder: "tiptap") %>
+        </button>
+
+        <div data-dropdown-target="menu" class="hidden absolute left-0 mt-2 w-48 rounded-lg shadow-lg bg-white border border-gray-200 z-50">
+          <div class="py-1" role="none">
+            <button type="button" class="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-100" data-action="click->tiptap-editor#insertTable click->dropdown#close" role="menuitem">Insert Table</button>
+            <button type="button" class="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-100" data-action="click->tiptap-editor#deleteTable click->dropdown#close" role="menuitem">Delete Table</button>
+            <button type="button" class="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-100" data-action="click->tiptap-editor#addColumnAfter click->dropdown#close" role="menuitem">Add Column</button>
+            <button type="button" class="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-100" data-action="click->tiptap-editor#deleteColumn click->dropdown#close" role="menuitem">Delete Column</button>
+            <button type="button" class="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-100" data-action="click->tiptap-editor#addRowAfter click->dropdown#close" role="menuitem">Add Row</button>
+            <button type="button" class="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-100" data-action="click->tiptap-editor#deleteRow click->dropdown#close" role="menuitem">Delete Row</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text Alignment -->
+      <button type="button" data-action="align-left" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("align-left", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <button type="button" data-action="align-center" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("align-center", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+
+      <button type="button" data-action="align-right" class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <%= icon("align-right", css_class: "w-5 h-5", subfolder: "tiptap") %>
+      </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Editor -->
+  <div data-tiptap-editor-target="editor" class="min-h-[400px] p-4"></div>
+
+  <!-- Contextual code language selector -->
+  <select
+    data-tiptap-editor-target="codeLanguage"
+    data-action="change->tiptap-editor#changeCodeLanguage"
+    class="absolute z-10 hidden h-8 w-32 cursor-pointer rounded-md border border-slate-600 bg-slate-800 px-2 text-xs font-medium text-slate-200 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+    aria-label="Code language"
+    title="Code language">
+    <option value="plaintext">Plain text</option>
+    <option value="bash">Bash</option>
+    <option value="c">C</option>
+    <option value="cpp">C++</option>
+    <option value="csharp">C#</option>
+    <option value="css">CSS</option>
+    <option value="diff">Diff</option>
+    <option value="go">Go</option>
+    <option value="html">HTML</option>
+    <option value="java">Java</option>
+    <option value="javascript">JavaScript</option>
+    <option value="json">JSON</option>
+    <option value="kotlin">Kotlin</option>
+    <option value="markdown">Markdown</option>
+    <option value="php">PHP</option>
+    <option value="python">Python</option>
+    <option value="ruby">Ruby</option>
+    <option value="rust">Rust</option>
+    <option value="sql">SQL</option>
+    <option value="swift">Swift</option>
+    <option value="typescript">TypeScript</option>
+    <option value="xml">XML</option>
+    <option value="yaml">YAML</option>
+  </select>
+
+  <!-- Link Dropdown -->
+  <div data-tiptap-editor-target="linkDropdown" class="absolute z-10 bg-white border border-gray-200 rounded-lg shadow-lg p-2 hidden" style="min-width: 300px;">
+    <div class="space-y-3">
+      <div class="flex items-center space-x-2">
+        <input
+          data-tiptap-editor-target="linkInput"
+          data-action="keydown->tiptap-editor#handleLinkInputKeydown"
+          type="text"
+          placeholder="Paste a link..."
+          class="flex-1 px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          tabindex="-1"
+        />
+        <button
+          data-action="click->tiptap-editor#applyLink"
+          type="button"
+          title="Apply link"
+          class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+          <%= icon("apply-link", css_class: "w-4 h-4", subfolder: "tiptap") %>
+        </button>
+
+        <button
+          data-action="click->tiptap-editor#removeLink"
+          type="button"
+          title="Remove link"
+          class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200">
+          <%= icon("remove-link", css_class: "w-4 h-4", subfolder: "tiptap") %>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alt Text Editor -->
+  <div data-tiptap-editor-target="altDropdown" class="absolute z-10 hidden text-gray-600">
+    <input
+      data-tiptap-editor-target="altInput"
+      data-action="input->tiptap-editor#handleAltInputChange keydown->tiptap-editor#handleAltInputKeydown blur->tiptap-editor#applyAlt"
+      type="text"
+      placeholder="Add alt text..."
+      class="w-full px-2 py-1 text-sm text-gray-600 focus:outline-none bg-transparent"
+      autocomplete="off"
+      tabindex="-1"
+    />
+  </div>
+
+  <!-- YouTube Dropdown -->
+  <div data-tiptap-editor-target="youtubeDropdown" class="absolute z-10 bg-white border border-gray-200 rounded-lg shadow-lg p-2 hidden" style="min-width: 300px;">
+    <div class="space-y-3">
+      <div class="flex items-center space-x-2">
+        <input
+          data-tiptap-editor-target="youtubeInput"
+          data-action="keydown->tiptap-editor#handleYoutubeInputKeydown"
+          type="text"
+          placeholder="Paste YouTube URL..."
+          class="flex-1 px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          tabindex="-1"
+        />
+        <button
+          data-action="click->tiptap-editor#applyYoutube"
+          type="button"
+          title="Embed video"
+          class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+          <%= icon("apply-link", css_class: "w-4 h-4", subfolder: "tiptap") %>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden field for form submission -->
+  <%= form.hidden_field :content, data: { tiptap_editor_target: "content" } %>
+</div>

@@ -1,0 +1,55 @@
+pt:
+  postnhost:
+    public:
+      site:
+        schema_site_name: "PostnHost"
+        blog_tagline: "Blog"
+        blog_subtitle: "Descubra os últimos insights, tutoriais e histórias"
+        blog_meta_title: "Blog — PostnHost"
+        blog_meta_description: "Descubra os insights, tutoriais e histórias mais recentes do PostnHost."
+        blog_meta_title_paginated: "Página %{page} — %{blog_meta_title}"
+        name_footer_copyright: "postnhost.com"
+
+      blog:
+        page_title: "Página %{page} — Blog"
+        author_label: "Autor"
+        no_articles: "Ainda não há artigos"
+        no_articles_description: "Volte em breve para conferir novos conteúdos."
+        back_to_articles: "Voltar aos artigos"
+        more_in_category: "Mais em %{category}"
+        available_in_languages: "Disponível em outros idiomas:"
+        browse_all_articles: "Ver todos os artigos"
+        read_more: "Artigos relacionados"
+        read_article_aria_label: "Ler “%{title}”"
+        top_picks: "Destaques"
+
+      search:
+        title: "Resultados da busca por “%{query}”"
+        heading: "Resultados da busca por “%{query}”"
+        input_placeholder: "Buscar por título ou conteúdo"
+        submit: "Buscar"
+
+      category:
+        title: "%{category} — PostnHost"
+        page_title: "Página %{page} — %{category} — PostnHost"
+        page_heading: "Página %{page} — %{category}"
+        no_articles: "Nenhum artigo encontrado"
+        no_articles_description: "Ainda não há artigos publicados nesta categoria."
+
+      authors:
+        latest_from_author: "Artigos mais recentes deste autor"
+        no_articles: "Ainda não há artigos"
+        no_articles_description: "Este autor ainda não publicou nenhum artigo."
+
+      footer:
+        heading: "Rodapé"
+        explore_categories: "Artigos por categoria"
+        pages: "Páginas"
+
+      breadcrumbs:
+        home: "Início"
+
+      pagination:
+        navigation: "Paginação"
+        previous: "Anterior"
+        next: "Próxima"

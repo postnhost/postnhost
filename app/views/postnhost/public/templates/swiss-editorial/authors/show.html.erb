@@ -1,0 +1,31 @@
+<%= render "postnhost/public/authors/content_for/show" %>
+
+<div class="mx-auto max-w-[1440px] px-6 py-20">
+  <%= render "postnhost/public/templates/swiss-editorial/authors/profile_block", author: @author %>
+</div>
+
+<section class="mx-auto max-w-[1440px] px-6 pt-8">
+  <div class="grid grid-cols-1 gap-10 lg:grid-cols-12">
+    <div class="lg:col-span-8 lg:col-start-3">
+      <div class="mb-0 flex items-baseline justify-between border-b-2 border-[#0a0a0a] pb-4">
+        <h2 class="text-[40px] font-bold leading-none"><%= t("postnhost.public.authors.latest_from_author") %></h2>
+      </div>
+
+      <% if category_articles.any? %>
+        <%= render partial: "postnhost/public/templates/swiss-editorial/authors/article_card",
+              collection: category_articles,
+              as: :item,
+              cached: ->(item) { [public_site_revision, item, "author_card"] } %>
+
+        <div class="pt-8">
+          <%= render "postnhost/public/templates/swiss-editorial/shared/pagination", pagy: @pagy %>
+        </div>
+      <% else %>
+        <div class="border-b border-[#d9d9d9] py-14 text-center">
+          <h3 class="text-[32px] font-bold leading-tight"><%= t("postnhost.public.authors.no_articles") %></h3>
+          <p class="mt-3 text-[#6b6b6b]"><%= t("postnhost.public.authors.no_articles_description") %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,48 @@
+<%= render "postnhost/public/categories/content_for/index" %>
+
+<!-- Category Header -->
+<div class="bg-white border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-12">
+    <div class="text-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
+        <%= public_category_heading(@category) %>
+      </h1>
+      <% if show_public_category_description?(@category) %>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <%= public_category_description(@category) %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Articles Grid -->
+<% if category_articles.any? %>
+  <div class="bg-white py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <%= render partial: "postnhost/public/templates/default/categories/article_card",
+              collection: category_articles,
+              as: :item,
+              cached: ->(item) { [public_site_revision, item, article_authors_cache_key(item), "category_card"] } %>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-center">
+        <%= render "postnhost/public/templates/default/shared/pagination", pagy: @pagy %>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <!-- Empty State -->
+  <div class="bg-white py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="mx-auto h-12 w-12 text-gray-400">
+        <%= icon("document-text", css_class: "w-full h-full") %>
+      </div>
+      <h2 class="mt-2 text-2xl font-semibold text-gray-900 mb-4"><%= t('postnhost.public.category.no_articles') %></h2>
+      <p class="text-lg text-gray-600 mb-8"><%= t('postnhost.public.category.no_articles_description') %></p>
+      <%= link_to t('postnhost.public.blog.browse_all_articles'), language_root_path(@current_language), class: 'bg-gray-900 text-white px-6 py-3 rounded-2xl font-semibold hover:bg-gray-800 transition-all duration-200' %>
+    </div>
+  </div>
+<% end %>

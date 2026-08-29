@@ -1,0 +1,23 @@
+<%
+  # Table container partial for consistent table layouts
+  #
+  # Parameters:
+  #   headers: Array of header hashes [{text: "...", class: "..."}]
+  #   header_grid_class: Optional grid classes for the header row (default: 12-column grid)
+  #   content block: Table body content
+  header_grid_class = local_assigns.fetch(:header_grid_class, 'grid grid-cols-12 gap-4')
+%>
+
+<div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+  <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+    <div class="<%= header_grid_class %> text-xs font-medium text-gray-500 uppercase tracking-wider">
+      <% headers.each do |header| %>
+        <div class="<%= header[:class] %>"><%= header[:text] %></div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="divide-y divide-gray-200">
+    <%= yield %>
+  </div>
+</div>

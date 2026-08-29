@@ -1,0 +1,19 @@
+<div class="mb-6">
+  <h2 class="text-xl font-medium tracking-tight text-gray-700">Timezone</h2>
+  <p class="mt-1 text-sm text-gray-500">Set your site's timezone.</p>
+</div>
+
+<%= form_with model: @setting, url: settings_path(section: 'timezone'), method: :patch, class: "space-y-6" do |f| %>
+  <%= render 'postnhost/shared/form_errors', resource: @setting %>
+
+  <div class="space-y-2">
+    <%= f.label :timezone, 'Timezone', class: form_label_classes %>
+    <%= f.select :timezone,
+      options_for_select(postnhost_timezone_options, ActiveSupport::TimeZone[@setting.timezone.presence || Postnhost.config.default_timezone]&.tzinfo&.name),
+      {},
+      class: form_input_classes %>
+    <p class="text-xs text-gray-500">Default timezone from config: <%= Postnhost.config.default_timezone %></p>
+  </div>
+
+  <%= f.submit 'Save Timezone', class: button_classes %>
+<% end %>

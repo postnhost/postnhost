@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="<%= document_lang %>" class="[scrollbar-gutter:stable]">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <%= render 'postnhost/shared/seo_meta_tags' %>
+    <%= render 'postnhost/shared/structured_data' %>
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag(*postnhost_stylesheet_assets, "data-turbo-track": "reload") %>
+    <%= javascript_include_tag "postnhost/application", "data-turbo-track": "reload", type: "module" %>
+
+    <%= render 'layouts/postnhost/favicon' %>
+
+    <%= yield :head %>
+    <%= render_site_scripts("head") %>
+  </head>
+
+  <body class="min-h-dvh overflow-y-scroll">
+    <%= render_site_scripts("body_start") %>
+    <header class="bg-white border-b border-gray-200"<%= ' data-controller="reading-progress"'.html_safe if public_article_show_page? %>>
+      <% if public_article_show_page? %>
+        <div class="fixed top-0 left-0 h-0.5 bg-gray-900 z-50 transition-all duration-500 ease-out" data-reading-progress-target="bar" style="width: 0%"></div>
+      <% end %>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4"<%= ' data-controller="public-mobile-nav"'.html_safe if !@use_auto_header_navigation && @header_navigation_items.any? %>>
+        <div class="flex items-center justify-between gap-4">
+        <div class="flex min-w-0 items-center gap-6">
+          <%= render "layouts/postnhost/public_header/logo" %>
+
+          <% if !@use_auto_header_navigation && @header_navigation_items.any? %>
+            <nav class="hidden md:flex items-center gap-3 lg:gap-5 min-h-[40px]">
+              <% @header_navigation_items.each do |item| %>
+                <% if item.kind == "link" && navigation_href(item).present? %>
+                  <%= link_to navigation_label(item), navigation_href(item), **navigation_link_options(item), class: "text-sm text-gray-600 hover:text-gray-900 transition-colors cursor-pointer" %>
+                <% elsif item.kind == "link" && item.target_kind == "text" && navigation_label(item).present? %>
+                  <p class="text-xs font-semibold uppercase tracking-wide text-gray-400"><%= navigation_label(item) %></p>
+                <% elsif item.kind == "dropdown" && item.children.any? %>
+                  <div class="relative group py-2">
+                    <span class="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
+                      <%= navigation_label(item) %>
+                      <%= icon("chevron-down", css_class: "h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180") %>
+                    </span>
+                    <div class="invisible absolute left-0 top-full z-50 min-w-48 rounded-xl border border-gray-200 bg-white p-2 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100">
+                      <% item.children.each do |child| %>
+                        <% if navigation_href(child).present? %>
+                          <%= link_to navigation_label(child), navigation_href(child), **navigation_link_options(child), class: "block px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-50 cursor-pointer" %>
+                        <% elsif child.target_kind == "text" && navigation_label(child).present? %>
+                          <p class="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-gray-400"><%= navigation_label(child) %></p>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            </nav>
+          <% end %>
+        </div>
+
+        <div class="flex items-center space-x-2 sm:space-x-4 min-h-[40px]">
+          <%= render "layouts/postnhost/public_header/language_switcher" %>
+          <%= render "layouts/postnhost/public_header/dashboard_sign_in" %>
+          <% if !@use_auto_header_navigation && @header_navigation_items.any? %>
+            <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-md text-gray-700 hover:bg-gray-100 md:hidden cursor-pointer" aria-label="Toggle navigation" data-action="public-mobile-nav#toggle">
+              <%= icon("menu", css_class: "h-5 w-5") %>
+            </button>
+          <% end %>
+        </div>
+        </div>
+
+        <% if !@use_auto_header_navigation && @header_navigation_items.any? %>
+          <nav class="hidden border-t border-gray-200 pt-3 mt-3 space-y-2 md:hidden" data-public-mobile-nav-target="panel">
+            <% @header_navigation_items.each do |item| %>
+              <% if item.kind == "link" && navigation_href(item).present? %>
+                <%= link_to navigation_label(item), navigation_href(item), **navigation_link_options(item), class: "block py-2 text-sm text-gray-700 hover:text-gray-900 cursor-pointer" %>
+              <% elsif item.kind == "link" && item.target_kind == "text" && navigation_label(item).present? %>
+                <p class="py-2 text-xs font-semibold uppercase tracking-wide text-gray-400"><%= navigation_label(item) %></p>
+              <% elsif item.kind == "dropdown" && item.children.any? %>
+                <details class="group">
+                  <summary class="flex list-none items-center justify-between py-2 text-sm font-semibold uppercase tracking-wide text-gray-500 cursor-pointer">
+                    <%= navigation_label(item) %>
+                    <%= icon("chevron-down", css_class: "h-4 w-4 transition-transform group-open:rotate-180") %>
+                  </summary>
+                  <div class="space-y-1 pl-3">
+                    <% item.children.each do |child| %>
+                      <% if navigation_href(child).present? %>
+                        <%= link_to navigation_label(child), navigation_href(child), **navigation_link_options(child), class: "block py-2 text-sm text-gray-700 hover:text-gray-900 cursor-pointer" %>
+                      <% elsif child.target_kind == "text" && navigation_label(child).present? %>
+                        <p class="py-2 text-xs font-semibold uppercase tracking-wide text-gray-400"><%= navigation_label(child) %></p>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </details>
+              <% end %>
+            <% end %>
+          </nav>
+        <% end %>
+      </div>
+    </header>
+
+    <main>
+      <%= yield %>
+    </main>
+
+    <%= render 'layouts/postnhost/footer' %>
+    <%= render_site_scripts("body_end") %>
+  </body>
+</html>

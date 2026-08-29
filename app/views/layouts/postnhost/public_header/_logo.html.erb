@@ -1,0 +1,9 @@
+<div class="flex items-center">
+  <%= link_to language_root_path(@current_language), class: "flex items-center group shrink-0" do %>
+    <%= image_tag setting_site_logo_src,
+          alt: "logo",
+          width: 180,
+          height: 37,
+          class: "h-7 sm:h-9 w-auto group-hover:opacity-80 transition-opacity" %>
+  <% end %>
+</div>

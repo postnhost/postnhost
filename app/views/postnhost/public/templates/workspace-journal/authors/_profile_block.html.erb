@@ -1,0 +1,32 @@
+<section>
+  <div class="max-w-44">
+    <%= render "postnhost/public/templates/workspace-journal/shared/author_avatar", user: author, size_class: "aspect-square w-full", text_size_class: "text-5xl" %>
+  </div>
+
+  <h1 class="mt-5 text-[2.5rem] font-semibold leading-none text-[#111111] sm:text-[3rem] lg:mt-8 lg:text-[2.875rem]">
+    <%= author_name(author) %>
+  </h1>
+
+  <% if author.position.present? %>
+    <p class="mt-5 text-sm/6 font-medium text-[#85827d]"><%= author.position %></p>
+  <% end %>
+
+  <% if author.bio.present? %>
+    <p class="mt-4 max-w-[18rem] text-sm/6 text-[#77736e] lg:mt-6"><%= author.bio %></p>
+  <% end %>
+
+  <% if author_social_links(author).any? %>
+    <div class="mt-6 flex flex-wrap gap-2 border-t border-[#eeeeec] pt-5 lg:mt-8">
+      <% author_social_links(author).each do |social| %>
+        <%= link_to social[:url],
+              target: "_blank",
+              rel: "noopener noreferrer",
+              class: "inline-flex size-9 items-center justify-center rounded-md text-[#85827d] hover:bg-[#f7f6f3] hover:text-[#1f1f1f] cursor-pointer",
+              aria: { label: social[:label] },
+              title: social[:label] do %>
+          <%= icon(social[:icon], css_class: "size-4") %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</section>

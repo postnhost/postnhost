@@ -1,0 +1,156 @@
+<% content_for :title, @language.name %>
+
+<div class="space-y-8">
+  <%= render 'postnhost/shared/elements/page_header',
+    title: @language.name,
+    stats: [
+      { text: "Code: #{@language.html_lang}", class: '' },
+      { text: "#{@articles_pagy.count} articles", class: '' },
+      { text: "#{@article_variants_pagy.count} article variants", class: '' },
+      (@language.default? ? { text: "Default Language", class: stats_badge_classes(variant: :blue) } : nil)
+    ].compact do %>
+    <%= render 'postnhost/shared/elements/button_link',
+      text: 'Back to Languages',
+      url: languages_path(@article),
+      variant: :secondary,
+      icon: 'chevron-left',
+      extra_class: 'w-full md:w-auto' %>
+    <%= render 'postnhost/shared/elements/button_link',
+      text: 'Edit',
+      url: edit_language_path(@language),
+      icon: 'edit',
+      extra_class: 'w-full md:w-auto' %>
+    <%= render 'postnhost/shared/elements/button_link',
+      text: 'Delete',
+      url: language_path(@language),
+      variant: :danger,
+      icon: 'trash',
+      method: :delete,
+      extra_class: 'w-full md:w-auto',
+      data: {
+        turbo_method: :delete,
+        turbo_confirm: "Are you sure you want to delete this language? This action cannot be undone."
+      } %>
+  <% end %>
+
+  <% unless postnhost_public_locale_file_present_for?(@language.html_lang) %>
+    <div class="rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-900 space-y-2">
+      <p class="font-medium">No locale file for this language code</p>
+      <p class="text-yellow-950">
+        There is no <code class="rounded bg-yellow-100 px-1.5 py-0.5 text-xs font-mono text-yellow-950">config/locales/<%= @language.html_lang %>.yml</code>
+        in your app and Postnhost does not ship one for <code class="rounded bg-yellow-100 px-1.5 py-0.5 text-xs font-mono text-yellow-950"><%= @language.html_lang %></code>.
+        Public pages may fall back to English for <code class="rounded bg-yellow-100 px-1.5 py-0.5 text-xs font-mono text-yellow-950">postnhost.public</code> strings.
+      </p>
+      <p class="text-yellow-950">
+        Generate a starter file from English:
+        <code class="rounded bg-yellow-100 px-1.5 py-0.5 text-xs font-mono text-yellow-950">bin/rails g postnhost:locale <%= @language.html_lang %></code>
+      </p>
+    </div>
+  <% end %>
+
+  <!-- Articles Section -->
+  <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-medium text-gray-900">Articles</h2>
+          <p class="mt-1 text-sm text-gray-600">Articles written in this language</p>
+        </div>
+
+        <span class="<%= stats_badge_classes(variant: :gray) %>">
+          <%= @articles_pagy.count %> articles
+        </span>
+      </div>
+    </div>
+
+    <% if @articles.any? %>
+      <div class="divide-y divide-gray-200">
+        <% @articles.each do |article| %>
+          <div class="<%= table_row_classes %>">
+            <div class="flex items-center justify-between">
+              <div class="flex-1">
+                <%= link_to edit_article_path(article), class: "block group" do %>
+                  <div class="font-medium text-gray-900 group-hover:text-gray-600 transition-colors">
+                    <%= article.title.present? ? article.title : 'Untitled' %>
+                  </div>
+                  <div class="text-sm text-gray-500 mt-1 flex items-center space-x-4">
+                    <% if article.categories.any? %>
+                      <span><%= article.categories.first.name %></span>
+                    <% end %>
+                    <span><%= article.created_at.strftime('%b %d, %Y') %></span>
+                  </div>
+                <% end %>
+              </div>
+
+              <div class="flex items-center space-x-2">
+                <span class="<%= stats_badge_classes(variant: article.published? ? :green : :gray) %>">
+                  <%= article.published? ? 'Published' : 'Draft' %>
+                </span>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <% if @articles_pagy.pages > 1 %>
+        <div class="border-t border-gray-200 px-6 py-4">
+          <%== pagination_nav(@articles_pagy) %>
+        </div>
+      <% end %>
+    <% else %>
+      <%= render 'postnhost/shared/elements/empty_state',
+        icon: 'document-text',
+        title: 'No articles',
+        description: 'No articles have been created in this language yet.' %>
+    <% end %>
+  </div>
+
+  <!-- Article Variants Section -->
+  <% if @article_variants.any? %>
+    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-medium text-gray-900">Article Variants</h2>
+            <p class="mt-1 text-sm text-gray-600">Article translations in this language</p>
+          </div>
+
+          <span class="<%= stats_badge_classes(variant: :gray) %>">
+            <%= @article_variants_pagy.count %> variants
+          </span>
+        </div>
+      </div>
+
+      <div class="divide-y divide-gray-200">
+        <% @article_variants.each do |variant| %>
+          <div class="<%= table_row_classes %>">
+            <div class="flex items-center justify-between">
+              <div class="flex-1">
+                <%= link_to edit_article_path(variant.article), class: "block group" do %>
+                  <div class="font-medium text-gray-900 group-hover:text-gray-600 transition-colors">
+                    <%= variant.title.present? ? variant.title : 'Untitled Variant' %>
+                  </div>
+                  <div class="text-sm text-gray-500 mt-1">
+                    <span>Original: <%= variant.article.title.present? ? variant.article.title : 'Untitled' %></span>
+                  </div>
+                <% end %>
+              </div>
+
+              <div class="flex items-center space-x-2">
+                <span class="<%= stats_badge_classes(variant: :purple) %>">
+                  Variant
+                </span>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <% if @article_variants_pagy.pages > 1 %>
+        <div class="border-t border-gray-200 px-6 py-4">
+          <%== pagination_nav(@article_variants_pagy) %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

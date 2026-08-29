@@ -1,0 +1,17 @@
+<% content_for :title, "Previewing #{@article.title}" %>
+
+<div>
+  <!-- 3-Column Layout -->
+  <div class="flex min-h-screen">
+    <%= render 'postnhost/shared/articles/meta_sidebar_preview',
+        resource: @versioned_article %>
+
+    <%= render 'postnhost/shared/articles/editor_column_preview',
+        article: @versioned_article,
+        content: @versioned_article.content %>
+
+    <%= render 'postnhost/shared/articles/version_action_buttons',
+        article: @article,
+        version: @version %>
+  </div>
+</div>

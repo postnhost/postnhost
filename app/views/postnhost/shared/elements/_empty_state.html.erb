@@ -1,0 +1,22 @@
+<%
+  # Empty state partial for "no items" states
+  #
+  # Parameters:
+  #   icon: (required) Icon name
+  #   title: (required) Title text
+  #   description: (required) Description text
+  #   actions block: Optional action buttons
+%>
+
+<div class="text-center py-12">
+  <div class="mx-auto h-12 w-12 text-gray-400">
+    <%= icon(icon, css_class: "w-full h-full") %>
+  </div>
+  <h3 class="mt-2 text-sm font-medium text-gray-900"><%= title %></h3>
+  <p class="mt-1 text-sm text-gray-500"><%= description %></p>
+  <% if block_given? %>
+    <div class="mt-6">
+      <%= yield %>
+    </div>
+  <% end %>
+</div>

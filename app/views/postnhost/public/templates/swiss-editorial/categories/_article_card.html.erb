@@ -1,0 +1,28 @@
+<article class="flex flex-col gap-3 break-words">
+  <% if category_article(item).cover_image? %>
+    <%= link_to category_article_url(item), class: "block cursor-pointer", "aria-label": t("postnhost.public.blog.read_article_aria_label", title: item.title) do %>
+      <%= render "postnhost/public/templates/swiss-editorial/shared/thumbnail_cover_image", publication: category_article(item), index: local_assigns.fetch(:index) { item_counter + local_assigns.fetch(:index_offset, 0) } %>
+    <% end %>
+  <% end %>
+
+  <% if category_article(item).categories.any? %>
+    <%= link_to "— #{localized_category_name(category_article(item).categories.first, @current_language)}",
+          language_category_path(category_article(item).categories.first.slug, @current_language),
+          class: "text-[11px] font-semibold uppercase text-[#d4322c] hover:text-[#a4221d] cursor-pointer" %>
+  <% end %>
+
+  <%= link_to category_article_url(item), class: "group block cursor-pointer" do %>
+    <h3 class="text-[22px] font-semibold leading-tight text-[#0a0a0a] group-hover:text-[#d4322c]">
+      <%= item.title %>
+    </h3>
+  <% end %>
+
+  <div class="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-medium uppercase text-[#6b6b6b]">
+    <% if author_name(category_article_author_user(item)).present? %>
+      <span>
+      <%= author_name(category_article_author_user(item)) %>
+      </span>
+    <% end %>
+    <span><%= l category_article(item).published_at.to_date, format: :long %></span>
+  </div>
+</article>

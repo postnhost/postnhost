@@ -1,0 +1,83 @@
+<% content_for :title, "Template" %>
+
+<div class="space-y-8">
+  <%= render "postnhost/shared/elements/page_header",
+    title: "Template",
+    description: "Choose and preview the public website template." %>
+
+  <div
+    class="grid grid-cols-1 gap-6 xl:grid-cols-3"
+    data-controller="template-preview"
+    data-template-preview-base-url-value="<%= postnhost.root_path %>">
+    <section class="xl:col-span-1">
+      <%= form_with model: @template, url: template_path, method: :patch, class: "space-y-6" do |f| %>
+        <%= render "postnhost/shared/form_errors", resource: @template %>
+
+        <div class="rounded-xl border border-gray-200 p-4 space-y-4">
+          <h2 class="text-base font-medium text-gray-900">Template</h2>
+          <p class="text-sm text-gray-500">Choose a template. The preview updates before saving.</p>
+
+          <div class="grid grid-cols-1 gap-3">
+            <% cms_template_options.each do |label, value| %>
+              <label class="cursor-pointer rounded-xl border border-gray-200 p-3 transition-colors hover:border-gray-400 has-[:checked]:border-gray-900 has-[:checked]:bg-gray-50">
+                <div class="flex items-center gap-2">
+                  <%= radio_button_tag "template[name]",
+                    value,
+                    @template.name == value,
+                    class: "h-4 w-4 border-gray-300 text-gray-900 focus:ring-gray-900",
+                    data: { action: "template-preview#update" } %>
+                  <span class="text-sm font-medium text-gray-900"><%= label %></span>
+                </div>
+              </label>
+            <% end %>
+          </div>
+        </div>
+
+        <details class="group rounded-xl border border-gray-200 bg-gray-50 p-4">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-3">
+            <h2 class="text-base font-medium text-gray-900">Customize template files</h2>
+            <%= icon("chevron-down", css_class: "h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200 group-open:rotate-180") %>
+          </summary>
+
+          <div class="mt-3 space-y-3">
+            <p class="text-sm leading-6 text-gray-600">Run this command from the host Rails application to copy every public template and layout into your app:</p>
+
+            <code class="block overflow-x-auto rounded-lg bg-gray-900 px-3 py-2 text-xs leading-5 text-white">bin/rails g postnhost:views --views-scope=full</code>
+
+            <p class="text-sm leading-6 text-gray-600">
+              Edit the copied <code class="rounded bg-gray-200 px-1.5 py-0.5 text-xs font-mono text-gray-900">.html.erb</code> files under
+              <code class="rounded bg-gray-200 px-1.5 py-0.5 text-xs font-mono text-gray-900">app/views/postnhost/public/templates/</code>
+              and <code class="rounded bg-gray-200 px-1.5 py-0.5 text-xs font-mono text-gray-900">app/views/layouts/postnhost/public/templates/</code>.
+              Rails uses these host-app copies instead of the packaged engine views. The selection above still controls which template is active.
+            </p>
+
+            <div class="space-y-2 border-t border-gray-200 pt-3">
+              <p class="text-sm leading-6 text-gray-600">If your changes add new Tailwind classes, install and run the optional host Tailwind pipeline:</p>
+              <div class="space-y-1">
+                <code class="block overflow-x-auto rounded-lg bg-gray-900 px-3 py-2 text-xs leading-5 text-white">bin/rails g postnhost:tailwindcss:install</code>
+                <code class="block overflow-x-auto rounded-lg bg-gray-900 px-3 py-2 text-xs leading-5 text-white">bundle exec rails postnhost:tailwindcss:watch</code>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <%= f.submit "Save Template", class: button_classes %>
+      <% end %>
+    </section>
+
+    <section class="relative xl:col-span-2">
+      <div
+        class="hidden absolute left-4 top-4 z-10 rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-600 shadow-sm"
+        data-template-preview-target="status">
+        Loading preview...
+      </div>
+      <iframe
+        title="Website preview"
+        src="<%= postnhost.root_path(preview_template: @template.name) %>"
+        class="h-[760px] w-full rounded-xl border border-gray-200 bg-white"
+        loading="eager"
+        data-template-preview-target="iframe"
+        data-action="load->template-preview#loaded"></iframe>
+    </section>
+  </div>
+</div>

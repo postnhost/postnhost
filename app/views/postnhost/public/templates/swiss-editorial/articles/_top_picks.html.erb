@@ -1,0 +1,38 @@
+<% if top_pick_articles.any? && !public_search_page? && !paginated_public_page? %>
+  <aside class="lg:col-span-4 lg:border-l lg:border-[#d9d9d9] lg:pl-8">
+    <div class="mb-8 border-t-2 border-[#d4322c] pt-[18px]">
+      <span class="text-[12px] font-bold uppercase tracking-[0.16em] text-[#d4322c]"><%= t("postnhost.public.blog.top_picks") %></span>
+    </div>
+
+    <% top_pick_articles.each_with_index do |item, index| %>
+      <% cache [public_site_revision, item, article_authors_cache_key(item), "swiss-editorial_top_pick"] do %>
+        <article class="<%= index < top_pick_articles.size - 1 ? "mb-8 border-b border-[#d9d9d9] pb-6" : "mb-8" %>">
+          <% if category_article(item).categories.any? %>
+            <span class="text-[11px] font-bold uppercase tracking-[0.16em] text-[#d4322c]">
+              — <%= localized_category_name(category_article(item).categories.first, @current_language) %>
+            </span>
+          <% end %>
+
+          <%= link_to category_article_url(item), class: "group mt-1 block cursor-pointer" do %>
+            <h3 class="text-[22px] font-semibold leading-tight tracking-[-0.02em] text-[#0a0a0a] group-hover:text-[#d4322c]">
+              <%= item.title %>
+            </h3>
+          <% end %>
+
+          <% if article_excerpt(item).present? %>
+            <p class="mt-2 text-[13px] leading-[1.5] text-[#6b6b6b]">
+              <%= article_excerpt(item) %>
+            </p>
+          <% end %>
+
+          <p class="mt-2 text-[11px] font-medium uppercase tracking-[0.12em] text-[#6b6b6b]">
+            <% if author_name(category_article_author_user(item)).present? %>
+              <%= author_name(category_article_author_user(item)) %> ·
+            <% end %>
+            <%= l category_article(item).published_at.to_date, format: :long %>
+          </p>
+        </article>
+      <% end %>
+    <% end %>
+  </aside>
+<% end %>

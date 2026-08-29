@@ -1,0 +1,14 @@
+<% if search_enabled? %>
+  <%= link_to public_search_trigger_url, class: "inline-flex items-center justify-center bg-white border border-gray-200 rounded-xl px-3 py-1.5 sm:py-2 text-gray-700 hover:border-gray-300 hover:text-gray-900 cursor-pointer" do %>
+    <span class="sr-only"><%= t("postnhost.public.search.submit") %></span>
+    <%= icon("magnifying-glass", css_class: "w-4 h-4 sm:w-5 sm:h-5 shrink-0") %>
+  <% end %>
+<% end %>
+
+<% if user_signed_in? %>
+  <%= link_to postnhost.articles_path, class: "bg-gray-900 text-white px-3 sm:px-6 py-2 sm:py-3 rounded-2xl font-semibold hover:bg-gray-800 transition-all duration-200 text-sm cursor-pointer inline-flex items-center justify-center w-10 sm:w-auto" do %>
+    <span class="sm:hidden" aria-hidden="true"><%= icon("arrow-right-end-on-rectangle", css_class: "w-4 h-4") %></span>
+    <span class="hidden sm:inline">Dashboard</span>
+    <span class="sr-only sm:hidden">Dashboard</span>
+  <% end %>
+<% end %>

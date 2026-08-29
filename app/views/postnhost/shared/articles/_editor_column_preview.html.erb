@@ -1,0 +1,33 @@
+<div class="w-full md:w-3/5 bg-white border-t border-b border-gray-200 border-t-0">
+  <!-- Cover Image (Read-only) -->
+  <div class="px-6 py-4 border-b border-gray-100 <%= 'hidden' unless article.cover_image? %>">
+    <div class="space-y-2">
+      <div class="relative">
+        <%= image_tag(article.cover_image? ? article.cover_image.url : '',
+              alt: article.cover_image_alt,
+              width: 1200,
+              height: 630,
+              class: "w-full object-cover") %>
+      </div>
+      <% if article.cover_image_alt.present? %>
+        <div class="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-xs bg-gray-50 text-gray-700">
+          <%= article.cover_image_alt %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Title Field (Read-only) -->
+  <div class="px-6 py-6 border-b border-gray-100">
+    <div class="w-full text-4xl font-bold text-gray-900 p-0 bg-transparent leading-tight">
+      <%= article.title %>
+    </div>
+  </div>
+
+  <!-- Content (Read-only) -->
+  <div class="min-h-[400px] p-4">
+    <div class="prose max-w-none">
+      <%= render_article_content(content) %>
+    </div>
+  </div>
+</div>

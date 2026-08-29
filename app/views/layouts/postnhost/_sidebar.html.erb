@@ -1,0 +1,72 @@
+<div id="menu" class="w-full md:w-64 bg-white p-4 h-full flex-shrink-0 border-r border-gray-200 flex flex-col justify-between overflow-y-auto hidden md:flex">
+  <div class="space-y-6">
+    <!-- Create Article Button -->
+    <%= link_to new_article_path, class: "w-full bg-gray-900 text-white px-4 py-2.5 rounded-xl hover:bg-gray-800 transition duration-200 text-sm font-medium inline-flex items-center justify-center space-x-2", data: { turbo_prefetch: false } do %>
+      <%= icon("plus", css_class: "w-4 h-4") %>
+      <span>Create Article</span>
+    <% end %>
+
+    <!-- Navigation -->
+    <div class="space-y-6">
+      <div>
+        <p class="px-3 mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Content</p>
+        <nav class="space-y-1">
+          <%= link_to articles_path, class: "group flex items-center space-x-3 text-gray-700 hover:text-gray-900 hover:bg-white font-medium px-3 py-2.5 rounded-xl transition-all duration-200 #{current_page?(articles_path) || controller_name == 'articles' || controller_name == 'article_variants' ? 'bg-white text-gray-900' : ''}" do %>
+            <div class="flex-shrink-0 #{current_page?(articles_path) || controller_name == 'articles' || controller_name == 'article_variants' ? 'text-gray-900' : 'text-gray-500 group-hover:text-gray-700'}">
+              <%= icon("document-text", css_class: "h-5 w-5") %>
+            </div>
+            <span class="text-sm font-medium">Articles</span>
+          <% end %>
+
+          <%= link_to categories_path, class: "group flex items-center space-x-3 text-gray-700 hover:text-gray-900 hover:bg-white font-medium px-3 py-2.5 rounded-xl transition-all duration-200 #{current_page?(categories_path) || controller_name == 'categories' ? 'bg-white text-gray-900' : ''}" do %>
+            <div class="flex-shrink-0 #{current_page?(categories_path) || controller_name == 'categories' ? 'text-gray-900' : 'text-gray-500 group-hover:text-gray-700'}">
+              <%= icon("folder", css_class: "h-5 w-5") %>
+            </div>
+            <span class="text-sm font-medium">Categories</span>
+          <% end %>
+
+          <%= link_to languages_path, class: "group flex items-center space-x-3 text-gray-700 hover:text-gray-900 hover:bg-white font-medium px-3 py-2.5 rounded-xl transition-all duration-200 #{current_page?(languages_path) || controller_name == 'languages' ? 'bg-white text-gray-900' : ''}" do %>
+            <div class="flex-shrink-0 #{current_page?(languages_path) || controller_name == 'languages' ? 'text-gray-900' : 'text-gray-500 group-hover:text-gray-700'}">
+              <%= icon("language", css_class: "h-5 w-5") %>
+            </div>
+            <span class="text-sm font-medium">Languages</span>
+          <% end %>
+
+          <%= link_to pages_path, class: "group flex items-center space-x-3 text-gray-700 hover:text-gray-900 hover:bg-white font-medium px-3 py-2.5 rounded-xl transition-all duration-200 #{current_page?(pages_path) || controller_name == 'pages' ? 'bg-white text-gray-900' : ''}" do %>
+            <div class="flex-shrink-0 #{current_page?(pages_path) || controller_name == 'pages' ? 'text-gray-900' : 'text-gray-500 group-hover:text-gray-700'}">
+              <%= icon("layers", css_class: "h-5 w-5") %>
+            </div>
+            <span class="text-sm font-medium">Pages</span>
+          <% end %>
+        </nav>
+      </div>
+
+      <div class="border-t border-gray-100 pt-4">
+        <p class="px-3 mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">System</p>
+        <nav class="space-y-1">
+          <%= link_to users_path, class: "group flex items-center space-x-3 text-gray-700 hover:text-gray-900 hover:bg-white font-medium px-3 py-2.5 rounded-xl transition-all duration-200 #{current_page?(users_path) || controller_name == 'users' ? 'bg-white text-gray-900' : ''}" do %>
+            <div class="flex-shrink-0 #{current_page?(users_path) || controller_name == 'users' ? 'text-gray-900' : 'text-gray-500 group-hover:text-gray-700'}">
+              <%= icon("users", css_class: "h-5 w-5") %>
+            </div>
+            <span class="text-sm font-medium">Authors</span>
+          <% end %>
+
+          <%= link_to edit_settings_path, class: "group flex items-center space-x-3 text-gray-700 hover:text-gray-900 hover:bg-white font-medium px-3 py-2.5 rounded-xl transition-all duration-200 #{current_page?(edit_settings_path) || controller_name == 'settings' ? 'bg-white text-gray-900' : ''}" do %>
+            <div class="flex-shrink-0 #{current_page?(edit_settings_path) || controller_name == 'settings' ? 'text-gray-900' : 'text-gray-500 group-hover:text-gray-700'}">
+              <%= icon("settings", css_class: "h-5 w-5") %>
+            </div>
+            <span class="text-sm font-medium">Settings</span>
+          <% end %>
+
+          <%= link_to edit_template_path, class: "group flex items-center space-x-3 text-gray-700 hover:text-gray-900 hover:bg-white font-medium px-3 py-2.5 rounded-xl transition-all duration-200 #{current_page?(edit_template_path) || controller_name == 'templates' ? 'bg-white text-gray-900' : ''}" do %>
+            <div class="flex-shrink-0 #{current_page?(edit_template_path) || controller_name == 'templates' ? 'text-gray-900' : 'text-gray-500 group-hover:text-gray-700'}">
+              <%= icon("eye", css_class: "h-5 w-5") %>
+            </div>
+            <span class="text-sm font-medium">Template</span>
+          <% end %>
+
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>

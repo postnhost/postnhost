@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="<%= document_lang %>" class="[scrollbar-gutter:stable]">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <%= render "postnhost/shared/seo_meta_tags" %>
+    <%= render "postnhost/shared/structured_data" %>
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag(*postnhost_stylesheet_assets, "data-turbo-track": "reload") %>
+    <%= javascript_include_tag "postnhost/application", "data-turbo-track": "reload", type: "module" %>
+
+    <%= render "layouts/postnhost/favicon" %>
+
+    <%= yield :head %>
+    <%= render_site_scripts("head") %>
+  </head>
+
+  <body class="min-h-dvh overflow-y-scroll bg-[#fafaf7] text-[#0a0a0a] antialiased">
+    <%= render_site_scripts("body_start") %>
+    <header class="sticky top-0 z-40 border-b border-[#d9d9d9] bg-[#fafaf7]"<%= ' data-controller="reading-progress"'.html_safe if public_article_show_page? %>>
+      <% if public_article_show_page? %>
+        <div class="fixed top-0 left-0 z-50 h-0.5 bg-[#0a0a0a] transition-all duration-500 ease-out" data-reading-progress-target="bar" style="width: 0%"></div>
+      <% end %>
+
+      <div class="mx-auto max-w-[1440px] px-4 sm:px-6" data-controller="public-mobile-nav">
+        <div class="flex items-center justify-between gap-4 py-3 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-6">
+          <nav class="hidden items-center gap-6 lg:flex" aria-label="<%= t('postnhost.public.footer.explore_categories') %>">
+            <% if @use_auto_header_navigation %>
+              <% @header_categories.first(4).each do |category| %>
+                <%= link_to localized_category_name(category, @current_language),
+                      language_category_path(category.slug, @current_language),
+                      class: "text-[13px] font-medium uppercase text-[#0a0a0a] hover:text-[#d4322c] cursor-pointer" %>
+              <% end %>
+            <% else %>
+              <% @header_navigation_items.each do |item| %>
+                <% if item.kind == "link" && navigation_href(item).present? %>
+                  <%= link_to navigation_label(item), navigation_href(item), **navigation_link_options(item), class: "text-[13px] font-medium uppercase text-[#0a0a0a] hover:text-[#d4322c] cursor-pointer" %>
+                <% elsif item.kind == "link" && item.target_kind == "text" && navigation_label(item).present? %>
+                  <p class="text-[11px] font-bold uppercase tracking-wide text-[#6b6b6b]"><%= navigation_label(item) %></p>
+                <% elsif item.kind == "dropdown" && item.children.any? %>
+                  <div class="relative group py-2">
+                    <span class="inline-flex items-center gap-1 text-[13px] font-medium uppercase text-[#0a0a0a] hover:text-[#d4322c] cursor-pointer">
+                      <%= navigation_label(item) %>
+                      <%= icon("chevron-down", css_class: "h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180") %>
+                    </span>
+                    <div class="invisible absolute left-0 top-full z-50 min-w-52 border-2 border-[#0a0a0a] bg-[#fafaf7] p-2 opacity-0 shadow-[6px_6px_0_#0a0a0a] transition group-hover:visible group-hover:opacity-100">
+                      <% item.children.each do |child| %>
+                        <% if navigation_href(child).present? %>
+                          <%= link_to navigation_label(child), navigation_href(child), **navigation_link_options(child), class: "block px-3 py-2 text-[13px] font-medium uppercase text-[#0a0a0a] hover:text-[#d4322c] cursor-pointer" %>
+                        <% elsif child.target_kind == "text" && navigation_label(child).present? %>
+                          <p class="px-3 py-2 text-[11px] font-bold uppercase tracking-wide text-[#6b6b6b]"><%= navigation_label(child) %></p>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            <% end %>
+          </nav>
+
+          <div class="min-w-0 lg:justify-self-center">
+            <%= render "layouts/postnhost/public_header/logo" %>
+          </div>
+
+          <div class="flex min-h-10 shrink-0 items-center justify-end gap-3 lg:justify-self-end">
+            <% if show_article_variant_language_switcher? %>
+              <select id="template-2-language-select" onchange="window.location.href=this.value" class="max-w-28 cursor-pointer appearance-none border-0 border-b border-[#0a0a0a] bg-transparent py-1 pr-4 text-[12px] font-semibold uppercase text-[#0a0a0a] focus:outline-none sm:max-w-32" aria-label="<%= @current_language.name %>">
+                <% localized_language_options(@article).each do |label, path| %>
+                  <option value="<%= path %>"><%= label %></option>
+                <% end %>
+              </select>
+            <% elsif show_other_languages_switcher? %>
+              <select id="template-2-language-select" onchange="window.location.href=this.value" class="max-w-28 cursor-pointer appearance-none border-0 border-b border-[#0a0a0a] bg-transparent py-1 pr-4 text-[12px] font-semibold uppercase text-[#0a0a0a] focus:outline-none sm:max-w-32" aria-label="<%= @current_language.name %>">
+                <% default_language_options.each do |label, path| %>
+                  <option value="<%= path %>"><%= label %></option>
+                <% end %>
+              </select>
+            <% end %>
+            <% if search_enabled? %>
+              <%= link_to public_search_trigger_url, class: "inline-flex h-9 w-9 items-center justify-center rounded-md text-[#0a0a0a] hover:bg-[#ecece8] lg:hidden cursor-pointer", aria: { label: t("postnhost.public.search.submit") }, title: t("postnhost.public.search.submit") do %>
+                <%= icon("magnifying-glass", css_class: "h-4 w-4") %>
+              <% end %>
+              <%= link_to public_search_trigger_url, class: "hidden text-[13px] font-medium uppercase text-[#0a0a0a] hover:text-[#d4322c] cursor-pointer lg:inline-flex" do %>
+                <%= t("postnhost.public.search.submit") %>
+              <% end %>
+            <% end %>
+            <% if user_signed_in? %>
+              <%= link_to "Dashboard", postnhost.articles_path, data: { turbo_prefetch: false }, class: "hidden border-2 border-[#0a0a0a] bg-[#0a0a0a] px-3 py-1.5 text-[12px] font-bold uppercase text-[#fafaf7] hover:border-[#d4322c] hover:bg-[#d4322c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a0a0a] sm:inline-flex cursor-pointer" %>
+            <% end %>
+            <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-md text-[#0a0a0a] hover:bg-[#ecece8] lg:hidden cursor-pointer" aria-label="Toggle navigation" data-action="public-mobile-nav#toggle">
+              <%= icon("menu", css_class: "h-5 w-5") %>
+            </button>
+          </div>
+        </div>
+
+        <nav class="hidden border-t border-[#d9d9d9] pb-3 pt-3 space-y-2 lg:hidden" data-public-mobile-nav-target="panel">
+          <% if @use_auto_header_navigation %>
+            <% @header_categories.first(6).each do |category| %>
+              <%= link_to localized_category_name(category, @current_language),
+                    language_category_path(category.slug, @current_language),
+                    class: "block py-2 text-[13px] font-medium uppercase text-[#0a0a0a] hover:text-[#d4322c] cursor-pointer" %>
+            <% end %>
+          <% else %>
+            <% @header_navigation_items.each do |item| %>
+              <% if item.kind == "link" && navigation_href(item).present? %>
+                <%= link_to navigation_label(item), navigation_href(item), **navigation_link_options(item), class: "block py-2 text-[13px] font-medium uppercase text-[#0a0a0a] hover:text-[#d4322c] cursor-pointer" %>
+              <% elsif item.kind == "link" && item.target_kind == "text" && navigation_label(item).present? %>
+                <p class="py-2 text-[11px] font-bold uppercase tracking-wide text-[#6b6b6b]"><%= navigation_label(item) %></p>
+              <% elsif item.kind == "dropdown" && item.children.any? %>
+                <details class="group">
+                  <summary class="flex list-none items-center justify-between py-2 text-[11px] font-bold uppercase text-[#6b6b6b] cursor-pointer">
+                    <%= navigation_label(item) %>
+                    <%= icon("chevron-down", css_class: "h-4 w-4 transition-transform group-open:rotate-180") %>
+                  </summary>
+                  <div class="space-y-1 pl-3">
+                    <% item.children.each do |child| %>
+                      <% if navigation_href(child).present? %>
+                        <%= link_to navigation_label(child), navigation_href(child), **navigation_link_options(child), class: "block py-2 text-[13px] font-medium uppercase text-[#0a0a0a] hover:text-[#d4322c] cursor-pointer" %>
+                      <% elsif child.target_kind == "text" && navigation_label(child).present? %>
+                        <p class="py-2 text-[11px] font-bold uppercase tracking-wide text-[#6b6b6b]"><%= navigation_label(child) %></p>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </details>
+              <% end %>
+            <% end %>
+          <% end %>
+          <% if user_signed_in? %>
+            <%= link_to "Dashboard", postnhost.articles_path, data: { turbo_prefetch: false }, class: "block py-2 text-[13px] font-bold uppercase text-[#0a0a0a] hover:text-[#d4322c] sm:hidden cursor-pointer" %>
+          <% end %>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <%= yield %>
+    </main>
+
+    <footer aria-labelledby="footer-heading" class="mt-20 border-t-2 border-[#0a0a0a] bg-[#fafaf7]">
+      <h2 id="footer-heading" class="sr-only"><%= t("postnhost.public.footer.heading") %></h2>
+
+      <div class="mx-auto max-w-[1440px] px-6 py-12">
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-12">
+          <div class="md:col-span-5">
+            <%= render "layouts/postnhost/public_header/logo" %>
+            <p class="mt-4 max-w-xs text-[13px] leading-6 text-[#6b6b6b]"><%= t("postnhost.public.site.blog_subtitle") %></p>
+          </div>
+
+          <% unless @use_auto_footer_navigation %>
+            <div class="md:col-span-7 md:col-start-6">
+              <div class="flex flex-wrap gap-x-10 gap-y-8 text-left md:justify-end">
+                <% @footer_navigation_columns.each do |column| %>
+                  <div class="min-w-32">
+                    <h3 class="mb-3 text-xs font-bold uppercase text-[#0a0a0a]"><%= navigation_label(column) %></h3>
+                    <% column.children.sort_by(&:position).each do |child| %>
+                      <% if child.target_kind != "external" && navigation_href(child).present? %>
+                        <%= link_to navigation_label(child), navigation_href(child), **navigation_link_options(child), class: "block py-1 text-sm text-[#1f1f1f] hover:text-[#d4322c] cursor-pointer" %>
+                      <% end %>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+
+          <% if @use_auto_footer_navigation && @footer_categories.any? %>
+            <div class="md:col-span-3 md:col-start-9">
+              <h3 class="mb-3 text-xs font-bold uppercase text-[#0a0a0a]"><%= t("postnhost.public.footer.explore_categories") %></h3>
+              <% @footer_categories.first(4).each do |category| %>
+                <%= link_to localized_category_name(category, @current_language),
+                      language_category_path(category.slug, @current_language),
+                      class: "block py-1 text-sm text-[#1f1f1f] hover:text-[#d4322c] cursor-pointer" %>
+              <% end %>
+            </div>
+          <% end %>
+
+          <% if @use_auto_footer_navigation && (@footer_published_pages.any? || @footer_static_pages.any?) %>
+            <div class="md:col-span-1">
+              <h3 class="mb-3 text-xs font-bold uppercase text-[#0a0a0a]"><%= t("postnhost.public.footer.pages") %></h3>
+              <% @footer_published_pages.each do |page| %>
+                <%= link_to (page.title.presence || page.slug.humanize),
+                      language_static_page_path(page.slug, @current_language),
+                      class: "block py-1 text-sm text-[#1f1f1f] hover:text-[#d4322c] cursor-pointer" %>
+              <% end %>
+              <% @footer_static_pages.each do |slug| %>
+                <%= link_to slug.humanize,
+                      language_static_page_path(slug, @current_language),
+                      class: "block py-1 text-sm text-[#1f1f1f] hover:text-[#d4322c] cursor-pointer" %>
+              <% end %>
+            </div>
+          <% end %>
+
+        </div>
+
+        <div class="mt-10 flex flex-col gap-3 border-t border-[#d9d9d9] pt-5 text-xs text-[#6b6b6b] sm:flex-row sm:items-center sm:justify-between">
+          <p>&copy; <%= Date.current.year %> <%= t("postnhost.public.site.name_footer_copyright") %></p>
+
+          <% if @setting.show_powered_by? %>
+            <a href="https://postnhost.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-[#6b6b6b] hover:text-[#0a0a0a] transition-colors sm:justify-end cursor-pointer">
+              Powered by
+              <%= image_tag "postnhost/logo.webp", alt: "PostnHost", class: "h-4 w-auto", width: 80, height: 16 %>
+            </a>
+          <% end %>
+        </div>
+      </div>
+    </footer>
+    <%= render_site_scripts("body_end") %>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<article class="bg-white rounded-2xl border border-gray-200 hover:border-gray-300 transition-all duration-200 overflow-hidden flex flex-col break-words">
+  <%= link_to category_article_url(item), class: "block", "aria-label": t('postnhost.public.blog.read_article_aria_label', title: item.title) do %>
+    <%= render "postnhost/public/templates/default/shared/thumbnail_cover_image", publication: category_article(item), index: local_assigns.fetch(:index) { item_counter + local_assigns.fetch(:index_offset, 0) } %>
+  <% end %>
+
+  <div class="p-8 flex-1 flex flex-col">
+    <div class="flex items-center space-x-3 mb-4">
+      <% if category_article(item).categories.any? %>
+        <%= link_to localized_category_name(category_article(item).categories.first, @current_language), language_category_path(category_article(item).categories.first.slug, @current_language),
+                class: "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors" %>
+      <% end %>
+      <span class="text-sm text-gray-500">
+        <%= l category_article(item).published_at.to_date, format: :long %>
+      </span>
+    </div>
+
+    <%= link_to category_article_url(item), class: "block group flex-1", "aria-label": t("postnhost.public.blog.read_article_aria_label", title: item.title) do %>
+      <h3 class="text-xl font-semibold text-gray-900 group-hover:text-gray-700 mb-3 line-clamp-2">
+        <%= item.title %>
+      </h3>
+      <% if article_excerpt(item).present? %>
+        <p class="text-sm text-gray-600 line-clamp-3">
+          <%= article_excerpt(item) %>
+        </p>
+      <% end %>
+    <% end %>
+  </div>
+</article>

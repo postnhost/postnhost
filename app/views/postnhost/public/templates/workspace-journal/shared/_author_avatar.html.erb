@@ -1,0 +1,9 @@
+<div class="<%= size_class %> flex items-center justify-center overflow-hidden rounded-md bg-zinc-950 text-[#fbfaf7]">
+  <% if author_avatar(user).present? %>
+    <%= image_tag author_avatar(user), class: "h-full w-full object-cover", alt: "Author Image" %>
+  <% elsif author_initials(user).present? %>
+    <span class="<%= text_size_class %> font-semibold uppercase">
+      <%= author_initials(user) %>
+    </span>
+  <% end %>
+</div>

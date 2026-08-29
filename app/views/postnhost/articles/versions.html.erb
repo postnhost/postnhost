@@ -1,0 +1,68 @@
+<% content_for :title, "Version History - #{@article.title}" %>
+
+<div class="space-y-8">
+  <%= render 'postnhost/shared/elements/page_header',
+    title: 'Version History',
+    description: "View and restore previous published versions of \"#{@article.title}\"" do %>
+    <%= render 'postnhost/shared/elements/button_link',
+      text: 'Back to Article',
+      url: edit_article_path(@article),
+      variant: :secondary,
+      icon: 'chevron-left',
+      extra_class: 'w-full md:w-auto' %>
+  <% end %>
+
+  <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+    <% if @versions.any? %>
+      <ul class="divide-y divide-gray-200">
+        <% @versions.each_with_index do |version, index| %>
+          <li class="p-4 sm:p-6 hover:bg-gray-50 transition-colors">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div class="min-w-0 flex-1">
+                <div class="mb-2 flex flex-wrap items-center gap-x-3 gap-y-2">
+                  <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium <%= version.id == @article.article_snapshot&.paper_trail_version_id ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
+                    <% if version.id == @article.article_snapshot&.paper_trail_version_id %>
+                      Published Version
+                    <% else %>
+                      Version <%= @versions.count - index %>
+                    <% end %>
+                  </span>
+                  <span class="text-sm text-gray-500">
+                    <%= admin_datetime(version.created_at) %>
+                  </span>
+                </div>
+
+                <%= render "postnhost/articles/version_snapshot", versioned: version.reify %>
+              </div>
+
+              <div class="flex w-full min-w-0 gap-2 sm:ml-4 sm:w-auto sm:flex-shrink-0 sm:justify-end">
+                <%= render 'postnhost/shared/elements/button_link',
+                  text: 'Preview',
+                  url: version_preview_article_path(@article, version_id: version.id),
+                  variant: :secondary,
+                  icon: 'eye',
+                  extra_class: 'flex-1 justify-center sm:flex-initial' %>
+                <%= render 'postnhost/shared/elements/button_link',
+                  text: 'Restore',
+                  url: rollback_article_path(@article, version_id: version.id),
+                  variant: :secondary,
+                  icon: 'clock',
+                  method: :post,
+                  extra_class: 'flex-1 justify-center sm:flex-initial',
+                  data: {
+                    turbo_method: :post,
+                    turbo_confirm: "Are you sure you want to restore this version? Your current changes will be overwritten."
+                  } %>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <%= render 'postnhost/shared/elements/empty_state',
+        icon: 'clock',
+        title: 'No version history',
+        description: 'Versions are created when you publish changes to a published article.' %>
+    <% end %>
+  </div>
+</div>

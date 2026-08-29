@@ -1,0 +1,55 @@
+ru:
+  postnhost:
+    public:
+      site:
+        schema_site_name: "PostnHost"
+        blog_tagline: "Блог"
+        blog_subtitle: "Последние статьи, учебные материалы и истории"
+        blog_meta_title: "Блог — PostnHost"
+        blog_meta_description: "Последние статьи, руководства и истории от PostnHost."
+        blog_meta_title_paginated: "Страница %{page} — %{blog_meta_title}"
+        name_footer_copyright: "postnhost.com"
+
+      blog:
+        page_title: "Страница %{page} — Блог"
+        author_label: "Автор"
+        no_articles: "Пока нет статей"
+        no_articles_description: "Скоро появятся новые материалы."
+        back_to_articles: "Все статьи"
+        more_in_category: "Больше материалов в категории «%{category}»"
+        available_in_languages: "Доступно на других языках:"
+        browse_all_articles: "Все статьи"
+        read_more: "Похожие статьи"
+        read_article_aria_label: "Читать «%{title}»"
+        top_picks: "Выбор редакции"
+
+      search:
+        title: "Результаты поиска по запросу «%{query}»"
+        heading: "Результаты поиска по запросу «%{query}»"
+        input_placeholder: "Поиск по заголовку или содержанию"
+        submit: "Поиск"
+
+      category:
+        title: "%{category} — PostnHost"
+        page_title: "Страница %{page} — %{category} — PostnHost"
+        page_heading: "Страница %{page} — %{category}"
+        no_articles: "Статьи не найдены"
+        no_articles_description: "В этой категории пока нет опубликованных статей."
+
+      authors:
+        latest_from_author: "Последние статьи этого автора"
+        no_articles: "Пока нет статей"
+        no_articles_description: "Этот автор пока не опубликовал ни одной статьи."
+
+      footer:
+        heading: "Подвал"
+        explore_categories: "Статьи по категориям"
+        pages: "Страницы"
+
+      breadcrumbs:
+        home: "Главная"
+
+      pagination:
+        navigation: "Навигация по страницам"
+        previous: "Предыдущая"
+        next: "Следующая"
