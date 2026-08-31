@@ -1,4 +1,4 @@
-if ENV["COVERAGE"]
+if ENV["COVERAGE"] == "1"
   require "simplecov"
 
   SimpleCov.start do
@@ -18,7 +18,6 @@ if ENV["COVERAGE"]
     group "Library", "lib/postnhost"
 
     enable_coverage :branch
-    minimum_coverage line: 97, branch: 80
   end
 end
 

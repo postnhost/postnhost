@@ -1,8 +1,4 @@
-CRITICAL: Never use variable assignments in ERB views (for example, `<% description = page_description %>`).
-
-CRITICAL: Do not add speculative fallbacks or undocumented backward-compatibility paths. Preserve documented public APIs and the supported Ruby and Rails compatibility ranges.
-
-# AGENTS.md — PostnHost Engine
+# AGENTS.md
 
 This file is the canonical, self-contained guidance for the PostnHost mountable Rails engine. Paths in this document are relative to the engine root.
 

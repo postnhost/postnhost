@@ -2,11 +2,12 @@
 
 All notable changes to PostnHost are documented in this file.
 
-## [Unreleased]
+## [0.1.1] - 2026-08-31
 
 ### Fixed
 
 - Scoped packaged and host-generated CSS to PostnHost layouts and replaced competing stylesheets with one combined host build that transparently shadows the packaged logical asset.
+- Corrected installer, template customization, Tailwind setup, and production checklist instructions.
 
 ## [0.1.0] - 2026-08-29
 
@@ -28,4 +29,5 @@ First open source release of PostnHost.
 
 Authored by Kirill Shevchenko (Ruby/Rails engineering) and Maxim Sova (technical SEO expertise).
 
+[0.1.1]: https://github.com/postnhost/postnhost/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/postnhost/postnhost/releases/tag/v0.1.0

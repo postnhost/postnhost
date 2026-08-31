@@ -69,15 +69,15 @@ jobs:
       - name: Install JavaScript dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build assets
-        run: |
-          yarn build
-          yarn build:css
-
       - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libvips42
+
+      - name: Build assets
+        run: |
+          yarn build
+          yarn build:css
 
       - name: Prepare test database
         run: bundle exec rake prepare_test_db
@@ -115,15 +115,15 @@ jobs:
       - name: Install JavaScript dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build assets
-        run: |
-          yarn build
-          yarn build:css
-
       - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libvips42
+
+      - name: Build assets
+        run: |
+          yarn build
+          yarn build:css
 
       - name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
