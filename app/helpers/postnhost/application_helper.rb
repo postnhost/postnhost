@@ -13,17 +13,6 @@ module Postnhost
       { field: :bluesky_url, label: "Bluesky", icon: "bluesky" }
     ].freeze
 
-    def postnhost_stylesheet_assets
-      assets = ["postnhost/application"]
-      assets << "postnhost/host" if postnhost_host_tailwind_enabled?
-      assets
-    end
-
-    def postnhost_host_tailwind_enabled?
-      Rails.root.join("postnhost.tailwind.config.js").exist? &&
-        Rails.root.join("app/assets/stylesheets/postnhost/host.tailwind.css").exist?
-    end
-
     def postnhost_openai_api_key_configured?
       Postnhost.config.openai_api_key.present?
     end

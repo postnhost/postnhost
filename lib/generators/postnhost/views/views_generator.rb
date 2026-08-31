@@ -1,7 +1,7 @@
 module Postnhost
   module Generators
     class ViewsGenerator < Rails::Generators::Base
-      desc "Copies public Postnhost views to your application for customization"
+      desc "Copies public PostnHost views to your application for customization"
       class_option :views_scope,
                    type: :string,
                    required: true,
@@ -28,7 +28,7 @@ module Postnhost
         copy_file "layouts/postnhost/public_header/_dashboard_sign_in.html.erb", "app/views/layouts/postnhost/public_header/_dashboard_sign_in.html.erb"
         say ""
         warn_if_host_tailwind_not_installed
-        say "Public views copied (#{views_scope})! Full scope includes every public template and layout under app/views/postnhost/public/templates/ and app/views/layouts/postnhost/public/templates/.", :green
+        say views_scope == "full" ? "All public templates and layouts were copied." : "The minimal public view set was copied.", :green
       end
 
       def engine_views_path
@@ -123,15 +123,13 @@ module Postnhost
       def warn_if_host_tailwind_not_installed
         return if host_tailwind_enabled?
 
-        say "Tip: if you add new Tailwind classes in copied views, install host pipeline:", :yellow
-        say "  rails g postnhost:tailwindcss:install"
-        say "  bundle exec rails postnhost:tailwindcss:watch"
+        say "Tip: if you add new Tailwind classes in copied views, install host Tailwind support:", :yellow
+        say "  bin/rails g postnhost:tailwindcss:install"
         say ""
       end
 
       def host_tailwind_enabled?
-        Rails.root.join("postnhost.tailwind.config.js").exist? &&
-          Rails.root.join("app/assets/stylesheets/postnhost/host.tailwind.css").exist?
+        Rails.root.join("app/assets/stylesheets/postnhost/host.tailwind.css").exist?
       end
 
       def source_paths

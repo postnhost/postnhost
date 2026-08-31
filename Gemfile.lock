@@ -5,6 +5,7 @@ PATH
       bcrypt
       carrierwave (>= 3.0)
       carrierwave-aws (~> 1.6)
+      crass
       nokogiri
       openai
       pagy (~> 43.0)

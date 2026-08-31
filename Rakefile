@@ -2,6 +2,34 @@ require "bundler/setup"
 require "fileutils"
 
 require "bundler/gem_tasks"
+require_relative "lib/postnhost/css_build"
+
+css_build = lambda do |watch:|
+  root = __dir__
+  unscoped_path = File.join(root, "app/assets/builds/postnhost/application.unscoped.css")
+  output_path = File.join(root, "app/assets/builds/postnhost/application.css")
+  command = [
+    File.join(root, "node_modules/.bin/tailwindcss"),
+    "-i", File.join(root, "app/assets/stylesheets/application.tailwind.css"),
+    "-o", unscoped_path,
+    "--minify"
+  ]
+  command << "--watch" if watch
+
+  Postnhost::CssBuild.run(command:, unscoped_path:, output_path:, watch:)
+end
+
+namespace :css do
+  desc "Build the engine stylesheet"
+  task build: :environment do
+    css_build.call(watch: false)
+  end
+
+  desc "Build the engine stylesheet and watch for changes"
+  task watch: :environment do
+    css_build.call(watch: true)
+  end
+end
 
 # Load dummy app so the Rails `environment` task exists (required by prepare_test_db).
 require_relative "spec/dummy/config/application"

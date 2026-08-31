@@ -43,7 +43,7 @@ Mount this engine into an existing Rails app, or use the <a href="https://github
   - [Host app i18n](#host-app-i18n-optional)
   - [Static pages](#static-pages-terms-privacy-etc)
 - [Routes](#routes)
-- [Manual configuration](#manual-configuration)
+  - [Production checklist](#production-checklist)
 - [Development](#development)
 - [License](#license)
 
@@ -194,7 +194,6 @@ bin/dev
 
 This generator creates:
 
-- `postnhost.tailwind.config.js`
 - `app/assets/stylesheets/postnhost/host.tailwind.css`
 - `Procfile.dev` watcher entry:
   - `postnhost_css: bundle exec rails postnhost:tailwindcss:watch`
@@ -202,8 +201,9 @@ This generator creates:
   - `postnhost:tailwindcss`
   - `postnhost:tailwindcss:watch`
 
-When host-tailwind mode files are present, PostnHost layouts automatically include `postnhost/host.css` after `postnhost/application.css`.
-You do not need to edit layout tags.
+Host-tailwind mode builds one combined stylesheet from the engine and host view sources at `app/assets/builds/postnhost/application.css`. That host-owned file transparently overrides the packaged asset with the same logical path; the engine always requests `postnhost/application`. This avoids competing Tailwind builds and lets copied views use ordinary classes such as `bg-red-500` or `md:grid`.
+
+If the host build is absent, Rails uses the packaged engine asset automatically. Both packaged and combined stylesheets are limited to PostnHost layouts through the `data-postnhost` root attribute. You do not need to edit layout tags or prefix Tailwind classes. Host customization requires Tailwind CSS 4.
 
 ### Robots.txt sitemap URL (required)
 
@@ -319,13 +319,15 @@ mount Postnhost::Engine, at: "/blog"
 - `GET /sitemap.xml` - XML sitemap
 - `GET /sitemap.xsl` - Sitemap stylesheet
 
-## Manual configuration
+## Production checklist
 
-Some parts must still be configured manually in code:
+Review these host-application settings before deployment:
 
-- Favicons
-- Robots.txt
-- Error pages 404/500 etc.
+- Replace the host app’s favicon and related icon files if needed.
+- Update `public/robots.txt` so its sitemap URL matches the production domain and engine mount path.
+- Review the host app’s static `public/404.html` and `public/500.html` pages.
+- Configure the generated CarrierWave initializer for S3-compatible production storage, or replace it with another storage configuration.
+- If you customize the public templates, copy the required views and enable host Tailwind support when your changes introduce new utility classes.
 
 ## Development
 

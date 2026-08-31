@@ -7,7 +7,7 @@ module Postnhost
 
       def create_static_pages
         if slugs.empty?
-          say("Please provide at least one page slug, e.g. rails g postnhost:static_pages terms privacy", :red)
+          say("Please provide at least one page slug, e.g. bin/rails g postnhost:static_pages terms privacy", :red)
           return
         end
 

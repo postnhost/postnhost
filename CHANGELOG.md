@@ -2,6 +2,12 @@
 
 All notable changes to PostnHost are documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- Scoped packaged and host-generated CSS to PostnHost layouts and replaced competing stylesheets with one combined host build that transparently shadows the packaged logical asset.
+
 ## [0.1.0] - 2026-08-29
 
 First open source release of PostnHost.

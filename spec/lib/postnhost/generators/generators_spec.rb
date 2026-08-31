@@ -78,22 +78,23 @@ RSpec.describe Postnhost::Generators do
       generator = generator_for(described_class)
 
       generator.create_stylesheet_directory
-      generator.create_tailwind_config
       generator.create_host_stylesheet
       generator.update_package_json
       generator.wire_procfile_dev
-      generator.create_tailwind_config
       generator.create_host_stylesheet
       generator.wire_procfile_dev
       generator.print_next_steps
 
       package_json = JSON.parse(destination_root.join("package.json").read)
-      expect(package_json.dig("scripts", "postnhost:tailwindcss")).to include("tailwindcss")
+      host_stylesheet = destination_root.join("app/assets/stylesheets/postnhost/host.tailwind.css").read
+      expect(package_json.dig("scripts", "postnhost:tailwindcss")).to eq("bundle exec rails postnhost:tailwindcss:build")
       expect(package_json.dig("devDependencies", "@tailwindcss/typography")).to eq("^0.5.16")
+      expect(host_stylesheet).to include('@source "../../../views/postnhost/**/*.erb";')
+      expect(host_stylesheet).not_to include('@import "tailwindcss";')
       expect(destination_root.join("Procfile.dev").read.scan("postnhost_css:").size).to eq(1)
     end
 
-    it "prints manual instructions when package.json is absent" do
+    it "prints Ruby compiler instructions when package.json is absent" do
       allow(Rails).to receive(:root).and_return(destination_root)
 
       generator_for(described_class).update_package_json

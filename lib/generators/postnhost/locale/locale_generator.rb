@@ -5,7 +5,7 @@ module Postnhost
     class LocaleGenerator < Rails::Generators::Base
       argument :locale, type: :string, desc: "Locale code to match Language#html_lang (e.g. sv, pt-BR)"
 
-      desc "Copies Postnhost English locale (en.yml) to config/locales/<locale>.yml in your app for translation."
+      desc "Copies the PostnHost English locale (en.yml) to config/locales/<locale>.yml in your app for translation."
 
       def copy_postnhost_locale
         code = locale.to_s.strip

@@ -161,7 +161,7 @@ RSpec.describe "Onboarding", type: :request do
       expect(response.body).to include("Production checklist")
       expect(response.body).to include("Go to Dashboard")
       expect(response.body).to include("robots.txt")
-      expect(response.body).to include("S3 upload settings")
+      expect(response.body).to include("Production uploads")
 
       patch postnhost.onboarding_path, params: { step: "post_install_done" }
       expect(response).to redirect_to(postnhost.articles_path)

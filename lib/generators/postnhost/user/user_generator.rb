@@ -1,7 +1,7 @@
 module Postnhost
   module Generators
     class UserGenerator < Rails::Generators::Base
-      desc "Interactively creates a Postnhost CMS user"
+      desc "Interactively creates a PostnHost CMS user"
 
       def create_user
         attributes = prompt_for_user_attributes

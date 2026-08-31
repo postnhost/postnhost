@@ -1,29 +1,29 @@
 <div class="space-y-5">
   <p class="text-sm text-gray-600">
-    Final manual checks for host app integration. Most of these are inherited from the root app and can be customized there. You can find this checklist later in the README.
+    Review these host-app settings before deployment. Details are available in the Production checklist section of the README.
   </p>
 
   <div class="rounded-xl border border-gray-200 bg-gray-50 p-4">
     <ul class="space-y-3 text-sm text-gray-700">
       <li>
         <span class="font-medium text-gray-900">1. Favicon</span><br>
-        Inherited from the root app. Update host favicon files/links if needed.
+        Replace the favicon and related icon files in the host app if needed.
       </li>
       <li>
-        <span class="font-medium text-gray-900">2. 404 / 500 pages</span><br>
-        Inherited from root app static error pages (`public/404.html` and `public/500.html`).
+        <span class="font-medium text-gray-900">2. 404 and 500 pages</span><br>
+        Review the host app&rsquo;s static error pages at <code>public/404.html</code> and <code>public/500.html</code>.
       </li>
       <li>
         <span class="font-medium text-gray-900">3. robots.txt</span><br>
-        Inherited from root app (`public/robots.txt`). Confirm the sitemap URL matches your mount path.
+        Update the host app&rsquo;s <code>public/robots.txt</code> and confirm that the sitemap URL matches your mount path.
       </li>
       <li>
         <span class="font-medium text-gray-900">4. Public template styling</span><br>
-        Customize by running <code>rails g postnhost:views --views_scope=minimal</code> (or <code>full</code>) and editing copied templates in the host app.
+        To customize the public site, run <code>bin/rails g postnhost:views --views-scope=minimal</code> or use <code>--views-scope=full</code>, then edit the copied templates.
       </li>
       <li>
-        <span class="font-medium text-gray-900">5. S3 upload settings</span><br>
-        Configure credentials/bucket/endpoint in host app credentials and initializer (`config/initializers/postnhost.rb`).
+        <span class="font-medium text-gray-900">5. Production uploads</span><br>
+        The generated CarrierWave initializer uses S3-compatible storage in production. Configure it through Rails credentials or <code>config/initializers/postnhost.rb</code>, or replace that storage configuration.
       </li>
     </ul>
   </div>

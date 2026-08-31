@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<%= document_lang %>" class="[scrollbar-gutter:stable]">
+<html lang="<%= document_lang %>" data-postnhost>
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -10,7 +10,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag(*postnhost_stylesheet_assets, "data-turbo-track": "reload") %>
+    <%= stylesheet_link_tag "postnhost/application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "postnhost/application", "data-turbo-track": "reload", type: "module" %>
 
     <%= render "layouts/postnhost/favicon" %>

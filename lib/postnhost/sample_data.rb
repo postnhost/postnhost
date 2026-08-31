@@ -785,7 +785,7 @@ module Postnhost
           <li>⏰ <strong>Post scheduling</strong> — Schedule publication through your application’s Active Job adapter</li>
           <li>🌐 <strong>Localized SEO</strong> — Localized routes, language switcher, sitemap, and hreflang tags</li>
           <li>⚙️ <strong>Settings</strong> — Update key copy and assets from the CMS</li>
-          <li>🎨 <strong>Customizable views</strong> — Override public templates in the host app (<code>rails g postnhost:views</code>)</li>
+          <li>🎨 <strong>Customizable views</strong> — Override public templates in the host app (<code>bin/rails g postnhost:views --views-scope=minimal</code>)</li>
           <li>⚡ <strong>Hotwire UI</strong> — Turbo Frames/Streams and Stimulus</li>
           <li>🔐 <strong>Session-based auth</strong> — Built-in admin authentication</li>
         </ul>

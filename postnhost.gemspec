@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "bcrypt"
   spec.add_dependency "carrierwave", ">= 3.0"
   spec.add_dependency "carrierwave-aws", "~> 1.6"
+  spec.add_dependency "crass"
   spec.add_dependency "nokogiri"
   spec.add_dependency "openai"
   spec.add_dependency "pagy", "~> 43.0"

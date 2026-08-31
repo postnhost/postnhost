@@ -5,15 +5,6 @@ RSpec.describe Postnhost::ApplicationHelper, type: :helper do
     helper.define_singleton_method(:current_setting) { Postnhost::Setting.current }
   end
 
-  describe "#postnhost_stylesheet_assets" do
-    it "includes host styles only when the host Tailwind pipeline is configured" do
-      allow(helper).to receive(:postnhost_host_tailwind_enabled?).and_return(false, true)
-
-      expect(helper.postnhost_stylesheet_assets).to eq(["postnhost/application"])
-      expect(helper.postnhost_stylesheet_assets).to eq(["postnhost/application", "postnhost/host"])
-    end
-  end
-
   describe "#postnhost_openai_api_key_configured?" do
     it "returns false when openai_api_key is blank" do
       allow(Postnhost.config).to receive(:openai_api_key).and_return(nil)

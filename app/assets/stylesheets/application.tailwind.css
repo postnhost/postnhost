@@ -1,5 +1,9 @@
-@import "tailwindcss";
+@import "tailwindcss" source(none);
 @plugin "@tailwindcss/typography";
+
+@source "../../views/**/*.erb";
+@source "../../helpers/**/*.rb";
+@source "../../javascript/**/*.js";
 
 .flash-close-button {
   cursor: pointer;

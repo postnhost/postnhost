@@ -132,6 +132,8 @@ PostnHost is a mountable Rails engine with Hotwire, Stimulus, Tailwind CSS, Pape
 - Packaged outputs are:
   - `app/assets/builds/postnhost/application.css`
   - `app/assets/builds/postnhost/application.js`
+- CSS selectors are build-time scoped under `html[data-postnhost]`; every shipped PostnHost layout must keep the `data-postnhost` root attribute.
+- Host Tailwind mode compiles the engine and copied host views into a host-owned `postnhost/application.css` that shadows the packaged logical asset, so engine runtime code never depends on a host stylesheet name.
 - Do not generate or ship source maps.
 - Rebuild both outputs before committing changes to their inputs.
 - The gem must work without requiring frontend dependencies in the host application.

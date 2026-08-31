@@ -6,9 +6,9 @@
   },
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --format=esm --outdir=app/assets/builds/postnhost --public-path=/assets",
-    "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/postnhost/application.css --minify",
+    "build:css": "bundle exec rake css:build",
     "build:watch": "esbuild app/javascript/*.* --bundle --format=esm --outdir=app/assets/builds/postnhost --public-path=/assets --watch=forever",
-    "build:css:watch": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/postnhost/application.css --minify --watch",
+    "build:css:watch": "bundle exec rake css:watch",
     "dev": "sh -c 'yarn build:watch & yarn build:css:watch & wait'"
   },
   "dependencies": {
