@@ -33,6 +33,7 @@ Postnhost::Engine.routes.draw do
   end
 
   # Admin routes
+  resources :api_tokens, only: %i[index create destroy]
   resource :onboarding, only: %i[show update], controller: "onboarding"
   resource :session, only: %i[new create destroy], controller: "sessions"
   resources :users, only: %i[index new create edit update destroy] do
@@ -104,6 +105,17 @@ Postnhost::Engine.routes.draw do
 
   resource :settings, only: %i[edit update], controller: "settings" do
     resources :site_scripts, only: %i[create update destroy], controller: "settings/site_scripts"
+  end
+
+  # Management API and MCP
+  namespace :api do
+    namespace :v1 do
+      get "openapi", to: "commands#schema", as: :openapi
+      get "commands", to: "commands#index", as: :commands
+      post "commands/:command", to: "commands#create", as: :command
+      post "mcp", to: "mcp#create", as: :mcp
+      match "mcp", to: "mcp#unsupported", via: %i[get delete]
+    end
   end
 
   # Public static pages from host app views:

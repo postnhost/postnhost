@@ -5,6 +5,8 @@ module Postnhost
 
     self.table_name = "postnhost_users"
 
+    has_many :api_tokens, class_name: "Postnhost::ApiToken", dependent: :destroy
+
     has_secure_password
 
     mount_uploader :avatar_file, Postnhost::AvatarUploader

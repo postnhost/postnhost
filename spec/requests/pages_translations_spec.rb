@@ -5,7 +5,7 @@ RSpec.describe "Pages::Translations", type: :request do
 
   let!(:default_language) { create(:language, :default) }
   let(:user) { create(:user) }
-  let(:page) { create(:page, user:, language: default_language) }
+  let(:page) { create(:page, :published, user:, language: default_language) }
   let(:russian) { create(:language, :russian) }
 
   before { sign_in user }
