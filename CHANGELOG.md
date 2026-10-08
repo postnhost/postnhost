@@ -2,6 +2,19 @@
 
 All notable changes to PostnHost are documented in this file.
 
+## [0.2.0] - 2026-10-10
+
+### Added
+
+- Versioned JSON management API and Streamable HTTP MCP endpoint at `/api/v1/mcp`, relative to the engine mount path.
+- 89 shared commands for CMS content, publishing, versions, uploads, translations, users, navigation, and settings, with command discovery and OpenAPI schemas.
+- API & MCP dashboard for creating and revoking personal bearer tokens, with hashed token storage and one-time secret display.
+
+### Improved
+
+- Paginated management lists use compact summaries and bounded database queries; full content remains available through individual record commands.
+- UI and management commands share translation enqueueing, preserving successfully queued work and cleaning up placeholders when enqueueing fails.
+
 ## [0.1.1] - 2026-08-31
 
 ### Fixed
@@ -29,5 +42,6 @@ First open source release of PostnHost.
 
 Authored by Kirill Shevchenko (Ruby/Rails engineering) and Maxim Sova (technical SEO expertise).
 
+[0.2.0]: https://github.com/postnhost/postnhost/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/postnhost/postnhost/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/postnhost/postnhost/releases/tag/v0.1.0

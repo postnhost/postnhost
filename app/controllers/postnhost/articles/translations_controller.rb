@@ -6,15 +6,8 @@ module Postnhost
     def new; end
 
     def create
-      language_ids = params[:language_ids] || []
-
-      language_ids.each do |language_id|
-        Postnhost::Translation::ArticleVariantJob.perform_later(@article.id, language_id.to_i)
-
-        @article.article_variants.create!(language: Postnhost::Language.find_by(id: language_id.to_i), generating: true)
-      end
-
-      redirect_to article_variants_path(@article)
+      result = Postnhost::Translation::Enqueue.call(record: @article, language_ids: Array(params[:language_ids]).map(&:to_i).uniq)
+      redirect_to article_variants_path(@article), **(result.success? ? {} : { alert: result.errors.to_sentence })
     end
 
     private

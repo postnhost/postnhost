@@ -42,6 +42,7 @@ Mount this engine into an existing Rails app, or use the <a href="https://github
   - [Replacing favicon](#replacing-favicon)
   - [Host app i18n](#host-app-i18n-optional)
   - [Static pages](#static-pages-terms-privacy-etc)
+- [API and MCP](#api-and-mcp)
 - [Routes](#routes)
   - [Production checklist](#production-checklist)
 - [Development](#development)
@@ -294,6 +295,16 @@ Link helpers:
 ```erb
 <%= link_to "Terms", postnhost.public_static_page_path(slug: "terms") %>
 ```
+
+## API and MCP
+
+Manage CMS content and settings through the versioned JSON command API and the
+Streamable HTTP MCP endpoint. Open **API & MCP** in the CMS to create or revoke
+bearer tokens. The API and MCP share the same discoverable commands, input schemas,
+and publishing workflows.
+
+Discover commands at `/api/v1/commands`, OpenAPI at `/api/v1/openapi`, and
+connect MCP clients to `/api/v1/mcp`, relative to the engine mount path.
 
 ## Routes
 
