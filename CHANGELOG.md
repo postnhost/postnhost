@@ -2,7 +2,7 @@
 
 All notable changes to PostnHost are documented in this file.
 
-## [0.2.0] - 2026-10-10
+## [0.2.0] - 2026-10-24
 
 ### Added
 

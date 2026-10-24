@@ -15,9 +15,10 @@ RSpec.describe "API and MCP access", type: :system do
     expect(page).to have_text("Writing agent")
     expect(page).to have_css("code", text: /pnh_\w+/)
 
-    find_link("Articles").execute_script("this.click()")
+    visit postnhost.articles_path
     expect(page).to have_current_path(postnhost.articles_path)
-    find_link("API & MCP").execute_script("this.click()")
+    visit postnhost.api_tokens_path
+    expect(page).to have_text("Access tokens")
     expect(page).to have_no_css("code", text: /pnh_\w+/)
     find_button("Revoke").execute_script("this.click()")
     expect(page).to have_text("Revoked")
