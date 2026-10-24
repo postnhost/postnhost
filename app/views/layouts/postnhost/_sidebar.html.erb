@@ -58,6 +58,13 @@
             <span class="text-sm font-medium">Settings</span>
           <% end %>
 
+          <%= link_to api_tokens_path, class: "group flex items-center space-x-3 text-gray-700 hover:text-gray-900 hover:bg-white font-medium px-3 py-2.5 rounded-xl transition-all duration-200 #{controller_name == 'api_tokens' ? 'bg-white text-gray-900' : ''}" do %>
+            <div class="flex-shrink-0 <%= controller_name == 'api_tokens' ? 'text-gray-900' : 'text-gray-500 group-hover:text-gray-700' %>">
+              <%= icon("code-bracket", css_class: "h-5 w-5") %>
+            </div>
+            <span class="text-sm font-medium">API &amp; MCP</span>
+          <% end %>
+
           <%= link_to edit_template_path, class: "group flex items-center space-x-3 text-gray-700 hover:text-gray-900 hover:bg-white font-medium px-3 py-2.5 rounded-xl transition-all duration-200 #{current_page?(edit_template_path) || controller_name == 'templates' ? 'bg-white text-gray-900' : ''}" do %>
             <div class="flex-shrink-0 #{current_page?(edit_template_path) || controller_name == 'templates' ? 'text-gray-900' : 'text-gray-500 group-hover:text-gray-700'}">
               <%= icon("eye", css_class: "h-5 w-5") %>

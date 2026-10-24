@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    postnhost (0.1.1)
+    postnhost (0.2.0)
       bcrypt
       carrierwave (>= 3.0)
       carrierwave-aws (~> 1.6)

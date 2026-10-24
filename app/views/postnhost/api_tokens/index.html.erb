@@ -1,0 +1,92 @@
+<% content_for :title, "API & MCP" %>
+<% content_for :head do %>
+  <meta name="turbo-cache-control" content="no-cache">
+<% end %>
+
+<div class="space-y-8">
+  <%= render "postnhost/shared/elements/page_header", title: "API & MCP access", description: "Connect agents and integrations to your CMS." %>
+
+  <% if @secret.present? %>
+    <section class="rounded-2xl border border-green-200 bg-green-50 p-6 space-y-3" aria-label="New token">
+      <div class="flex items-center gap-2 text-green-800">
+        <%= icon("check-circle", css_class: "h-5 w-5") %>
+        <h2 class="font-medium">Token created</h2>
+      </div>
+      <p class="text-sm text-green-800">Copy this token now. It is shown only once.</p>
+      <code class="block rounded-xl border border-green-200 bg-white p-4 text-sm text-gray-900 break-all select-all"><%= @secret %></code>
+    </section>
+  <% end %>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <section class="lg:col-span-2 <%= form_card_classes %>" aria-labelledby="create-token-title">
+      <div>
+        <h2 id="create-token-title" class="text-lg font-medium text-gray-900">Create an access token</h2>
+        <p class="mt-2 text-sm text-gray-500">Tokens grant your CMS permissions. Give each integration its own token so you can revoke access separately.</p>
+      </div>
+      <%= form_with scope: :api_token, url: api_tokens_path, data: { turbo: false }, class: "space-y-6" do |form| %>
+        <div>
+          <%= form.label :name, class: form_label_classes %>
+          <%= form.text_field :name, required: true, placeholder: "e.g. Writing agent", class: form_input_classes %>
+        </div>
+        <%= form.submit "Create token", class: button_classes %>
+      <% end %>
+    </section>
+
+    <section class="<%= form_card_classes %>" aria-labelledby="connection-title">
+      <div>
+        <h2 id="connection-title" class="text-lg font-medium text-gray-900">Connection details</h2>
+        <p class="mt-2 text-sm text-gray-500">Use your token to authenticate either connection.</p>
+      </div>
+      <dl class="space-y-5">
+        <div>
+          <dt class="text-sm font-medium text-gray-700">Management API · v1</dt>
+          <dd class="mt-2 rounded-xl bg-gray-50 p-3 text-xs text-gray-900 break-all"><code><%= api_v1_commands_url %></code></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-700">MCP · v1</dt>
+          <dd class="mt-2 rounded-xl bg-gray-50 p-3 text-xs text-gray-900 break-all"><code><%= api_v1_mcp_url %></code></dd>
+          <dd class="mt-2 text-xs text-gray-500">Connect using Streamable HTTP.</dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-700">Authorization header</dt>
+          <dd class="mt-2 rounded-xl bg-gray-50 p-3 text-xs text-gray-900 break-all"><code>Bearer &lt;your-token&gt;</code></dd>
+        </div>
+      </dl>
+    </section>
+  </div>
+
+  <section class="space-y-4" aria-labelledby="access-tokens-title">
+    <div>
+      <h2 id="access-tokens-title" class="text-lg font-medium text-gray-900">Access tokens</h2>
+      <p class="mt-2 text-sm text-gray-500">Manage the tokens you have created for your account.</p>
+    </div>
+    <% if @api_tokens.any? %>
+      <%= render "postnhost/shared/elements/table_container", headers: [
+        { text: "Token", class: "col-span-8" },
+        { text: "Actions", class: "col-span-4 text-right" }
+      ] do %>
+        <% @api_tokens.each do |token| %>
+          <div class="<%= table_row_classes %>">
+            <div class="grid grid-cols-12 gap-4 items-center">
+              <div class="col-span-8 min-w-0 space-y-2">
+                <p class="font-medium text-gray-900 break-words"><%= token.name %></p>
+                <% if token.revoked_at? %>
+                  <span class="inline-flex <%= stats_badge_classes(variant: :gray) %>">Revoked</span>
+                <% else %>
+                  <span class="inline-flex <%= stats_badge_classes(variant: :green) %>">Active</span>
+                <% end %>
+              </div>
+              <div class="col-span-4 flex justify-end">
+                <% unless token.revoked_at? %>
+                  <%= button_to "Revoke", api_token_path(token), method: :delete, class: button_classes(variant: :danger) %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% else %>
+      <%= render "postnhost/shared/elements/empty_state", icon: "code-bracket", title: "No access tokens", description: "Create a token above to connect your first agent or integration." %>
+    <% end %>
+  </section>
+</div>

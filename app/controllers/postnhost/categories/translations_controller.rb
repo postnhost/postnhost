@@ -4,15 +4,8 @@ module Postnhost
     before_action :load_category
 
     def create
-      language_ids = params[:language_ids] || []
-
-      language_ids.each do |language_id|
-        Postnhost::Translation::CategoryVariantJob.perform_later(@category.id, language_id.to_i)
-
-        @category.category_variants.create!(language: Postnhost::Language.find_by(id: language_id.to_i), generating: true)
-      end
-
-      redirect_to category_variants_path(@category)
+      result = Postnhost::Translation::Enqueue.call(record: @category, language_ids: Array(params[:language_ids]).map(&:to_i).uniq)
+      redirect_to category_variants_path(@category), **(result.success? ? {} : { alert: result.errors.to_sentence })
     end
 
     private

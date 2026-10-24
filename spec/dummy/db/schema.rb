@@ -10,11 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_26_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_08_120000) do
   create_table "host_posts", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "postnhost_api_tokens", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "revoked_at"
+    t.string "token_digest", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["token_digest"], name: "index_postnhost_api_tokens_on_token_digest", unique: true
+    t.index ["user_id"], name: "index_postnhost_api_tokens_on_user_id"
   end
 
   create_table "postnhost_article_authors", force: :cascade do |t|
@@ -419,6 +430,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_26_130000) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "postnhost_api_tokens", "postnhost_users", column: "user_id"
   add_foreign_key "postnhost_article_authors", "postnhost_articles", column: "article_id"
   add_foreign_key "postnhost_article_authors", "postnhost_users", column: "user_id"
   add_foreign_key "postnhost_article_categories", "postnhost_articles", column: "article_id"
