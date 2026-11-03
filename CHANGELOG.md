@@ -2,6 +2,13 @@
 
 All notable changes to PostnHost are documented in this file.
 
+## [0.2.1] - 2026-11-03
+
+### Fixed
+
+- Show all users' articles in the CMS article list and suggestion picker, including articles whose creator has been deleted.
+- Preserve shared article suggestions when the editor displays validation errors.
+
 ## [0.2.0] - 2026-10-24
 
 ### Added
@@ -56,6 +63,7 @@ First open source release of PostnHost.
 
 Authored by Kirill Shevchenko (Ruby/Rails engineering) and Maxim Sova (technical SEO expertise).
 
+[0.2.1]: https://github.com/postnhost/postnhost/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/postnhost/postnhost/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/postnhost/postnhost/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/postnhost/postnhost/releases/tag/v0.1.0

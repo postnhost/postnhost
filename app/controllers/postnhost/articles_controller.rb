@@ -11,10 +11,9 @@ module Postnhost
       @status = Postnhost::Article.normalize_status(params[:status])
       @sort = Postnhost::Article.normalize_sort(params[:sort])
 
-      articles = current_user.articles
-                             .includes(:language, :article_snapshot)
-                             .with_status(@status)
-                             .sorted_by(@sort)
+      articles = Postnhost::Article.includes(:language, :article_snapshot)
+                                   .with_status(@status)
+                                   .sorted_by(@sort)
 
       @pagy, @articles = pagy(:offset, articles, limit: PAGE_SIZE)
     end
@@ -30,7 +29,7 @@ module Postnhost
       @categories = Postnhost::Category.all
       @users = Postnhost::User.order(:name, :email)
       @languages = Postnhost::Language.order(default: :desc, name: :asc)
-      @articles = current_user.articles.where.not(id: @article.id).order(:title)
+      @articles = Postnhost::Article.where.not(id: @article.id).order(:title)
     end
 
     def update
@@ -45,7 +44,7 @@ module Postnhost
         @categories = Postnhost::Category.all
         @users = Postnhost::User.order(:name, :email)
         @languages = Postnhost::Language.order(default: :desc, name: :asc)
-        @articles = current_user.articles.where.not(id: @article.id).order(:title)
+        @articles = Postnhost::Article.where.not(id: @article.id).order(:title)
         render :edit, status: :unprocessable_content
       end
     end

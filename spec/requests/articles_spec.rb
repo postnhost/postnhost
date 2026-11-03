@@ -25,8 +25,22 @@ RSpec.describe "Articles", type: :request do
       expect(response).to have_http_status(:ok)
     end
 
+    it "lists articles from all users, including articles without a creator" do
+      own_article = create(:article, user:, title: "My Article")
+      other_article = create(:article, title: "Another User Article")
+      orphaned_article = create(:article, :without_user, title: "Former User Article")
+      sign_in(user)
+
+      get postnhost.articles_path
+
+      expect(response).to have_http_status(:ok)
+      [own_article, other_article, orphaned_article].each do |article|
+        expect(response.body).to include(article.title)
+      end
+    end
+
     it "filters articles by status" do
-      published = create(:article, :published, user:, title: "Published Piece")
+      published = create(:article, :published, title: "Published Piece")
       draft = create(:article, user:, title: "Draft Piece")
       scheduled = create(:article, :scheduled, user:, title: "Scheduled Piece")
       sign_in(user)
@@ -75,7 +89,23 @@ RSpec.describe "Articles", type: :request do
 
       created_article = Postnhost::Article.last
       expect(response).to redirect_to(postnhost.edit_article_path(created_article))
+      expect(created_article.user).to eq(user)
       expect(created_article.authors).to contain_exactly(user)
+    end
+  end
+
+  describe "GET /articles/:id/edit" do
+    it "offers other users' articles as suggestions and excludes the current article" do
+      article = create(:article, title: "Shared Article")
+      suggestion = create(:article, title: "Another User Suggestion")
+      sign_in(user)
+
+      get postnhost.edit_article_path(article)
+
+      expect(response).to have_http_status(:ok)
+      options = response.parsed_body.css('[data-suggestion-manager-target="selector"] option')
+      expect(options.pluck("value")).to include(suggestion.id.to_s)
+      expect(options.pluck("value")).not_to include(article.id.to_s)
     end
   end
 
@@ -173,6 +203,7 @@ RSpec.describe "Articles", type: :request do
 
     it "renders validation errors and preserves the submitted article" do
       article = create(:article, user:, title: "Valid title")
+      suggestion = create(:article, title: "Another User Suggestion")
       sign_in(user)
 
       patch postnhost.article_path(article), params: {
@@ -182,6 +213,9 @@ RSpec.describe "Articles", type: :request do
       expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include("Slug can only contain lowercase letters, numbers, and hyphens")
       expect(article.reload.title).to eq("Valid title")
+      options = response.parsed_body.css('[data-suggestion-manager-target="selector"] option')
+      expect(options.pluck("value")).to include(suggestion.id.to_s)
+      expect(options.pluck("value")).not_to include(article.id.to_s)
     end
   end
 
