@@ -35,5 +35,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rails-i18n"
   spec.add_dependency "rouge"
   spec.add_dependency "ruby-vips"
+  spec.add_dependency "ssrf_filter", ">= 1.5"
   spec.add_dependency "turbo-rails"
 end

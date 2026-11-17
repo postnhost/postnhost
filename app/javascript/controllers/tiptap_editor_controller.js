@@ -87,6 +87,7 @@ import { TableRow } from '@tiptap/extension-table-row'
 import { TableHeader } from '@tiptap/extension-table-header'
 import { TableCell } from '@tiptap/extension-table-cell'
 import Youtube from '@tiptap/extension-youtube'
+import { imageClipboardContent, insertUploadedImages } from '../helpers/image_paste'
 import { codeLowlight } from '../helpers/code_highlighting'
 import { applyClasses, removeClasses, EDITOR_STATES } from "../helpers/style_helpers"
 
@@ -113,7 +114,6 @@ export default class extends Controller {
   connect() {
     this.initializeEditor()
     window.addEventListener('resize', this.#positionCodeLanguageControl)
-    this.setupPasteHandler()
     this.setupDragAndDropHandler()
   }
 
@@ -205,6 +205,7 @@ export default class extends Controller {
       ],
       content: this.contentValue || '',
       editorProps: {
+        handlePaste: (view, event) => this.#handleImagePaste(view, event),
         attributes: {
           class: 'prose max-w-none focus:outline-none min-h-[400px] p-4',
         },
@@ -690,58 +691,59 @@ export default class extends Controller {
     input.click()
   }
 
-  uploadImage(file) {
+  async uploadImage(file) {
     this.dispatch('upload-start', { bubbles: true })
+    try {
+      const url = await this.#storeImage(file)
+      if (!this.editor.isDestroyed) this.editor.chain().focus().setImage({ src: url }).run()
+      this.dispatch('upload-complete', { bubbles: true })
+    } catch (error) {
+      console.error('Upload error:', error)
+      this.dispatch('upload-failed', { bubbles: true })
+    }
+  }
 
+  async #storeImage(source) {
     const formData = new FormData()
-    formData.append('file', file)
+    if (typeof source === 'string' && source.startsWith('data:')) {
+      const blob = await (await fetch(source)).blob()
+      const extension = blob.type.split('/')[1]?.replace('jpeg', 'jpg') || 'png'
+      formData.append('file', blob, `pasted-image.${extension}`)
+    } else {
+      formData.append(typeof source === 'string' ? 'url' : 'file', source)
+    }
 
     const mountPath = this.mountPathValue === '/' ? '' : this.mountPathValue.replace(/\/$/, '')
     const uploadUrl = this.resourceTypeValue === 'page'
       ? `${mountPath}/pages/${this.resourceIdValue}/images`
       : `${mountPath}/articles/${this.resourceIdValue}/images`
 
-    fetch(uploadUrl, {
+    const response = await fetch(uploadUrl, {
       method: 'POST',
       body: formData,
       headers: {
         'X-CSRF-Token': document.querySelector('[name="csrf-token"]').getAttribute('content')
       }
     })
-      .then(response => response.json())
-      .then(data => {
-        if (data.url) {
-          // Insert image at current cursor position
-          this.editor.chain().focus().setImage({ src: data.url }).run()
-          this.dispatch('upload-complete', { bubbles: true })
-        } else {
-          this.dispatch('upload-failed', { bubbles: true })
-        }
-      })
-      .catch(error => {
-        console.error('Upload error:', error)
-        this.dispatch('upload-failed', { bubbles: true })
-      })
+    const data = await response.json()
+    if (!response.ok || !data.url) throw new Error(data.error || 'Image upload failed')
+    return data.url
   }
 
-  setupPasteHandler() {
-    this.editorTarget.addEventListener('paste', (event) => {
-      const items = event.clipboardData?.items
-      if (!items) return
+  #handleImagePaste(view, event) {
+    if (view.state.selection.$from.parent.type.spec.code) return false
+    const content = imageClipboardContent(event.clipboardData)
+    if (!content) return false
 
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i]
-
-        if (item.type.indexOf('image') !== -1) {
-          event.preventDefault()
-          const file = item.getAsFile()
-          if (file) {
-            this.uploadImage(file)
-          }
-          break
-        }
-      }
-    })
+    this.dispatch('upload-start', { bubbles: true })
+    insertUploadedImages(this.editor, content, source => this.#storeImage(source))
+      .then(() => this.dispatch('upload-complete', { bubbles: true }))
+      .catch(error => {
+        console.error('Paste image upload error:', error)
+        this.dispatch('upload-failed', { bubbles: true })
+        if (!this.editor.isDestroyed) window.alert('Some pasted images could not be uploaded. Please try pasting those images again.')
+      })
+    return true
   }
 
   setupDragAndDropHandler() {

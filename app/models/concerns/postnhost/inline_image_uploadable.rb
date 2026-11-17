@@ -5,10 +5,11 @@ module Postnhost::InlineImageUploadable
   SUPPORTED_CONTENT_TYPES = %w[image/jpeg image/png image/gif image/webp image/heic].freeze
 
   def upload_inline_image(file)
+    uploader = inline_image_uploader_class.new(self, :inline_image)
+    file = Postnhost::InlineImageDownloader.new(uploader).download(file) if file.is_a?(String)
     return { success: false, error: "Invalid file type" } unless valid_image_file_type?(file)
     return { success: false, error: "File too large" } if image_file_too_large?(file)
 
-    uploader = inline_image_uploader_class.new(self, :inline_image)
     uploader.store!(file)
 
     {
@@ -16,7 +17,7 @@ module Postnhost::InlineImageUploadable
       url: uploader.url,
       filename: uploader.identifier
     }
-  rescue CarrierWave::ProcessingError, CarrierWave::IntegrityError => e
+  rescue CarrierWave::DownloadError, CarrierWave::ProcessingError, CarrierWave::IntegrityError => e
     Rails.logger.error("CarrierWave inline image error: #{e.message}")
     { success: false, error: "Invalid image file" }
   rescue StandardError => e
