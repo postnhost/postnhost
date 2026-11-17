@@ -14,6 +14,7 @@ PATH
       rails-i18n
       rouge
       ruby-vips
+      ssrf_filter (>= 1.5)
       turbo-rails
 
 GEM

@@ -38968,6 +38968,58 @@ var Youtube = Node3.create({
 });
 var src_default13 = Youtube;
 
+// app/javascript/helpers/image_paste.js
+function imageClipboardContent(clipboard) {
+  if (!clipboard) return null;
+  const html = clipboard.getData("text/html");
+  const body = new DOMParser().parseFromString(html, "text/html").body;
+  if (body.querySelector("img")) return { body };
+  const files = Array.from(clipboard.files || []).filter((file) => file.type.startsWith("image/"));
+  return files.length ? { files } : null;
+}
+async function insertUploadedImages(editor, { body, files }, upload) {
+  let bookmark = editor.state.selection.getBookmark();
+  const mapSelection = ({ transaction }) => {
+    bookmark = bookmark.map(transaction.mapping);
+  };
+  editor.on("transaction", mapSelection);
+  try {
+    const images = body ? Array.from(body.querySelectorAll("img")) : files;
+    let failed = false;
+    const nodes = [];
+    for (const image of images) {
+      try {
+        const source2 = body ? image.getAttribute("src") : image;
+        if (!source2) throw new Error("Missing image source");
+        const url = await upload(source2);
+        if (body) {
+          image.setAttribute("src", url);
+          image.removeAttribute("srcset");
+          image.removeAttribute("sizes");
+        } else {
+          nodes.push({ type: "imageResize", attrs: { src: url } });
+        }
+      } catch {
+        failed = true;
+        if (body) image.replaceWith(document.createTextNode(image.getAttribute("alt") || ""));
+      }
+      if (editor.isDestroyed) return;
+    }
+    const selection = bookmark.resolve(editor.state.doc);
+    const content = body ? body.innerHTML : nodes;
+    if (content.length) {
+      editor.commands.insertContentAt(
+        { from: selection.from, to: selection.to },
+        content,
+        { updateSelection: editor.state.selection.eq(selection) }
+      );
+    }
+    if (failed) throw new Error("Some pasted images could not be uploaded");
+  } finally {
+    editor.off("transaction", mapSelection);
+  }
+}
+
 // node_modules/devlop/lib/default.js
 function ok() {
 }
@@ -48246,7 +48298,6 @@ var tiptap_editor_controller_default = class extends Controller {
   connect() {
     this.initializeEditor();
     window.addEventListener("resize", this.#positionCodeLanguageControl);
-    this.setupPasteHandler();
     this.setupDragAndDropHandler();
   }
   disconnect() {
@@ -48335,6 +48386,7 @@ var tiptap_editor_controller_default = class extends Controller {
       ],
       content: this.contentValue || "",
       editorProps: {
+        handlePaste: (view, event) => this.#handleImagePaste(view, event),
         attributes: {
           class: "prose max-w-none focus:outline-none min-h-[400px] p-4"
         }
@@ -48662,46 +48714,50 @@ var tiptap_editor_controller_default = class extends Controller {
     });
     input.click();
   }
-  uploadImage(file) {
+  async uploadImage(file) {
     this.dispatch("upload-start", { bubbles: true });
+    try {
+      const url = await this.#storeImage(file);
+      if (!this.editor.isDestroyed) this.editor.chain().focus().setImage({ src: url }).run();
+      this.dispatch("upload-complete", { bubbles: true });
+    } catch (error2) {
+      console.error("Upload error:", error2);
+      this.dispatch("upload-failed", { bubbles: true });
+    }
+  }
+  async #storeImage(source2) {
     const formData = new FormData();
-    formData.append("file", file);
+    if (typeof source2 === "string" && source2.startsWith("data:")) {
+      const blob = await (await fetch(source2)).blob();
+      const extension = blob.type.split("/")[1]?.replace("jpeg", "jpg") || "png";
+      formData.append("file", blob, `pasted-image.${extension}`);
+    } else {
+      formData.append(typeof source2 === "string" ? "url" : "file", source2);
+    }
     const mountPath = this.mountPathValue === "/" ? "" : this.mountPathValue.replace(/\/$/, "");
     const uploadUrl = this.resourceTypeValue === "page" ? `${mountPath}/pages/${this.resourceIdValue}/images` : `${mountPath}/articles/${this.resourceIdValue}/images`;
-    fetch(uploadUrl, {
+    const response = await fetch(uploadUrl, {
       method: "POST",
       body: formData,
       headers: {
         "X-CSRF-Token": document.querySelector('[name="csrf-token"]').getAttribute("content")
       }
-    }).then((response) => response.json()).then((data) => {
-      if (data.url) {
-        this.editor.chain().focus().setImage({ src: data.url }).run();
-        this.dispatch("upload-complete", { bubbles: true });
-      } else {
-        this.dispatch("upload-failed", { bubbles: true });
-      }
-    }).catch((error2) => {
-      console.error("Upload error:", error2);
-      this.dispatch("upload-failed", { bubbles: true });
     });
+    const data = await response.json();
+    if (!response.ok || !data.url) throw new Error(data.error || "Image upload failed");
+    return data.url;
   }
-  setupPasteHandler() {
-    this.editorTarget.addEventListener("paste", (event) => {
-      const items = event.clipboardData?.items;
-      if (!items) return;
-      for (let i2 = 0; i2 < items.length; i2++) {
-        const item = items[i2];
-        if (item.type.indexOf("image") !== -1) {
-          event.preventDefault();
-          const file = item.getAsFile();
-          if (file) {
-            this.uploadImage(file);
-          }
-          break;
-        }
-      }
+  #handleImagePaste(view, event) {
+    if (view.state.selection.$from.parent.type.spec.code) return false;
+    const content = imageClipboardContent(event.clipboardData);
+    if (!content) return false;
+    this.dispatch("upload-start", { bubbles: true });
+    insertUploadedImages(this.editor, content, (source2) => this.#storeImage(source2)).then(() => this.dispatch("upload-complete", { bubbles: true })).catch((error2) => {
+      console.error("Paste image upload error:", error2);
+      this.dispatch("upload-failed", { bubbles: true });
+      if (!this.editor.isDestroyed) window.alert("Some pasted images could not be uploaded. Please try pasting those images again.");
     });
+    return true;
   }
   setupDragAndDropHandler() {
     ;

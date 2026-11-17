@@ -4,7 +4,7 @@ module Postnhost
     before_action :load_page
 
     def create
-      file = params[:file]
+      file = params[:file].presence || params[:url]
 
       if file.present?
         result = @page.upload_inline_image(file)
