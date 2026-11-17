@@ -2,6 +2,21 @@
 
 All notable changes to PostnHost are documented in this file.
 
+## [0.2.2] - 2026-11-17
+
+### Fixed
+
+- Upload images in pasted article and page content through the configured CarrierWave storage, including S3-compatible destinations, instead of retaining remote image URLs or embedded base64 data. Images use the existing optimized WebP upload pipeline.
+- Preserve pasted text formatting, image order, alt text, and widths. Upload every clipboard image file and avoid duplicate uploads when the clipboard contains both HTML and file representations.
+- Retain surrounding text and report failed image imports without saving the original image sources.
+- Protect remote image imports with authenticated endpoints, SSRF filtering, download timeouts, and a 20 MB limit.
+
+### Upgrading existing blogs
+
+From your host application's directory, run `bundle update postnhost` and deploy the updated application with its packaged assets. Update any exact Gemfile pin to allow PostnHost 0.2.2. No database migration or storage configuration change is required.
+
+This release affects new pastes. Images already embedded in saved content require a separate content migration to move them into uploaded files.
+
 ## [0.2.1] - 2026-11-03
 
 ### Fixed
@@ -63,6 +78,7 @@ First open source release of PostnHost.
 
 Authored by Kirill Shevchenko (Ruby/Rails engineering) and Maxim Sova (technical SEO expertise).
 
+[0.2.2]: https://github.com/postnhost/postnhost/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/postnhost/postnhost/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/postnhost/postnhost/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/postnhost/postnhost/compare/v0.1.0...v0.1.1
