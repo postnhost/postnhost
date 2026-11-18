@@ -3,6 +3,7 @@ ru:
     public:
       site:
         schema_site_name: "PostnHost"
+        og_image_alt: "postnhost — Современная платформа для блогов"
         blog_tagline: "Блог"
         blog_subtitle: "Последние статьи, учебные материалы и истории"
         blog_meta_title: "Блог — PostnHost"

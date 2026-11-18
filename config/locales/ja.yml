@@ -3,6 +3,7 @@ ja:
     public:
       site:
         schema_site_name: "PostnHost"
+        og_image_alt: "postnhost – モダンなブログプラットフォーム"
         blog_tagline: "ブログ"
         blog_subtitle: "最新の洞察、チュートリアル、ストーリーをご覧ください"
         blog_meta_title: "ブログ｜PostnHost"

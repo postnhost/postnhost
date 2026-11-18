@@ -230,6 +230,7 @@ RSpec.describe "Settings", type: :request do
       expect(response.body).to include("Subtitle (postnhost.public.site.blog_subtitle)")
       expect(response.body).to include("Meta Title (postnhost.public.site.blog_meta_title)")
       expect(response.body).to include("Meta Description (postnhost.public.site.blog_meta_description)")
+      expect(response.body).to include("Default OG Image Alt Text (postnhost.public.site.og_image_alt)")
     end
   end
 

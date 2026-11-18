@@ -36,6 +36,7 @@ en:
     public:
       site:
         schema_site_name: "PostnHost"
+        og_image_alt: "postnhost - Modern blogging platform"
         blog_tagline: "Blog"
         blog_subtitle: "Discover the latest insights, tutorials, and stories"
         blog_meta_title: "Blog — PostnHost"

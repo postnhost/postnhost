@@ -7,7 +7,8 @@ module Postnhost
       "postnhost.public.site.blog_tagline" => "Tagline",
       "postnhost.public.site.blog_subtitle" => "Subtitle",
       "postnhost.public.site.blog_meta_title" => "Meta Title",
-      "postnhost.public.site.blog_meta_description" => "Meta Description"
+      "postnhost.public.site.blog_meta_description" => "Meta Description",
+      "postnhost.public.site.og_image_alt" => "Default OG Image Alt Text"
     }.freeze
 
     def setting_site_logo_src

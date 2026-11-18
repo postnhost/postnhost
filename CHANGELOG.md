@@ -2,6 +2,17 @@
 
 All notable changes to PostnHost are documented in this file.
 
+## [0.2.3] - 2026-11-18
+
+### Fixed
+
+- Use `postnhost.public.site.og_image_alt` for default Open Graph and Twitter image alt text instead of hardcoded branding. The key is translated in all shipped locales and editable in Settings → I18n as Default OG Image Alt Text.
+- Preserve article-specific cover image alt text.
+
+### Upgrading existing blogs
+
+Update any exact Gemfile pin to PostnHost 0.2.3, run `bundle update postnhost`, and deploy. No database migration is required. Host applications can also override the new key in their locale files. Copied `postnhost/shared/_seo_meta_tags.html.erb` partials must use the translation key to receive this change.
+
 ## [0.2.2] - 2026-11-17
 
 ### Fixed

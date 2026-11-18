@@ -29,7 +29,7 @@
   <meta property="og:image:secure_url" content="<%= setting_og_image_absolute_url %>" data-turbo-track="reload">
   <meta property="og:image:width" content="1200" data-turbo-track="reload">
   <meta property="og:image:height" content="630" data-turbo-track="reload">
-  <meta property="og:image:alt" content="postnhost - Modern blogging platform" data-turbo-track="reload">
+  <meta property="og:image:alt" content="<%= t("postnhost.public.site.og_image_alt") %>" data-turbo-track="reload">
 <% end %>
 
 <!-- Twitter Card data -->
@@ -46,7 +46,7 @@
   <% end %>
 <% else %>
   <meta name="twitter:image" content="<%= setting_og_image_absolute_url %>" data-turbo-track="reload">
-  <meta name="twitter:image:alt" content="postnhost - Modern blogging platform" data-turbo-track="reload">
+  <meta name="twitter:image:alt" content="<%= t("postnhost.public.site.og_image_alt") %>" data-turbo-track="reload">
 <% end %>
 
 <!-- Article specific meta tags -->
