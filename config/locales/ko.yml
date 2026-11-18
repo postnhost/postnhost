@@ -3,6 +3,7 @@ ko:
     public:
       site:
         schema_site_name: "PostnHost"
+        og_image_alt: "postnhost – 현대적인 블로그 플랫폼"
         blog_tagline: "블로그"
         blog_subtitle: "최신 인사이트, 튜토리얼, 스토리를 만나보세요"
         blog_meta_title: "블로그 — PostnHost"
